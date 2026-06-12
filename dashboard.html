@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Airbnb Manager — Dashboard</title>
+<title>Airbnb Manager</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .reminder-card{background:#fff;border:1px solid #fde68a;border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:flex-start;gap:12px}
@@ -15,29 +15,13 @@
 .reminder-days{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:#fef3c7;color:#92400e;margin-top:4px;display:inline-block}
 .reminder-days.urgent{background:#fee2e2;color:#991b1b}
 .reminder-days.sent{background:#dcfce7;color:#166534}
-.msg-card{background:#fff;border:1px solid #e8e8e4;border-radius:12px;padding:14px 16px;margin-bottom:10px;transition:border-color 0.15s}
-.msg-card:hover{border-color:#1a6b4a;cursor:pointer}
+.msg-card{background:#fff;border:1px solid #e8e8e4;border-radius:12px;padding:14px 16px;margin-bottom:10px;transition:border-color 0.15s;cursor:pointer}
+.msg-card:hover{border-color:#1a6b4a}
 .msg-trigger-badge{font-size:11px;color:#1e40af;background:#dbeafe;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:6px;font-weight:500}
 .msg-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
 .msg-title{font-size:14px;font-weight:600}
 .msg-preview{font-size:12px;color:#888;line-height:1.5}
 .msg-actions{display:flex;gap:4px;flex-shrink:0}
-.doc-booking-row{background:#fff;border:1px solid #e8e8e4;border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
-.doc-booking-info{flex:1;min-width:0}
-.doc-booking-name{font-size:13px;font-weight:600}
-.doc-booking-dates{font-size:11px;color:#888;margin-top:2px}
-.doc-card{background:#fff;border:1px solid #e8e8e4;border-radius:10px;padding:14px 16px;margin-bottom:10px}
-.doc-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.doc-avatar{width:36px;height:36px;border-radius:50%;background:#eff6ff;color:#1e40af;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
-.doc-name{font-size:14px;font-weight:600}
-.doc-meta{font-size:11px;color:#888;margin-top:2px}
-.doc-fields{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
-.doc-field{background:#f8f8f6;border-radius:6px;padding:7px 10px}
-.doc-field-label{font-size:10px;color:#888;margin-bottom:2px;text-transform:uppercase;letter-spacing:0.03em}
-.doc-field-value{font-size:12px;font-weight:600}
-.doc-actions{display:flex;gap:8px;flex-wrap:wrap}
-.delete-badge{font-size:10px;color:#92400e;background:#fef3c7;padding:2px 8px;border-radius:20px;font-weight:500}
-.link-copied{font-size:11px;color:#166534;background:#dcfce7;padding:2px 8px;border-radius:6px;display:none}
 .adempimento-row{background:#fff;border:1px solid #e8e8e4;border-radius:10px;padding:14px 16px;margin-bottom:10px}
 .adem-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .adem-name{font-size:14px;font-weight:600;flex:1}
@@ -54,15 +38,63 @@
 .adem-label span{color:#888;font-size:11px}
 .adem-toggle{width:20px;height:20px;border-radius:50%;border:2px solid #d0d0cc;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px}
 .adem-check.done .adem-toggle{background:#1a6b4a;border-color:#1a6b4a;color:#fff}
+.doc-booking-row{background:#fff;border:1px solid #e8e8e4;border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.doc-booking-info{flex:1;min-width:0}
+.doc-booking-name{font-size:13px;font-weight:600}
+.doc-booking-dates{font-size:11px;color:#888;margin-top:2px}
+.doc-card{background:#fff;border:1px solid #e8e8e4;border-radius:10px;padding:14px 16px;margin-bottom:10px}
+.doc-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.doc-avatar{width:36px;height:36px;border-radius:50%;background:#eff6ff;color:#1e40af;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.doc-name{font-size:14px;font-weight:600}
+.doc-meta{font-size:11px;color:#888;margin-top:2px}
+.doc-fields{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.doc-field{background:#f8f8f6;border-radius:6px;padding:7px 10px}
+.doc-field-label{font-size:10px;color:#888;margin-bottom:2px;text-transform:uppercase;letter-spacing:0.03em}
+.doc-field-value{font-size:12px;font-weight:600}
+.doc-actions{display:flex;gap:8px;flex-wrap:wrap}
+.delete-badge{font-size:10px;color:#92400e;background:#fef3c7;padding:2px 8px;border-radius:20px;font-weight:500}
+.link-copied{font-size:11px;color:#166534;background:#dcfce7;padding:2px 8px;border-radius:6px;display:none}
+.chart-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.chart-month{font-size:12px;color:#888;width:30px;flex-shrink:0;font-weight:500}
+.chart-bg{flex:1;height:22px;background:#f0f0ec;border-radius:4px;overflow:hidden}
+.chart-fill{height:100%;border-radius:4px;background:#1a6b4a;transition:width 0.5s ease}
+.chart-val{font-size:12px;font-weight:600;width:65px;text-align:right}
+.rule-card{background:#fff;border:1px solid #e8e8e4;border-radius:10px;padding:14px 16px;margin-bottom:10px}
+.rule-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.rule-name{font-size:13px;font-weight:600}
+.rule-desc{font-size:12px;color:#666;line-height:1.5}
+.rule-result{font-size:12px;color:#1a6b4a;font-weight:600;margin-top:6px}
+.price-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border:1px solid #e8e8e4;border-radius:10px;margin-bottom:8px}
+.price-info{flex:1}
+.price-name{font-size:14px;font-weight:600}
+.price-desc{font-size:12px;color:#888;margin-top:2px}
+.price-val{font-size:18px;font-weight:700;color:#1a6b4a;white-space:nowrap}
+.price-tag{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.pt-alta{background:#dcfce7;color:#166534}
+.pt-normale{background:#f0f0ec;color:#555}
+.pt-evento{background:#fef3c7;color:#92400e}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-month{font-size:15px;font-weight:600}
+.cal-nav-btn{padding:5px 12px;border-radius:8px;border:1px solid #e0e0da;background:#fff;cursor:pointer;font-size:13px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-header{text-align:center;font-size:11px;color:#888;padding:4px 0;font-weight:600}
+.cal-day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;font-size:12px;cursor:pointer;border:1px solid transparent;transition:all 0.15s}
+.cal-day:hover{background:#f5f5f3}
+.cal-day.booked-a{background:#fff0ec;color:#9a3412;border-color:#fcd9c8}
+.cal-day.booked-b{background:#eff6ff;color:#1e40af;border-color:#bfdbfe}
+.cal-day.booked-d{background:#f0fdf4;color:#166534;border-color:#bbf7d0}
+.cal-day.free{color:#1a1a1a}
+.cal-day.today{border-color:#1a6b4a;font-weight:700}
+.cal-day.other{color:#ccc}
+.cal-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.cal-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#666}
+.cal-legend-dot{width:10px;height:10px;border-radius:2px}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="topbar-title">
-    <span class="icon">🏠</span>
-    Via Gioberti — Firenze
-  </div>
+  <div class="topbar-title"><span class="icon">&#127968;</span> Via Gioberti &mdash; Firenze</div>
   <div class="topbar-right">
     <span class="role-badge" id="role-badge">Admin</span>
     <button class="logout-btn" onclick="doLogout()">Esci</button>
@@ -70,40 +102,41 @@
 </div>
 
 <div class="nav">
-  <button class="nav-btn active" onclick="showSection('dashboard',this)"><span class="nav-icon">📊</span>Dashboard</button>
-  <button class="nav-btn" onclick="showSection('bookings',this)"><span class="nav-icon">📅</span>Prenotazioni</button>
-  <button class="nav-btn" onclick="showSection('calendar',this)"><span class="nav-icon">🗓</span>Calendario</button>
-  <button class="nav-btn" onclick="showSection('messages',this)"><span class="nav-icon">💬</span>Messaggi</button>
-  <button class="nav-btn" onclick="showSection('tasks',this)"><span class="nav-icon">🧹</span>Pulizie</button>
-  <button class="nav-btn" onclick="showSection('pricing',this)"><span class="nav-icon">💰</span>Prezzi</button>
-  <button class="nav-btn" onclick="showSection('stats',this)"><span class="nav-icon">📈</span>Statistiche</button>
-  <button class="nav-btn" onclick="showSection('adempimenti',this)"><span class="nav-icon">📋</span>Adempimenti</button>
-  <button class="nav-btn" onclick="showSection('documenti',this)"><span class="nav-icon">📁</span>Documenti</button>
-  <a href="impostazioni.html" class="nav-btn"><span class="nav-icon">⚙️</span>Impostazioni</a>
+  <button class="nav-btn active" onclick="showSection('dashboard',this)"><span class="nav-icon">&#128202;</span>Dashboard</button>
+  <button class="nav-btn" onclick="showSection('bookings',this)"><span class="nav-icon">&#128197;</span>Prenotazioni</button>
+  <button class="nav-btn" onclick="showSection('calendar',this)"><span class="nav-icon">&#128467;</span>Calendario</button>
+  <button class="nav-btn" onclick="showSection('messages',this)"><span class="nav-icon">&#128172;</span>Messaggi</button>
+  <button class="nav-btn" onclick="showSection('tasks',this)"><span class="nav-icon">&#129529;</span>Pulizie</button>
+  <button class="nav-btn" onclick="showSection('pricing',this)"><span class="nav-icon">&#128176;</span>Prezzi</button>
+  <button class="nav-btn" onclick="showSection('stats',this)"><span class="nav-icon">&#128200;</span>Statistiche</button>
+  <button class="nav-btn" onclick="showSection('adempimenti',this)"><span class="nav-icon">&#128203;</span>Adempimenti</button>
+  <button class="nav-btn" onclick="showSection('documenti',this)"><span class="nav-icon">&#128193;</span>Documenti</button>
+  <a href="impostazioni.html" class="nav-btn"><span class="nav-icon">&#9881;</span>Impostazioni</a>
 </div>
 
 <div class="content">
 
-<!-- ── DASHBOARD ── -->
+<!-- DASHBOARD -->
 <div class="section active" id="section-dashboard">
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-label">Entrate mese</div><div class="stat-value green" id="s-revenue">—</div><div class="stat-sub" id="s-month">—</div></div>
-    <div class="stat-card"><div class="stat-label">Notti prenotate</div><div class="stat-value" id="s-nights">—</div><div class="stat-sub">questo mese</div></div>
-    <div class="stat-card"><div class="stat-label">Occupazione</div><div class="stat-value green" id="s-occ">—</div><div class="stat-sub">del mese</div></div>
-    <div class="stat-card"><div class="stat-label">Prenotaz. attive</div><div class="stat-value" id="s-active">—</div><div class="stat-sub">confermate</div></div>
+    <div class="stat-card"><div class="stat-label">Entrate mese</div><div class="stat-value green" id="s-revenue">-</div><div class="stat-sub" id="s-month">-</div></div>
+    <div class="stat-card"><div class="stat-label">Notti prenotate</div><div class="stat-value" id="s-nights">-</div><div class="stat-sub">questo mese</div></div>
+    <div class="stat-card"><div class="stat-label">Occupazione</div><div class="stat-value green" id="s-occ">-</div><div class="stat-sub">del mese</div></div>
+    <div class="stat-card"><div class="stat-label">Prenotaz. attive</div><div class="stat-value" id="s-active">-</div><div class="stat-sub">confermate</div></div>
   </div>
   <div class="sec-header"><div class="sec-title">Prossimi arrivi</div></div>
-  <div id="dash-bookings"><div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nessuna prenotazione imminente</div></div></div>
-  <div class="sec-header" style="margin-top:20px"><div class="sec-title">Attività pulizie in sospeso</div><a href="pulizie.html" style="font-size:12px;color:#1a6b4a">Vista pulizie →</a></div>
-  <div id="dash-tasks"><div class="empty"><div class="empty-icon">✅</div><div class="empty-text">Nessuna attività in sospeso</div></div></div>
+  <div id="dash-bookings"><div class="empty"><div class="empty-icon">&#128197;</div><div class="empty-text">Nessuna prenotazione imminente</div></div></div>
+  <div class="sec-header" style="margin-top:20px"><div class="sec-title">Attivita pulizie in sospeso</div><a href="pulizie.html" style="font-size:12px;color:#1a6b4a">Vista pulizie &rarr;</a></div>
+  <div id="dash-tasks"><div class="empty"><div class="empty-icon">&#9989;</div><div class="empty-text">Nessuna attivita in sospeso</div></div></div>
+  <div id="reminders-wrap" style="margin-top:20px;display:none">
+    <div class="sec-header"><div class="sec-title">&#128276; Promemoria messaggi</div></div>
+    <div id="reminders-list"></div>
+  </div>
 </div>
 
-<!-- ── PRENOTAZIONI ── -->
+<!-- PRENOTAZIONI -->
 <div class="section" id="section-bookings">
-  <div class="sec-header">
-    <div class="sec-title">Prenotazioni</div>
-    <button class="btn-primary" onclick="openModal('booking')">+ Aggiungi</button>
-  </div>
+  <div class="sec-header"><div class="sec-title">Prenotazioni</div><button class="btn-primary" onclick="openModal('booking')">+ Aggiungi</button></div>
   <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
     <select id="filter-status" onchange="renderBookings()" style="width:auto;padding:6px 10px;font-size:12px">
       <option value="">Tutti gli stati</option>
@@ -121,12 +154,12 @@
   <div id="bookings-list"></div>
 </div>
 
-<!-- ── CALENDARIO ── -->
+<!-- CALENDARIO -->
 <div class="section" id="section-calendar">
   <div class="cal-nav">
-    <button class="cal-nav-btn" onclick="changeMonth(-1)">‹ Prec</button>
+    <button class="cal-nav-btn" onclick="changeMonth(-1)">&lsaquo; Prec</button>
     <div class="cal-month" id="cal-title"></div>
-    <button class="cal-nav-btn" onclick="changeMonth(1)">Succ ›</button>
+    <button class="cal-nav-btn" onclick="changeMonth(1)">Succ &rsaquo;</button>
   </div>
   <div class="cal-grid">
     <div class="cal-header">Lun</div><div class="cal-header">Mar</div><div class="cal-header">Mer</div>
@@ -140,33 +173,36 @@
   </div>
 </div>
 
-<!-- ── MESSAGGI ── -->
+<!-- MESSAGGI -->
 <div class="section" id="section-messages">
-
-  <!-- PROMEMORIA ATTIVI -->
-  <div id="reminders-wrap" style="margin-bottom:20px;display:none">
-    <div class="sec-header"><div class="sec-title">🔔 Promemoria da inviare</div></div>
-    <div id="reminders-list"></div>
-  </div>
-
-  <!-- TEMPLATE -->
-  <div class="sec-header">
-    <div class="sec-title">Template messaggi</div>
-    <button class="btn-primary" onclick="openModal('message')">+ Aggiungi</button>
-  </div>
+  <div class="sec-header"><div class="sec-title">Template messaggi</div><button class="btn-primary" onclick="openModal('message')">+ Aggiungi</button></div>
   <div style="font-size:12px;color:#888;margin-bottom:14px;padding:10px 14px;background:#f8f8f6;border-radius:8px;line-height:1.6">
-    💡 Usa le variabili: <code style="background:#e8e8e4;padding:1px 5px;border-radius:4px">{nome}</code> = nome ospite &nbsp;|&nbsp; <code style="background:#e8e8e4;padding:1px 5px;border-radius:4px">{checkin}</code> = data arrivo &nbsp;|&nbsp; <code style="background:#e8e8e4;padding:1px 5px;border-radius:4px">{checkout}</code> = data partenza &nbsp;|&nbsp; <code style="background:#e8e8e4;padding:1px 5px;border-radius:4px">{notti}</code> = notti
+    Usa le variabili: <code style="background:#e8e8e4;padding:1px 5px;border-radius:4px">{nome}</code> = nome ospite &nbsp;|&nbsp;
+    <code style="background:#e8e8e4;padding:1px 5px;border-radius:4px">{checkin}</code> = data arrivo &nbsp;|&nbsp;
+    <code style="background:#e8e8e4;padding:1px 5px;border-radius:4px">{checkout}</code> = data partenza &nbsp;|&nbsp;
+    <code style="background:#e8e8e4;padding:1px 5px;border-radius:4px">{notti}</code> = notti
   </div>
   <div id="messages-list"></div>
-
+  <div class="modal-overlay" id="preview-overlay" onclick="if(event.target===this)closePreview()" style="z-index:300">
+    <div class="modal" style="max-width:520px">
+      <div class="modal-header">
+        <div class="modal-title" id="preview-title">Anteprima messaggio</div>
+        <button class="modal-close" onclick="closePreview()">x</button>
+      </div>
+      <div style="font-size:11px;color:#888;margin-bottom:10px" id="preview-guest-info"></div>
+      <div id="preview-body" style="background:#f8f8f6;border-radius:10px;padding:16px;font-size:13px;line-height:1.7;white-space:pre-wrap;min-height:80px"></div>
+      <div style="display:flex;gap:8px;margin-top:14px">
+        <button class="save-btn" onclick="copyPreview()" style="flex:1">Copia messaggio</button>
+        <button class="btn-secondary" onclick="markSent()" style="flex:1;padding:11px">Segna inviato</button>
+      </div>
+      <div id="preview-sent-badge" style="display:none;text-align:center;margin-top:10px;font-size:12px;color:#166534;background:#f0fdf4;padding:8px;border-radius:8px">Messaggio segnato come inviato</div>
+    </div>
+  </div>
 </div>
 
-<!-- ── PULIZIE ── -->
+<!-- PULIZIE -->
 <div class="section" id="section-tasks">
-  <div class="sec-header">
-    <div class="sec-title">Checklist pulizie</div>
-    <button class="btn-primary" onclick="openModal('task')">+ Aggiungi</button>
-  </div>
+  <div class="sec-header"><div class="sec-title">Checklist pulizie</div><button class="btn-primary" onclick="openModal('task')">+ Aggiungi</button></div>
   <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">
     <select id="filter-zone" onchange="renderTasks()" style="width:auto;padding:6px 10px;font-size:12px">
       <option value="">Tutte le zone</option>
@@ -182,130 +218,103 @@
   </div>
   <div id="tasks-list"></div>
   <div class="progress-wrap" id="progress-wrap" style="display:none">
-    <div class="progress-label"><span>Completamento sessione</span><span id="prog-text">0/0</span></div>
+    <div class="progress-label"><span>Completamento</span><span id="prog-text">0/0</span></div>
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-bar" style="width:0%"></div></div>
   </div>
 </div>
 
-<!-- ── PREZZI ── -->
+<!-- PREZZI -->
 <div class="section" id="section-pricing">
-  <div class="sec-header">
-    <div class="sec-title">Prezzi stagionali</div>
-    <button class="btn-primary" onclick="openModal('price')">+ Aggiungi</button>
-  </div>
+  <div class="sec-header"><div class="sec-title">Prezzi stagionali</div><button class="btn-primary" onclick="openModal('price')">+ Aggiungi</button></div>
   <div id="prices-list"></div>
-
   <div style="margin-top:28px">
     <div class="sec-header">
-      <div class="sec-title">⚙️ Regole dinamiche automatiche</div>
+      <div class="sec-title">Regole dinamiche</div>
       <button class="btn-secondary" onclick="openModal('rule')">+ Aggiungi regola</button>
     </div>
     <div style="font-size:12px;color:#888;margin-bottom:14px">Le regole vengono applicate automaticamente al prezzo base stagionale</div>
     <div id="rules-list"></div>
     <div style="margin-top:16px;padding:14px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px">
-      <div style="font-size:13px;font-weight:600;color:#166534;margin-bottom:4px">💡 Prezzo suggerito oggi</div>
+      <div style="font-size:13px;font-weight:600;color:#166534;margin-bottom:4px">Prezzo suggerito oggi</div>
       <div style="font-size:12px;color:#166534" id="price-today-info">Calcolo in corso...</div>
-      <div style="font-size:22px;font-weight:700;color:#1a6b4a;margin-top:6px" id="price-today">—</div>
+      <div style="font-size:22px;font-weight:700;color:#1a6b4a;margin-top:6px" id="price-today">-</div>
     </div>
     <div style="margin-top:12px;padding:14px 16px;background:#fff8ec;border:1px solid #fde68a;border-radius:10px;font-size:12px;color:#92400e">
-      🔗 <strong>Integrazione PriceLabs</strong> — disponibile in futuro. PriceLabs usa dati di mercato reali di Airbnb/Booking per ottimizzare i prezzi automaticamente (~€20/mese).
+      Integrazione PriceLabs disponibile in futuro (~20 euro/mese).
     </div>
   </div>
 </div>
 
-<!-- ── DOCUMENTI ── -->
-<div class="section" id="section-documenti">
-  <div class="sec-header">
-    <div class="sec-title">📁 Documenti ospiti</div>
-  </div>
-
-  <div style="padding:12px 16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;margin-bottom:20px;font-size:12px;color:#1e40af;line-height:1.7">
-    <strong>💡 Come funziona:</strong><br>
-    1. Seleziona una prenotazione → clicca <strong>"Genera link"</strong><br>
-    2. Invia il link all'ospite via Airbnb/WhatsApp<br>
-    3. L'ospite carica il documento direttamente dalla sua pagina<br>
-    4. Il documento appare qui pronto per Alloggiati Web<br>
-    5. Eliminazione automatica 30 giorni dopo il checkout
-  </div>
-
-  <div class="sec-header" style="margin-bottom:10px">
-    <div style="font-size:13px;font-weight:600">Prenotazioni attive</div>
-  </div>
-  <div id="doc-bookings-list" style="margin-bottom:24px"></div>
-
-  <div class="sec-header">
-    <div style="font-size:13px;font-weight:600">📄 Documenti ricevuti</div>
-    <button class="btn-secondary" style="font-size:12px;padding:5px 12px" onclick="loadDocumenti()">🔄 Aggiorna</button>
-  </div>
-  <div id="documenti-list"></div>
-</div>
-
-<!-- ── ADEMPIMENTI ── -->
-<div class="section" id="section-adempimenti">
-  <div class="sec-header">
-    <div class="sec-title">📋 Adempimenti burocratici</div>
-  </div>
-
-  <!-- LINK RAPIDI -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
-    <a href="https://alloggiatiweb.poliziadistato.it" target="_blank" style="text-decoration:none">
-      <div class="card" style="cursor:pointer;transition:border-color 0.15s;border-color:#e8e8e4" onmouseover="this.style.borderColor='#1a6b4a'" onmouseout="this.style.borderColor='#e8e8e4'">
-        <div style="font-size:22px;margin-bottom:8px">🚔</div>
-        <div style="font-size:13px;font-weight:700;margin-bottom:4px">Alloggiati Web</div>
-        <div style="font-size:11px;color:#888;line-height:1.5">Polizia di Stato — registrazione ospiti entro 24h dall'arrivo</div>
-        <div style="font-size:11px;color:#1a6b4a;margin-top:8px;font-weight:600">Apri portale →</div>
-      </div>
-    </a>
-    <a href="https://toscanaturismo.ross1000.it/turismo5-web/" target="_blank" style="text-decoration:none">
-      <div class="card" style="cursor:pointer;transition:border-color 0.15s;border-color:#e8e8e4" onmouseover="this.style.borderColor='#1a6b4a'" onmouseout="this.style.borderColor='#e8e8e4'">
-        <div style="font-size:22px;margin-bottom:8px">🏛️</div>
-        <div style="font-size:13px;font-weight:700;margin-bottom:4px">Turismo5 Toscana</div>
-        <div style="font-size:11px;color:#888;line-height:1.5">Regione Toscana — tassa di soggiorno e comunicazioni statistiche</div>
-        <div style="font-size:11px;color:#1a6b4a;margin-top:8px;font-weight:600">Apri portale →</div>
-      </div>
-    </a>
-  </div>
-
-  <!-- INFO SCADENZE -->
-  <div style="padding:12px 16px;background:#fff8ec;border:1px solid #fde68a;border-radius:10px;margin-bottom:20px;font-size:12px;color:#92400e;line-height:1.8">
-    <strong>⏰ Scadenze da ricordare:</strong><br>
-    • <strong>Alloggiati Web</strong> → entro <strong>24 ore</strong> dall'arrivo dell'ospite (obbligo di legge)<br>
-    • <strong>Turismo5</strong> → entro il <strong>16 del mese successivo</strong> per la tassa di soggiorno<br>
-    • <strong>Tassa di soggiorno Firenze</strong> → €5,50/persona/notte (max 7 notti) — da riscuotere all'arrivo
-  </div>
-
-  <!-- CHECKLIST PER PRENOTAZIONE -->
-  <div class="sec-header">
-    <div class="sec-title" style="font-size:14px">Stato adempimenti per prenotazione</div>
-    <button class="btn-secondary" style="font-size:12px;padding:5px 12px" onclick="refreshAdempimenti()">🔄 Aggiorna</button>
-  </div>
-  <div id="adempimenti-list">
-    <div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Nessuna prenotazione attiva</div></div>
-  </div>
-
-  <!-- NOTA TASSA SOGGIORNO -->
-  <div style="margin-top:20px;padding:14px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;font-size:12px;color:#166534;line-height:1.7">
-    <strong>💶 Calcolo tassa di soggiorno Firenze 2025:</strong><br>
-    €5,50 × numero ospiti × numero notti (max 7 notti per ospite)<br>
-    Es: 2 ospiti × 4 notti = <strong>€44,00</strong> da riscuotere e versare al Comune
-  </div>
-</div>
-
-<!-- ── STATISTICHE ── -->
+<!-- STATISTICHE -->
 <div class="section" id="section-stats">
   <div class="sec-header"><div class="sec-title">Statistiche</div></div>
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-label">Entrate totali</div><div class="stat-value green" id="stat-total">—</div><div class="stat-sub" id="stat-period">—</div></div>
-    <div class="stat-card"><div class="stat-label">Occupazione media</div><div class="stat-value" id="stat-occ">—</div><div class="stat-sub">media mensile</div></div>
-    <div class="stat-card"><div class="stat-label">Prezzo medio/notte</div><div class="stat-value" id="stat-avg">—</div><div class="stat-sub">tutte le piattaforme</div></div>
-    <div class="stat-card"><div class="stat-label">Prenotazioni totali</div><div class="stat-value" id="stat-bcount">—</div><div class="stat-sub">storico</div></div>
+    <div class="stat-card"><div class="stat-label">Entrate totali</div><div class="stat-value green" id="stat-total">-</div><div class="stat-sub" id="stat-period">storico</div></div>
+    <div class="stat-card"><div class="stat-label">Occupazione media</div><div class="stat-value" id="stat-occ">-</div><div class="stat-sub">media mensile</div></div>
+    <div class="stat-card"><div class="stat-label">Prezzo medio/notte</div><div class="stat-value" id="stat-avg">-</div><div class="stat-sub">tutte le piattaforme</div></div>
+    <div class="stat-card"><div class="stat-label">Prenotazioni totali</div><div class="stat-value" id="stat-bcount">-</div><div class="stat-sub">storico</div></div>
   </div>
-  <div class="sec-title" style="margin-bottom:12px;font-size:13px">Entrate per mese (€)</div>
+  <div class="sec-title" style="margin-bottom:12px;font-size:13px">Entrate per mese</div>
   <div id="revenue-chart" class="card"></div>
   <div style="margin-top:20px">
     <div class="sec-title" style="margin-bottom:12px;font-size:13px">Piattaforme</div>
     <div class="stats-grid" id="platform-stats"></div>
   </div>
+</div>
+
+<!-- ADEMPIMENTI -->
+<div class="section" id="section-adempimenti">
+  <div class="sec-header"><div class="sec-title">Adempimenti burocratici</div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+    <a href="https://alloggiatiweb.poliziadistato.it" target="_blank" style="text-decoration:none">
+      <div class="card" style="cursor:pointer">
+        <div style="font-size:22px;margin-bottom:8px">&#128658;</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px">Alloggiati Web</div>
+        <div style="font-size:11px;color:#888;line-height:1.5">Polizia di Stato - registrazione ospiti entro 24h dall'arrivo</div>
+        <div style="font-size:11px;color:#1a6b4a;margin-top:8px;font-weight:600">Apri portale &rarr;</div>
+      </div>
+    </a>
+    <a href="https://toscanaturismo.ross1000.it/turismo5-web/" target="_blank" style="text-decoration:none">
+      <div class="card" style="cursor:pointer">
+        <div style="font-size:22px;margin-bottom:8px">&#127963;</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px">Turismo5 Toscana</div>
+        <div style="font-size:11px;color:#888;line-height:1.5">Regione Toscana - tassa di soggiorno e comunicazioni statistiche</div>
+        <div style="font-size:11px;color:#1a6b4a;margin-top:8px;font-weight:600">Apri portale &rarr;</div>
+      </div>
+    </a>
+  </div>
+  <div style="padding:12px 16px;background:#fff8ec;border:1px solid #fde68a;border-radius:10px;margin-bottom:20px;font-size:12px;color:#92400e;line-height:1.8">
+    <strong>Scadenze:</strong><br>
+    Alloggiati Web &rarr; entro 24 ore dall'arrivo<br>
+    Turismo5 &rarr; entro il 16 del mese successivo<br>
+    Tassa di soggiorno Firenze &rarr; 5,50 euro/persona/notte (max 7 notti)
+  </div>
+  <div class="sec-header"><div class="sec-title" style="font-size:14px">Stato adempimenti per prenotazione</div></div>
+  <div id="adempimenti-list"><div class="empty"><div class="empty-icon">&#128203;</div><div class="empty-text">Nessuna prenotazione attiva</div></div></div>
+  <div style="margin-top:20px;padding:14px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;font-size:12px;color:#166534;line-height:1.7">
+    <strong>Calcolo tassa di soggiorno:</strong><br>
+    5,50 euro x numero ospiti x numero notti (max 7 notti per ospite)
+  </div>
+</div>
+
+<!-- DOCUMENTI -->
+<div class="section" id="section-documenti">
+  <div class="sec-header"><div class="sec-title">Documenti ospiti</div></div>
+  <div style="padding:12px 16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;margin-bottom:20px;font-size:12px;color:#1e40af;line-height:1.7">
+    <strong>Come funziona:</strong><br>
+    1. Seleziona una prenotazione e clicca "Copia link"<br>
+    2. Invia il link all'ospite via Airbnb o WhatsApp<br>
+    3. L'ospite carica il documento dalla sua pagina<br>
+    4. Il documento appare qui pronto per Alloggiati Web<br>
+    5. Eliminazione automatica 30 giorni dopo il checkout
+  </div>
+  <div class="sec-header" style="margin-bottom:10px"><div style="font-size:13px;font-weight:600">Prenotazioni attive</div></div>
+  <div id="doc-bookings-list" style="margin-bottom:24px"></div>
+  <div class="sec-header">
+    <div style="font-size:13px;font-weight:600">Documenti ricevuti</div>
+    <button class="btn-secondary" style="font-size:12px;padding:5px 12px" onclick="loadDocumenti()">Aggiorna</button>
+  </div>
+  <div id="documenti-list"></div>
 </div>
 
 </div><!-- /content -->
@@ -315,7 +324,7 @@
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modal-title"></div>
-      <button class="modal-close" onclick="closeModal()">×</button>
+      <button class="modal-close" onclick="closeModal()">x</button>
     </div>
     <div id="modal-body"></div>
   </div>
@@ -324,251 +333,192 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// Funzioni globali accessibili dagli onclick HTML
-// Devono stare in uno script normale (non module) per essere globali
-function showSection(id, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  var el = document.getElementById('section-' + id);
-  if (el) el.classList.add('active');
-  if (btn) btn.classList.add('active');
-  if (id === 'calendar') { if(window._renderCalendar) window._renderCalendar(); }
-  if (id === 'adempimenti') { if(window._renderAdempimenti) window._renderAdempimenti(); }
-  if (id === 'documenti') { if(window._renderDocBookings) window._renderDocBookings(); if(window._loadDocumenti) window._loadDocumenti(); }
+// Funzioni globali (accessibili dagli onclick HTML)
+function showSection(id,btn){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var el=document.getElementById('section-'+id);
+  if(el) el.classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id==='calendar'&&window._rc) window._rc();
+  if(id==='adempimenti'&&window._ra) window._ra();
+  if(id==='documenti'){if(window._rdb)window._rdb();if(window._ld)window._ld();}
 }
-function doLogout() { if(window._doLogout) window._doLogout(); }
-function openModal(t,d) { if(window._openModal) window._openModal(t,d); }
-function closeModal() { if(window._closeModal) window._closeModal(); }
-function toggleTask(id,v) { if(window._toggleTask) window._toggleTask(id,v); }
-function renderBookings() { if(window._renderBookings) window._renderBookings(); }
-function renderTasks() { if(window._renderTasks) window._renderTasks(); }
-function changeMonth(d) { if(window._changeMonth) window._changeMonth(d); }
-function saveBooking() { if(window._saveBooking) window._saveBooking(); }
-function saveMessage() { if(window._saveMessage) window._saveMessage(); }
-function saveTask() { if(window._saveTask) window._saveTask(); }
-function savePrice() { if(window._savePrice) window._savePrice(); }
-function saveRule() { if(window._saveRule) window._saveRule(); }
-function editBooking(id) { if(window._editBooking) window._editBooking(id); }
-function editMessage(id) { if(window._editMessage) window._editMessage(id); }
-function editPrice(id) { if(window._editPrice) window._editPrice(id); }
-function deleteItem(c,id) { if(window._deleteItem) window._deleteItem(c,id); }
-function toggleRule(id,v) { if(window._toggleRule) window._toggleRule(id,v); }
-function updateRuleForm() { if(window._updateRuleForm) window._updateRuleForm(); }
-function openPreview(a,b,c) { if(window._openPreview) window._openPreview(a,b,c); }
-function closePreview() { if(window._closePreview) window._closePreview(); }
-function copyPreview() { if(window._copyPreview) window._copyPreview(); }
-function markSent() { if(window._markSent) window._markSent(); }
-function openMsgPreviewFromTemplate(id) { if(window._openMsgPreviewFromTemplate) window._openMsgPreviewFromTemplate(id); }
-function addDefaultTemplate(k) { if(window._addDefaultTemplate) window._addDefaultTemplate(k); }
-function toggleAdem(k,id) { if(window._toggleAdem) window._toggleAdem(k,id); }
-function refreshAdempimenti() { if(window._refreshAdempimenti) window._refreshAdempimenti(); }
-function copyDocLink(id,l) { if(window._copyDocLink) window._copyDocLink(id,l); }
-function copyGuestData(id) { if(window._copyGuestData) window._copyGuestData(id); }
-function deleteDocumento(id,p) { if(window._deleteDocumento) window._deleteDocumento(id,p); }
-function loadDocumenti() { if(window._loadDocumenti) window._loadDocumenti(); }
+function doLogout(){if(window._dl)window._dl();}
+function openModal(t,d){if(window._om)window._om(t,d);}
+function closeModal(){if(window._cm)window._cm();}
+function closePreview(){if(window._cp)window._cp();}
+function copyPreview(){if(window._cop)window._cop();}
+function markSent(){if(window._ms)window._ms();}
+function toggleTask(id,v){if(window._tt)window._tt(id,v);}
+function renderBookings(){if(window._rb)window._rb();}
+function renderTasks(){if(window._rts)window._rts();}
+function changeMonth(d){if(window._chm)window._chm(d);}
+function saveBooking(){if(window._sb)window._sb();}
+function saveMessage(){if(window._sm)window._sm();}
+function saveTask(){if(window._stk)window._stk();}
+function savePrice(){if(window._sp)window._sp();}
+function saveRule(){if(window._sr)window._sr();}
+function editBooking(id){if(window._eb)window._eb(id);}
+function editMessage(id){if(window._em)window._em(id);}
+function editPrice(id){if(window._ep)window._ep(id);}
+function deleteItem(c,id){if(window._di)window._di(c,id);}
+function toggleRule(id,v){if(window._tr)window._tr(id,v);}
+function updateRuleForm(){if(window._urf)window._urf();}
+function openPreview(a,b,c){if(window._op)window._op(a,b,c);}
+function openMsgPreviewFromTemplate(id){if(window._ompt)window._ompt(id);}
+function addDefaultTemplate(k){if(window._adt)window._adt(k);}
+function toggleAdem(k,id){if(window._ta)window._ta(k,id);}
+function refreshAdempimenti(){if(window._ra)window._ra();}
+function copyDocLink(id,l){if(window._cdl)window._cdl(id,l);}
+function copyGuestData(id){if(window._cgd)window._cgd(id);}
+function deleteDocumento(id,p){if(window._dd)window._dd(id,p);}
+function loadDocumenti(){if(window._ld)window._ld();}
 </script>
 
 <script type="module">
 import { auth, db, storage } from './firebase.js';
-import { ref as storageRef, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import { ref as sRef, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import {
-  collection, addDoc, getDocs, doc, updateDoc, deleteDoc,
-  query, orderBy, onSnapshot, serverTimestamp, where
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, where, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// ── AUTH ──
-onAuthStateChanged(auth, user => {
+// AUTH
+onAuthStateChanged(auth, function(user){
   if(!user){ window.location.href='index.html'; return; }
   init();
 });
-window._doLogout = async () => { await signOut(auth); window.location.href='index.html'; };
+window._dl = async function(){ await signOut(auth); window.location.href='index.html'; };
 
-// ── STATE ──
-let bookings=[], tasks=[], messages=[], prices=[], rules=[];
-let calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
-let editingId=null, editingCollection=null;
+// STATE
+var bookings=[], tasks=[], messages=[], prices=[], rules=[], documenti=[];
+var calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
+var editingId=null, currentSentKey=null;
 
-// ── INIT ──
 function init(){
-  listenBookings();
-  listenTasks();
-  listenMessages();
-  listenPrices();
-  listenRules();
+  listenBookings(); listenTasks(); listenMessages(); listenPrices(); listenRules();
 }
 
-// ── REALTIME LISTENERS ──
+// LISTENERS
 function listenBookings(){
-  onSnapshot(collection(db,'bookings'), snap=>{
-    bookings = snap.docs.map(d=>({id:d.id,...d.data()}));
-    bookings.sort((a,b)=>new Date(a.checkin)-new Date(b.checkin));
-    renderBookings();
-    renderDashboard();
-    renderCalendar();
-    renderStats();
-    renderReminders();
-    renderAdempimenti();
-    renderDocBookings();
+  onSnapshot(collection(db,'bookings'), function(snap){
+    bookings = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    bookings.sort(function(a,b){return new Date(a.checkin)-new Date(b.checkin);});
+    renderDashboard(); renderBookings(); renderCalendar(); renderStats();
+    renderReminders(); renderAdempimenti(); renderDocBookings();
   });
 }
 function listenTasks(){
-  onSnapshot(collection(db,'tasks'), snap=>{
-    tasks = snap.docs.map(d=>({id:d.id,...d.data()}));
-    renderTasks();
-    renderDashboardTasks();
+  onSnapshot(collection(db,'tasks'), function(snap){
+    tasks = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    renderTasks(); renderDashboardTasks();
   });
 }
 function listenMessages(){
-  onSnapshot(collection(db,'messages'), snap=>{
-    messages = snap.docs.map(d=>({id:d.id,...d.data()}));
-    renderMessages();
-    renderReminders();
+  onSnapshot(collection(db,'messages'), function(snap){
+    messages = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    renderMessages(); renderReminders();
   });
 }
 function listenPrices(){
-  onSnapshot(collection(db,'prices'), snap=>{
-    prices = snap.docs.map(d=>({id:d.id,...d.data()}));
-    renderPrices();
-    updateTodayPrice();
+  onSnapshot(collection(db,'prices'), function(snap){
+    prices = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    renderPrices(); updateTodayPrice();
   });
 }
 function listenRules(){
-  onSnapshot(collection(db,'rules'), snap=>{
-    rules = snap.docs.map(d=>({id:d.id,...d.data()}));
-    renderRules();
-    updateTodayPrice();
+  onSnapshot(collection(db,'rules'), function(snap){
+    rules = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    renderRules(); updateTodayPrice();
   });
 }
 
-// ── DASHBOARD ──
+// DASHBOARD
 function renderDashboard(){
-  const now = new Date();
-  const y=now.getFullYear(), m=now.getMonth();
-  const monthName = now.toLocaleDateString('it-IT',{month:'long',year:'numeric'});
-  const daysInMonth = new Date(y,m+1,0).getDate();
-
-  const monthBookings = bookings.filter(b=>{
-    const ci=new Date(b.checkin), co=new Date(b.checkout);
-    return b.stato!=='Cancellata' && (
-      (ci.getFullYear()===y && ci.getMonth()===m) ||
-      (co.getFullYear()===y && co.getMonth()===m)
-    );
+  var now=new Date(), y=now.getFullYear(), m=now.getMonth();
+  var monthName=now.toLocaleDateString('it-IT',{month:'long',year:'numeric'});
+  var daysInMonth=new Date(y,m+1,0).getDate();
+  var mb=bookings.filter(function(b){
+    if(b.stato==='Cancellata') return false;
+    var ci=new Date(b.checkin), co=new Date(b.checkout);
+    return (ci.getFullYear()===y&&ci.getMonth()===m)||(co.getFullYear()===y&&co.getMonth()===m);
   });
-
-  const revenue = monthBookings.reduce((s,b)=>s+Number(b.prezzo||0),0);
-  let nights=0;
-  monthBookings.forEach(b=>{
-    const ci=new Date(b.checkin), co=new Date(b.checkout);
-    const start=new Date(Math.max(ci,new Date(y,m,1)));
-    const end=new Date(Math.min(co,new Date(y,m,daysInMonth)));
-    if(end>start) nights+=Math.round((end-start)/(86400000));
+  var revenue=mb.reduce(function(s,b){return s+Number(b.prezzo||0);},0);
+  var nights=0;
+  mb.forEach(function(b){
+    var ci=new Date(b.checkin), co=new Date(b.checkout);
+    var s=new Date(Math.max(ci,new Date(y,m,1)));
+    var e=new Date(Math.min(co,new Date(y,m,daysInMonth)));
+    if(e>s) nights+=Math.round((e-s)/86400000);
   });
-  const occ=Math.round(nights/daysInMonth*100);
-  const active=bookings.filter(b=>b.stato==='Confermata').length;
-
-  document.getElementById('s-revenue').textContent='€'+revenue.toLocaleString('it-IT');
+  var occ=Math.round(nights/daysInMonth*100);
+  var active=bookings.filter(function(b){return b.stato==='Confermata';}).length;
+  document.getElementById('s-revenue').textContent='EUR '+revenue.toLocaleString('it-IT');
   document.getElementById('s-month').textContent=monthName;
   document.getElementById('s-nights').textContent=nights;
   document.getElementById('s-occ').textContent=occ+'%';
   document.getElementById('s-active').textContent=active;
-
-  // prossimi arrivi (prossimi 14 giorni)
-  const upcoming = bookings.filter(b=>{
-    const ci=new Date(b.checkin);
-    const diff=(ci-now)/(86400000);
-    return b.stato!=='Cancellata' && diff>=-1 && diff<=14;
+  var upcoming=bookings.filter(function(b){
+    if(b.stato==='Cancellata') return false;
+    var diff=(new Date(b.checkin)-now)/86400000;
+    return diff>=-1&&diff<=14;
   }).slice(0,3);
-  const db_el=document.getElementById('dash-bookings');
-  db_el.innerHTML = upcoming.length ? upcoming.map(b=>bookingCardHTML(b)).join('') :
-    '<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nessun arrivo nei prossimi 14 giorni</div></div>';
+  var el=document.getElementById('dash-bookings');
+  if(el) el.innerHTML=upcoming.length?upcoming.map(bookingCardHTML).join(''):'<div class="empty"><div class="empty-icon">&#128197;</div><div class="empty-text">Nessun arrivo nei prossimi 14 giorni</div></div>';
 }
 
 function renderDashboardTasks(){
-  const pending = tasks.filter(t=>!t.done).slice(0,4);
-  const el=document.getElementById('dash-tasks');
-  el.innerHTML = pending.length ? pending.map(t=>taskItemHTML(t,true)).join('') :
-    '<div class="empty"><div class="empty-icon">✅</div><div class="empty-text">Tutte le attività completate!</div></div>';
+  var pending=tasks.filter(function(t){return !t.done;}).slice(0,4);
+  var el=document.getElementById('dash-tasks');
+  if(el) el.innerHTML=pending.length?pending.map(function(t){return taskItemHTML(t,true);}).join(''):'<div class="empty"><div class="empty-icon">&#9989;</div><div class="empty-text">Tutte le attivita completate!</div></div>';
 }
 
-// ── BOOKINGS ──
+// BOOKINGS
 function bookingCardHTML(b){
-  const initials=(b.nome||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-  const avClass=b.piattaforma==='Airbnb'?'av-a':b.piattaforma==='Booking.com'?'av-b':'av-d';
-  const badgeClass=b.stato==='Confermata'?'badge-green':b.stato==='In attesa'?'badge-amber':'badge-red';
-  const nights=Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000);
-  return `<div class="booking-card">
-    <div class="b-avatar ${avClass}">${initials}</div>
-    <div class="b-info">
-      <div class="b-name">${b.nome||'—'}</div>
-      <div class="b-dates">${formatDate(b.checkin)} – ${formatDate(b.checkout)} · ${nights} nott${nights===1?'e':'i'}</div>
-      <span class="badge ${badgeClass}">${b.stato||'—'}</span>
-    </div>
-    <div class="b-right">
-      <div class="b-price">€${Number(b.prezzo||0).toLocaleString('it-IT')}</div>
-      <div class="b-platform">${b.piattaforma||'—'}</div>
-      <div style="display:flex;gap:4px;margin-top:6px;justify-content:flex-end">
-        <button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="editBooking('${b.id}')">✏️</button>
-        <button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem('bookings','${b.id}')">🗑</button>
-      </div>
-    </div>
-  </div>`;
+  var initials=(b.nome||'?').split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
+  var avClass=b.piattaforma==='Airbnb'?'av-a':b.piattaforma==='Booking.com'?'av-b':'av-d';
+  var badgeClass=b.stato==='Confermata'?'badge-green':b.stato==='In attesa'?'badge-amber':'badge-red';
+  var nights=Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000);
+  return '<div class="booking-card"><div class="b-avatar '+avClass+'">'+initials+'</div><div class="b-info"><div class="b-name">'+(b.nome||'-')+'</div><div class="b-dates">'+formatDate(b.checkin)+' - '+formatDate(b.checkout)+' - '+nights+' notti</div><span class="badge '+badgeClass+'">'+(b.stato||'-')+'</span></div><div class="b-right"><div class="b-price">EUR '+(b.prezzo||0)+'</div><div class="b-platform">'+(b.piattaforma||'-')+'</div><div style="display:flex;gap:4px;margin-top:6px;justify-content:flex-end"><button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="editBooking(\''+b.id+'\')">Modifica</button><button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem(\'bookings\',\''+b.id+'\')">Elimina</button></div></div></div>';
 }
 
-window._renderBookings = function(){
-  const statusF=document.getElementById('filter-status')?.value||'';
-  const platF=document.getElementById('filter-platform')?.value||'';
-  let filtered=bookings.filter(b=>{
-    if(statusF && b.stato!==statusF) return false;
-    if(platF && b.piattaforma!==platF) return false;
+window._rb = function(){
+  var statusF=document.getElementById('filter-status')?document.getElementById('filter-status').value:'';
+  var platF=document.getElementById('filter-platform')?document.getElementById('filter-platform').value:'';
+  var filtered=bookings.filter(function(b){
+    if(statusF&&b.stato!==statusF) return false;
+    if(platF&&b.piattaforma!==platF) return false;
     return true;
   });
-  const el=document.getElementById('bookings-list');
-  if(!el) return;
-  el.innerHTML = filtered.length ? filtered.map(b=>bookingCardHTML(b)).join('') :
-    '<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nessuna prenotazione trovata</div></div>';
+  var el=document.getElementById('bookings-list');
+  if(el) el.innerHTML=filtered.length?filtered.map(bookingCardHTML).join(''):'<div class="empty"><div class="empty-icon">&#128197;</div><div class="empty-text">Nessuna prenotazione trovata</div></div>';
 };
+function renderBookings(){ if(window._rb) window._rb(); }
 
-// ── CALENDAR ──
-window._changeMonth=function(dir){ calMonth+=dir; if(calMonth>11){calMonth=0;calYear++;}else if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
-
-function renderCalendar(){
-  const title=new Date(calYear,calMonth,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});
-  const el=document.getElementById('cal-title');
+// CALENDAR
+window._rc = function(){
+  var title=new Date(calYear,calMonth,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});
+  var el=document.getElementById('cal-title');
   if(el) el.textContent=title.charAt(0).toUpperCase()+title.slice(1);
-
-  const container=document.getElementById('cal-days');
+  var container=document.getElementById('cal-days');
   if(!container) return;
   container.innerHTML='';
-
-  const firstDay=(new Date(calYear,calMonth,1).getDay()+6)%7;
-  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
-  const today=new Date();
-
-  // build booked days map
-  const bookedDays={};
-  bookings.filter(b=>b.stato!=='Cancellata').forEach(b=>{
-    let d=new Date(b.checkin);
-    const end=new Date(b.checkout);
+  var firstDay=(new Date(calYear,calMonth,1).getDay()+6)%7;
+  var daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  var today=new Date();
+  var bookedDays={};
+  bookings.filter(function(b){return b.stato!=='Cancellata';}).forEach(function(b){
+    var d=new Date(b.checkin), end=new Date(b.checkout);
     while(d<end){
-      if(d.getFullYear()===calYear && d.getMonth()===calMonth){
-        const key=d.getDate();
-        bookedDays[key]=b.piattaforma;
-      }
+      if(d.getFullYear()===calYear&&d.getMonth()===calMonth) bookedDays[d.getDate()]=b.piattaforma;
       d.setDate(d.getDate()+1);
     }
   });
-
-  for(let i=0;i<firstDay;i++){
-    const div=document.createElement('div');
-    div.className='cal-day other';
-    container.appendChild(div);
-  }
-  for(let d=1;d<=daysInMonth;d++){
-    const div=document.createElement('div');
+  for(var i=0;i<firstDay;i++){var div=document.createElement('div');div.className='cal-day other';container.appendChild(div);}
+  for(var d=1;d<=daysInMonth;d++){
+    var div=document.createElement('div');
     div.className='cal-day';
     div.textContent=d;
-    const plat=bookedDays[d];
+    var plat=bookedDays[d];
     if(plat==='Airbnb') div.classList.add('booked-a');
     else if(plat==='Booking.com') div.classList.add('booked-b');
     else if(plat) div.classList.add('booked-d');
@@ -576,985 +526,440 @@ function renderCalendar(){
     if(d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear()) div.classList.add('today');
     container.appendChild(div);
   }
-}
+};
+function renderCalendar(){ if(window._rc) window._rc(); }
+window._chm = function(dir){ calMonth+=dir; if(calMonth>11){calMonth=0;calYear++;}else if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); };
 
-// ── MESSAGES ──
-function fillTemplate(testo, booking){
+// MESSAGES
+function fillTemplate(testo,booking){
   if(!booking) return testo;
-  const nights = Math.max(0, Math.round((new Date(booking.checkout)-new Date(booking.checkin))/86400000));
-  return (testo||'')
-    .replace(/{nome}/g, booking.nome||'Ospite')
-    .replace(/{checkin}/g, formatDate(booking.checkin))
-    .replace(/{checkout}/g, formatDate(booking.checkout))
-    .replace(/{notti}/g, nights);
-}
-
-function getDaysUntil(dateStr){
-  const diff = new Date(dateStr) - new Date();
-  return Math.ceil(diff/86400000);
+  var nights=Math.max(0,Math.round((new Date(booking.checkout)-new Date(booking.checkin))/86400000));
+  return (testo||'').replace(/{nome}/g,booking.nome||'Ospite').replace(/{checkin}/g,formatDate(booking.checkin)).replace(/{checkout}/g,formatDate(booking.checkout)).replace(/{notti}/g,nights);
 }
 
 function renderReminders(){
-  const remWrap = document.getElementById('reminders-wrap');
-  const remList = document.getElementById('reminders-list');
-  if(!remList || !messages.length || !bookings.length){ if(remWrap) remWrap.style.display='none'; return; }
-
-  const now = new Date();
-  const reminders = [];
-
-  bookings.filter(b=>b.stato!=='Cancellata').forEach(b=>{
-    messages.forEach(m=>{
-      const trigger = m.trigger||'';
-      const daysUntilCheckin = getDaysUntil(b.checkin);
-      const daysUntilCheckout = getDaysUntil(b.checkout);
-      let shouldShow = false;
-      let label = '';
-
-      if(trigger==='Al check-in' && daysUntilCheckin>=0 && daysUntilCheckin<=1){ shouldShow=true; label='Check-in oggi/domani'; }
-      else if(trigger==='1 giorno prima' && daysUntilCheckin===1){ shouldShow=true; label='Arrivo domani'; }
-      else if(trigger==='2 giorni prima' && daysUntilCheckin>=1 && daysUntilCheckin<=2){ shouldShow=true; label='Arrivo fra '+daysUntilCheckin+' giorni'; }
-      else if(trigger==='1 ora dopo checkout' && daysUntilCheckout>=0 && daysUntilCheckout<=1){ shouldShow=true; label='Checkout oggi'; }
-
-      if(shouldShow){
-        const sentKey = 'sent_'+b.id+'_'+m.id;
-        const alreadySent = localStorage.getItem(sentKey);
-        reminders.push({ booking:b, message:m, label, daysUntilCheckin, sentKey, sent:!!alreadySent });
+  var wrap=document.getElementById('reminders-wrap');
+  var list=document.getElementById('reminders-list');
+  if(!list||!messages.length||!bookings.length){if(wrap)wrap.style.display='none';return;}
+  var now=new Date(), reminders=[];
+  bookings.filter(function(b){return b.stato!=='Cancellata';}).forEach(function(b){
+    messages.forEach(function(m){
+      var trigger=m.trigger||'';
+      var daysCI=Math.ceil((new Date(b.checkin)-now)/86400000);
+      var daysCO=Math.ceil((new Date(b.checkout)-now)/86400000);
+      var show=false, label='';
+      if(trigger==='Al check-in'&&daysCI>=0&&daysCI<=1){show=true;label='Check-in oggi/domani';}
+      else if(trigger==='1 giorno prima'&&daysCI===1){show=true;label='Arrivo domani';}
+      else if(trigger==='2 giorni prima'&&daysCI>=1&&daysCI<=2){show=true;label='Arrivo fra '+daysCI+' giorni';}
+      else if(trigger==='1 ora dopo checkout'&&daysCO>=0&&daysCO<=1){show=true;label='Checkout oggi';}
+      if(show){
+        var sentKey='sent_'+b.id+'_'+m.id;
+        var sent=!!localStorage.getItem(sentKey);
+        reminders.push({booking:b,message:m,label:label,daysCI:daysCI,sentKey:sentKey,sent:sent});
       }
     });
   });
-
-  if(!reminders.length){ if(remWrap) remWrap.style.display='none'; return; }
-  if(remWrap) remWrap.style.display='block';
-
-  remList.innerHTML = reminders.map((r,i)=>{
-    const urgent = r.daysUntilCheckin<=0;
-    const daysClass = r.sent?'sent':urgent?'urgent':'';
-    return `<div class="reminder-card ${r.sent?'sent':''}">
-      <div class="reminder-icon">${r.sent?'✅':'🔔'}</div>
-      <div class="reminder-info">
-        <div class="reminder-title">${r.message.titolo} — ${r.booking.nome}</div>
-        <div class="reminder-sub">${r.message.trigger} · ${formatDate(r.booking.checkin)} – ${formatDate(r.booking.checkout)}</div>
-        <span class="reminder-days ${daysClass}">${r.sent?'Inviato':r.label}</span>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
-        <button class="btn-primary" style="padding:6px 12px;font-size:12px" onclick="openPreview('${r.message.id}','${r.booking.id}','${r.sentKey}')">
-          ${r.sent?'👁 Rivedi':'📋 Copia'}
-        </button>
-      </div>
-    </div>`;
+  if(!reminders.length){if(wrap)wrap.style.display='none';return;}
+  if(wrap) wrap.style.display='block';
+  list.innerHTML=reminders.map(function(r){
+    return '<div class="reminder-card '+(r.sent?'sent':'')+'"><div class="reminder-icon">'+(r.sent?'&#9989;':'&#128276;')+'</div><div class="reminder-info"><div class="reminder-title">'+r.message.titolo+' - '+r.booking.nome+'</div><div class="reminder-sub">'+r.message.trigger+' - '+formatDate(r.booking.checkin)+' / '+formatDate(r.booking.checkout)+'</div><span class="reminder-days '+(r.sent?'sent':r.daysCI<=0?'urgent':'')+'"> '+(r.sent?'Inviato':r.label)+'</span></div><button class="btn-primary" style="padding:6px 12px;font-size:12px" onclick="openPreview(\''+r.message.id+'\',\''+r.booking.id+'\',\''+r.sentKey+'\')">Copia</button></div>';
   }).join('');
 }
 
-let currentSentKey = null;
-window._openPreview = function(msgId, bookingId, sentKey){
-  const m = messages.find(x=>x.id===msgId);
-  const b = bookings.find(x=>x.id===bookingId);
+window._op = function(msgId,bookingId,sentKey){
+  var m=messages.find(function(x){return x.id===msgId;});
+  var b=bookings.find(function(x){return x.id===bookingId;});
   if(!m||!b) return;
-  currentSentKey = sentKey;
-  document.getElementById('preview-title').textContent = m.titolo||'Anteprima';
-  document.getElementById('preview-guest-info').textContent = '👤 '+b.nome+' · '+formatDate(b.checkin)+' – '+formatDate(b.checkout);
-  document.getElementById('preview-body').textContent = fillTemplate(m.testo, b);
-  const sent = localStorage.getItem(sentKey);
-  document.getElementById('preview-sent-badge').style.display = sent?'block':'none';
+  currentSentKey=sentKey;
+  document.getElementById('preview-title').textContent=m.titolo||'Anteprima';
+  document.getElementById('preview-guest-info').textContent='Ospite: '+b.nome+' - '+formatDate(b.checkin)+' / '+formatDate(b.checkout);
+  document.getElementById('preview-body').textContent=fillTemplate(m.testo,b);
+  var sent=localStorage.getItem(sentKey);
+  document.getElementById('preview-sent-badge').style.display=sent?'block':'none';
   document.getElementById('preview-overlay').classList.add('open');
 };
-
-window._closePreview = function(){ document.getElementById('preview-overlay').classList.remove('open'); };
-
-window._copyPreview = function(){
-  const text = document.getElementById('preview-body').textContent;
-  navigator.clipboard.writeText(text).then(()=>toast('Messaggio copiato! 📋'));
+window._cp = function(){ document.getElementById('preview-overlay').classList.remove('open'); };
+window._cop = function(){
+  var text=document.getElementById('preview-body').textContent;
+  navigator.clipboard.writeText(text).then(function(){toast('Messaggio copiato!');});
 };
-
-window._markSent = function(){
+window._ms = function(){
   if(currentSentKey){
-    localStorage.setItem(currentSentKey, '1');
+    localStorage.setItem(currentSentKey,'1');
     document.getElementById('preview-sent-badge').style.display='block';
     renderReminders();
-    toast('Segnato come inviato ✅');
+    toast('Segnato come inviato');
   }
+};
+window._ompt = function(msgId){
+  var m=messages.find(function(x){return x.id===msgId;});
+  if(!m) return;
+  var upcoming=bookings.filter(function(b){return b.stato!=='Cancellata'&&new Date(b.checkin)>=new Date();}).sort(function(a,b){return new Date(a.checkin)-new Date(b.checkin);})[0];
+  document.getElementById('preview-title').textContent=m.titolo||'Anteprima';
+  document.getElementById('preview-guest-info').textContent=upcoming?'Anteprima con: '+upcoming.nome:'Anteprima con dati esempio';
+  var fake=upcoming||{nome:'Mario Rossi',checkin:'2026-07-01',checkout:'2026-07-05'};
+  document.getElementById('preview-body').textContent=fillTemplate(m.testo,fake);
+  document.getElementById('preview-sent-badge').style.display='none';
+  currentSentKey=null;
+  document.getElementById('preview-overlay').classList.add('open');
 };
 
 function renderMessages(){
-  const el=document.getElementById('messages-list');
+  var el=document.getElementById('messages-list');
   if(!el) return;
   renderReminders();
-  el.innerHTML = messages.length ? messages.map(m=>`
-    <div class="msg-card" onclick="openMsgPreviewFromTemplate('${m.id}')">
-      <span class="msg-trigger-badge">${m.trigger||'—'}</span>
-      <div class="msg-title-row">
-        <div class="msg-title">${m.titolo||'—'}</div>
-        <div class="msg-actions" onclick="event.stopPropagation()">
-          <button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="editMessage('${m.id}')">✏️</button>
-          <button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem('messages','${m.id}')">🗑</button>
-        </div>
-      </div>
-      <div class="msg-preview">${(m.testo||'').slice(0,130)}${(m.testo||'').length>130?'...':''}</div>
-      <div style="font-size:11px;color:#1a6b4a;margin-top:6px">👁 Clicca per vedere anteprima</div>
-    </div>`).join('') :
-    `<div class="empty"><div class="empty-icon">💬</div><div class="empty-text">Nessun template. Aggiungine uno!</div></div>
-    <div style="margin-top:16px">
-      <div style="font-size:13px;font-weight:600;margin-bottom:10px">🚀 Template pronti da usare:</div>
-      <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('benvenuto')">+ Messaggio di benvenuto (check-in)</button>
-      <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('guidabenvenuto')">+ Guida del quartiere con attrazioni e ristoranti</button>
-      <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('prearrivo')">+ Promemoria pre-arrivo (2 giorni prima)</button>
-      <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('metasoggiorno')">+ Messaggio metà soggiorno</button>
-      <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('istruzionicheckout')">+ Istruzioni per il check-out (1 giorno prima)</button>
-      <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('checkout')">+ Ringraziamento post-soggiorno</button>
-    </div>`;
-}
-
-window._openMsgPreviewFromTemplate = function(msgId){
-  const m = messages.find(x=>x.id===msgId);
-  if(!m) return;
-  // trova la prossima prenotazione per anteprima
-  const upcoming = bookings.filter(b=>b.stato!=='Cancellata'&&new Date(b.checkin)>=new Date()).sort((a,b)=>new Date(a.checkin)-new Date(b.checkin))[0];
-  document.getElementById('preview-title').textContent = m.titolo||'Anteprima';
-  document.getElementById('preview-guest-info').textContent = upcoming
-    ? '👤 Anteprima con: '+upcoming.nome+' · '+formatDate(upcoming.checkin)+' – '+formatDate(upcoming.checkout)
-    : '⚠️ Anteprima con dati esempio (nessuna prenotazione attiva)';
-  const fakeBooking = upcoming || { nome:'Mario Rossi', checkin:'2026-07-01', checkout:'2026-07-05' };
-  document.getElementById('preview-body').textContent = fillTemplate(m.testo, fakeBooking);
-  document.getElementById('preview-sent-badge').style.display='none';
-  currentSentKey = null;
-  document.getElementById('preview-overlay').classList.add('open');
-};
-
-const defaultTemplates = {
-  benvenuto:{
-    titolo:'Messaggio di benvenuto',
-    trigger:'Al check-in',
-    testo:`Caro/a {nome},
-
-Benvenuto/a nel mio appartamento a Firenze! 🏠
-
-Sono felice di ospitarti per queste {notti} notti. Ecco tutto quello che ti serve sapere:
-
-🔑 Accesso all'appartamento:
-• Indirizzo: Via Capo di Mondo 76, 50136 Firenze
-• Codice cassetta chiavi: [INSERISCI CODICE]
-• Check-in: dalle ore 15:00
-• Check-out: entro le ore 10:00
-
-📶 WiFi:
-• Rete: [NOME RETE]
-• Password: [PASSWORD]
-
-🚌 Come spostarti dal quartiere:
-• Bus 6A, 6B, 17 → fermata a 2 min a piedi → centro in 20 min
-• Stazione Campo di Marte → a 10 min a piedi (treni regionali)
-• Taxi: ItTaxi app o chiama il 055 3131
-
-🏛️ Da non perdere nei dintorni:
-• Basilica di Santa Croce → 15 min a piedi
-• Mercato di Sant'Ambrogio → 10 min a piedi
-• Piazzale Michelangelo → 25 min a piedi (tramonto spettacolare!)
-• Galleria degli Uffizi → 20 min in bus o 30 min a piedi
-
-🍽️ Dove mangiare vicino a casa:
-• Cotta a Puntino (Via Guido Biagi) → ottima pizza, a 5 min
-• Mercato Sant'Ambrogio → pranzo tra i locali, a 10 min
-• Le Delizie del Palato → cucina toscana autentica, vicino allo stadio
-
-🛒 Supermercati:
-• Esselunga / Conad in zona, a 5-10 min a piedi
-
-Per qualsiasi domanda o necessità, sono sempre disponibile. Scrivimi qui su Airbnb!
-
-Buon soggiorno a Firenze 🌸
-Sean`
-  },
-  prearrivo:{
-    titolo:'Promemoria pre-arrivo',
-    trigger:'2 giorni prima',
-    testo:`Ciao {nome}! 👋
-
-Mancano 2 giorni al tuo soggiorno a Firenze — non vediamo l'ora di accoglierti!
-
-📋 Riepilogo:
-📅 Check-in: {checkin}
-📅 Check-out: {checkout}
-📍 Via Capo di Mondo 76, 50136 Firenze (quartiere Campo di Marte)
-
-🚇 Come raggiungere l'appartamento:
-
-✈️ Dall'aeroporto Vespucci (FLR):
-• Tram T2 → SMN, poi bus 6A/6B o 17 fino a Via Capo di Mondo (~35 min, ~€2,50)
-• Taxi: tariffa fissa €28 fino al centro, ~15-20 min
-• App taxi: ItTaxi (tel. 055 3131) o AppTaxi
-
-🚂 Dalla Stazione SMN (Santa Maria Novella):
-• Bus 6A, 6B o 17 → fermata Landucci/Fra' Paolo Sarpi, 2 min a piedi (~20 min, €1,70)
-• Taxi: ~€11-13, circa 10-15 min
-
-🚉 Da Firenze Campo di Marte (treno):
-• A piedi: ~10 minuti
-
-🚌 Bus utili dalla zona:
-Linee 6A, 6B, 17, 23A, 23B — fermata a 2 minuti a piedi
-
-🅿️ In auto:
-Parcheggio disponibile in strada nelle vie limitrofe.
-La zona non è in area ZTL — nessuna restrizione di accesso.
-
-Per qualsiasi domanda sono a tua disposizione. A presto! 😊
-
-Sean`
-  },
-  checkout:{
-    titolo:'Ringraziamento post-soggiorno',
-    trigger:'1 ora dopo checkout',
-    testo:`Caro/a {nome},
-
-Grazie mille per aver soggiornato nel mio appartamento dal {checkin} al {checkout}! 🙏
-
-Spero che il tuo soggiorno a Firenze sia stato indimenticabile e che tu abbia potuto goderti questa meravigliosa città.
-
-⭐ Se l'esperienza ti è piaciuta, ti sarei molto grato/a se potessi lasciare una recensione su Airbnb — ci vogliono solo 2 minuti e per me fa una grande differenza!
-
-👉 Puoi lasciare la recensione direttamente dall'app Airbnb o dal sito, nella sezione "I tuoi viaggi".
-
-Spero di rivederti presto a Firenze — sei sempre il/la benvenuto/a! 😊
-
-Un caro saluto,
-Sean`
-  },
-  metasoggiorno:{
-    titolo:'Messaggio metà soggiorno',
-    trigger:'Personalizzato',
-    testo:`Ciao {nome}! 😊
-
-Spero che il tuo soggiorno a Firenze stia andando alla grande!
-
-Volevo solo salutarti e assicurarmi che tutto sia di tuo gradimento nell'appartamento.
-
-🏛️ Se hai bisogno di consigli su cosa vedere o dove mangiare, sono felice di aiutarti! Qualche idea dal quartiere:
-
-🍽️ Dove mangiare vicino a casa:
-• Trattoria da Ruggero (Via Senese) → cucina toscana autentica
-• Mercato di Sant'Ambrogio → pranzo tra i locali, a 10 min a piedi
-• Buca Mario → una delle osterie storiche di Firenze
-
-🏛️ Da non perdere assolutamente:
-• Piazzale Michelangelo → tramonto mozzafiato, 20 min a piedi
-• Santa Croce → a 10 min a piedi, tomba di Michelangelo e Galileo
-• Oltrarno → il quartiere più autentico, 15 min a piedi
-
-🚌 Per spostarti:
-• Bus 6A/6B/17 dalla fermata sotto casa → centro in 20 min
-• Bici/monopattino elettrico: Lime e Dott disponibili in zona
-
-Non esitare a scrivermi per qualsiasi cosa. Buon proseguimento! 🌺
-
-Sean`
-  },
-  istruzionicheckout:{
-    titolo:'Istruzioni per il check-out',
-    trigger:'1 giorno prima',
-    testo:`Ciao {nome}!
-
-Il tuo soggiorno sta per concludersi — domani è il giorno del check-out ({checkout}). 
-
-Ecco le istruzioni per lasciare l'appartamento:
-
-🕐 Orario check-out: entro le ore 10:00
-(Se hai bisogno di più tempo, scrivimi prima — cercherò di aiutarti!)
-
-✅ Prima di partire, ti chiedo gentilmente di:
-• Lasciare le chiavi nella cassetta fuori dalla porta (stesso codice dell'arrivo)
-• Mettere i piatti usati in lavastoviglie e avviarla
-• Svuotare il frigorifero da alimenti deperibili
-• Buttare la spazzatura nei bidoni condominiali in cortile
-• Chiudere bene finestre, balcone e tapparelle
-• Spegnere luci, climatizzatore e TV
-
-🧳 Bagagli:
-Se hai bisogno di lasciare i bagagli dopo il check-out per qualche ora, scrivimi — posso organizzarmi!
-
-✈️ Come raggiungere l'aeroporto Vespucci:
-• Tram T2 da SMN: prendi il bus 6A/6B fino a SMN, poi T2 per l'aeroporto (~40 min, €1,70)
-• Taxi: ~€28 tariffa fissa, chiama ItTaxi al 055 3131
-
-🚂 Stazione Campo di Marte (treni regionali):
-• A 10 minuti a piedi da casa
-
-È stato un vero piacere ospitarti. Buon viaggio di ritorno! ✈️
-
-Sean`
-  },
-  guidabenvenuto:{
-    titolo:'Guida del quartiere',
-    trigger:'Al check-in',
-    testo:`Ciao {nome}! 🗺️
-
-Ecco la mia guida personale al quartiere Campo di Marte / Le Cure — la zona più autentica di Firenze, lontana dal caos turistico ma vicinissima a tutto!
-
-🏛️ ATTRAZIONI A PIEDI DA CASA:
-• Basilica di Santa Croce → 15 min (tomba di Michelangelo e Galileo!)
-• Mercato di Sant'Ambrogio → 10 min (il mercato preferito dai fiorentini)
-• Piazza Massimo D'Azeglio → 5 min (bellissima per una passeggiata)
-• Piazzale Michelangelo → 25 min (tramonto da non perdere!)
-• Arno e Lungarni → 20 min a piedi
-• Stadio Artemio Franchi → 10 min (se c'è la Fiorentina, l'atmosfera è unica!)
-
-🏛️ CENTRO STORICO (20-30 min in bus o a piedi):
-• Galleria degli Uffizi → prenotare online con anticipo!
-• Duomo e Cupola del Brunelleschi → accesso gratuito alla cattedrale
-• Galleria dell'Accademia → il David di Michelangelo
-• Palazzo Pitti e Giardino di Boboli
-• Ponte Vecchio e Oltrarno
-
-🍽️ DOVE MANGIARE (i miei preferiti):
-• Cotta a Puntino (Via Guido Biagi 6) → miglior pizza della zona ⭐
-• Mercato di Sant'Ambrogio → pranzo autentico tra i locali, prezzi onesti
-• Le Delizie del Palato → cucina toscana e napoletana, zona stadio
-• Trattoria L'Oriuolo → cucina fiorentina tradizionale, centro storico
-• Per un aperitivo: i bar in Piazza D'Azeglio e lungo Viale Mazzini
-
-☕ COLAZIONE:
-• I bar del quartiere aprono dalle 7:00 — cornetto e cappuccino come i fiorentini!
-
-🛒 DOVE FARE LA SPESA:
-• Supermercato Conad / Esselunga → a 5-10 min a piedi
-• Mercato Sant'Ambrogio (mattina) → frutta, verdura e prodotti locali freschi
-
-🚌 TRASPORTI DAL QUARTIERE:
-• Bus 6A, 6B, 17 → centro in 20 min, fermata a 2 min da casa
-• Stazione Campo di Marte → 10 min a piedi (treni per tutta la Toscana!)
-• Taxi: app ItTaxi o chiama 055 3131
-• Bici/monopattino: Lime e Dott disponibili in zona
-
-💡 CONSIGLI PRATICI:
-• Biglietto bus: €1,70 (90 min), acquistabile in tabaccheria o app Autolinee Toscane
-• Musei: prenota sempre online per evitare code enormi
-• ZTL: il centro storico è ZTL — non entrare in auto senza permesso!
-• Farmacia: in Via Gioberti a 5 min
-
-Sono sempre disponibile per altri consigli. Buona esplorazione! 🌸
-Sean`
+  if(!messages.length){
+    el.innerHTML='<div class="empty"><div class="empty-icon">&#128172;</div><div class="empty-text">Nessun template</div></div>'+
+    '<div style="margin-top:16px"><div style="font-size:13px;font-weight:600;margin-bottom:10px">Template pronti:</div>'+
+    '<button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate(\'benvenuto\')">+ Messaggio di benvenuto (check-in)</button>'+
+    '<button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate(\'guidabenvenuto\')">+ Guida del quartiere</button>'+
+    '<button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate(\'prearrivo\')">+ Promemoria pre-arrivo (2 giorni prima)</button>'+
+    '<button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate(\'metasoggiorno\')">+ Messaggio meta soggiorno</button>'+
+    '<button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate(\'istruzionicheckout\')">+ Istruzioni check-out (1 giorno prima)</button>'+
+    '<button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate(\'checkout\')">+ Ringraziamento post-soggiorno</button>'+
+    '</div>';
+    return;
   }
-};
-window._addDefaultTemplate = async function(key){
-  const t = defaultTemplates[key];
-  if(!t) return;
-  await addDoc(collection(db,'messages'),{...t, createdAt:serverTimestamp(), updatedAt:serverTimestamp()});
-  toast('Template "'+t.titolo+'" aggiunto! ✓');
-};
-
-// ── TASKS ──
-function taskItemHTML(t, compact=false){
-  return `<div class="task-item ${t.done?'done-item':''}" id="task-${t.id}">
-    <div class="task-check ${t.done?'done':''}" onclick="toggleTask('${t.id}','${!t.done}')">
-      ${t.done?'✓':''}
-    </div>
-    <span class="task-label ${t.done?'done':''}">${t.descrizione||'—'}</span>
-    <span class="task-zone">${t.zona||'—'}</span>
-    ${!compact?`<button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem('tasks','${t.id}')">🗑</button>`:''}
-  </div>`;
+  el.innerHTML=messages.map(function(m){
+    return '<div class="msg-card" onclick="openMsgPreviewFromTemplate(\''+m.id+'\')">'+
+    '<span class="msg-trigger-badge">'+(m.trigger||'-')+'</span>'+
+    '<div class="msg-title-row"><div class="msg-title">'+(m.titolo||'-')+'</div>'+
+    '<div class="msg-actions" onclick="event.stopPropagation()">'+
+    '<button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="editMessage(\''+m.id+'\')">Modifica</button>'+
+    '<button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem(\'messages\',\''+m.id+'\')">Elimina</button>'+
+    '</div></div>'+
+    '<div class="msg-preview">'+(m.testo||'').slice(0,130)+'</div>'+
+    '<div style="font-size:11px;color:#1a6b4a;margin-top:6px">Clicca per anteprima</div></div>';
+  }).join('');
 }
 
-window._renderTasks=function(){
-  const zoneF=document.getElementById('filter-zone')?.value||'';
-  const showDone=document.getElementById('show-done')?.checked||false;
-  let filtered=tasks.filter(t=>{
-    if(zoneF && t.zona!==zoneF) return false;
-    if(!showDone && t.done) return false;
+// TASKS
+function taskItemHTML(t,compact){
+  return '<div class="task-item '+(t.done?'done-item':'')+'" id="task-'+t.id+'">'+
+  '<div class="task-check '+(t.done?'done':'')+'" onclick="toggleTask(\''+t.id+'\','+(t.done?'false':'true')+')">'+(t.done?'v':'')+'</div>'+
+  '<span class="task-label '+(t.done?'done':'')+'">'+(t.descrizione||'-')+'</span>'+
+  '<span class="task-zone">'+(t.zona||'-')+'</span>'+
+  (compact?'':'<button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem(\'tasks\',\''+t.id+'\')">Elimina</button>')+
+  '</div>';
+}
+window._rts = function(){
+  var zoneF=document.getElementById('filter-zone')?document.getElementById('filter-zone').value:'';
+  var showDone=document.getElementById('show-done')?document.getElementById('show-done').checked:false;
+  var filtered=tasks.filter(function(t){
+    if(zoneF&&t.zona!==zoneF) return false;
+    if(!showDone&&t.done) return false;
     return true;
   });
-  const el=document.getElementById('tasks-list');
-  if(!el) return;
-  el.innerHTML=filtered.length?filtered.map(t=>taskItemHTML(t)).join(''):
-    '<div class="empty"><div class="empty-icon">🧹</div><div class="empty-text">Nessuna attività. Aggiungine una!</div></div>';
-
-  const all=tasks.length, done=tasks.filter(t=>t.done).length;
-  const pw=document.getElementById('progress-wrap');
-  if(pw){ pw.style.display=all?'block':'none';
-    document.getElementById('prog-text').textContent=done+'/'+all+' completate';
-    document.getElementById('prog-bar').style.width=all?Math.round(done/all*100)+'%':'0%';
-  }
+  var el=document.getElementById('tasks-list');
+  if(el) el.innerHTML=filtered.length?filtered.map(function(t){return taskItemHTML(t,false);}).join(''):'<div class="empty"><div class="empty-icon">&#129529;</div><div class="empty-text">Nessuna attivita</div></div>';
+  var all=tasks.length, done=tasks.filter(function(t){return t.done;}).length;
+  var pw=document.getElementById('progress-wrap');
+  if(pw){pw.style.display=all?'block':'none';document.getElementById('prog-text').textContent=done+'/'+all;document.getElementById('prog-bar').style.width=all?Math.round(done/all*100)+'%':'0%';}
+};
+function renderTasks(){ if(window._rts) window._rts(); }
+window._tt = async function(id,done){
+  await updateDoc(doc(db,'tasks',id),{done:(done==='true'||done===true)});
 };
 
-window._toggleTask=async function(id, done){
-  await updateDoc(doc(db,'tasks',id),{done:done==='true'||done===true});
-};
-
-// ── PRICES ──
+// PRICES
 function renderPrices(){
-  const el=document.getElementById('prices-list');
+  var el=document.getElementById('prices-list');
   if(!el) return;
-  const tagMap={Alta:'pt-alta',Normale:'pt-normale',Evento:'pt-evento'};
-  el.innerHTML=prices.length?prices.map(p=>`
-    <div class="price-row">
-      <div class="price-info">
-        <div class="price-name">${p.nome||'—'}</div>
-        <div class="price-desc">${p.descrizione||''}</div>
-      </div>
-      <span class="price-tag ${tagMap[p.tipo]||'pt-normale'}">${p.tipo||'—'}</span>
-      <div class="price-val">€${Number(p.prezzo||0).toLocaleString('it-IT')}/notte</div>
-      <div style="display:flex;gap:4px">
-        <button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="editPrice('${p.id}')">✏️</button>
-        <button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem('prices','${p.id}')">🗑</button>
-      </div>
-    </div>`).join(''):
-    '<div class="empty"><div class="empty-icon">💰</div><div class="empty-text">Nessun prezzo. Aggiungine uno!</div></div>';
-}
-
-// ── DYNAMIC RULES ──
-function renderRules(){
-  const el=document.getElementById('rules-list');
-  if(!el) return;
-  el.innerHTML=rules.length?rules.map(r=>`
-    <div class="rule-card">
-      <div class="rule-header">
-        <div class="rule-name">${r.nome||'—'}</div>
-        <div style="display:flex;gap:4px;align-items:center">
-          <span class="badge ${r.attiva?'badge-green':'badge-amber'}">${r.attiva?'Attiva':'Disattiva'}</span>
-          <button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="toggleRule('${r.id}',${!r.attiva})">${r.attiva?'Disattiva':'Attiva'}</button>
-          <button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem('rules','${r.id}')">🗑</button>
-        </div>
-      </div>
-      <div class="rule-desc">${ruleDescription(r)}</div>
-      <div class="rule-result">${ruleResultText(r)}</div>
-    </div>`).join(''):
-    '<div class="empty"><div class="empty-icon">⚙️</div><div class="empty-text">Nessuna regola. Le regole modificano automaticamente i prezzi.</div></div>';
-  updateTodayPrice();
-}
-
-function ruleDescription(r){
-  const condMap={
-    'last_minute':'Se mancano meno di <strong>'+r.giorni+'</strong> giorni al check-in e il giorno è ancora libero',
-    'anticipo':'Se la prenotazione arriva con più di <strong>'+r.giorni+'</strong> giorni di anticipo',
-    'weekend':'Nei giorni di venerdì, sabato e domenica',
-    'min_soggiorno':'Se la durata del soggiorno è inferiore a <strong>'+r.giorni+'</strong> notti'
-  };
-  const azMap={
-    'sconto':'→ Applica uno sconto del <strong>'+r.valore+'%</strong>',
-    'aumento':'→ Aumenta il prezzo del <strong>'+r.valore+'%</strong>',
-    'fisso':'→ Imposta prezzo fisso a <strong>€'+r.valore+'</strong>/notte'
-  };
-  return (condMap[r.condizione]||r.condizione)+' '+( azMap[r.azione]||r.azione);
-}
-
-function ruleResultText(r){
-  const base=getBasePrice();
-  if(!base) return 'Aggiungi un prezzo base per vedere il risultato';
-  const result=applyRule(base,r);
-  return '💶 Prezzo base €'+base+' → con questa regola: €'+result+'/notte';
+  var tagMap={'Alta':'pt-alta','Normale':'pt-normale','Evento':'pt-evento'};
+  el.innerHTML=prices.length?prices.map(function(p){
+    return '<div class="price-row"><div class="price-info"><div class="price-name">'+(p.nome||'-')+'</div><div class="price-desc">'+(p.descrizione||'')+'</div></div>'+
+    '<span class="price-tag '+(tagMap[p.tipo]||'pt-normale')+'">'+(p.tipo||'-')+'</span>'+
+    '<div class="price-val">EUR '+(p.prezzo||0)+'/notte</div>'+
+    '<div style="display:flex;gap:4px"><button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="editPrice(\''+p.id+'\')">Modifica</button><button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem(\'prices\',\''+p.id+'\')">Elimina</button></div></div>';
+  }).join(''):'<div class="empty"><div class="empty-icon">&#128176;</div><div class="empty-text">Nessun prezzo. Aggiungine uno!</div></div>';
 }
 
 function getBasePrice(){
   if(!prices.length) return null;
-  const now=new Date();
-  const m=now.getMonth();
-  // season detection
-  if(m>=5&&m<=8) return prices.find(p=>p.tipo==='Alta')?.prezzo || prices[0]?.prezzo;
-  if(m>=2&&m<=4||m===9) return prices.find(p=>p.nome?.toLowerCase().includes('media'))?.prezzo || prices[0]?.prezzo;
-  return prices.find(p=>p.tipo==='Normale'||p.nome?.toLowerCase().includes('bassa'))?.prezzo || prices[0]?.prezzo;
+  var m=new Date().getMonth();
+  if(m>=5&&m<=8) return prices.find(function(p){return p.tipo==='Alta';})||prices[0];
+  return prices.find(function(p){return p.tipo==='Normale';})||prices[0];
 }
-
 function applyRule(base,r){
-  if(!r.attiva) return base;
   base=Number(base);
   if(r.azione==='sconto') return Math.round(base*(1-r.valore/100));
   if(r.azione==='aumento') return Math.round(base*(1+r.valore/100));
   if(r.azione==='fisso') return Number(r.valore);
   return base;
 }
-
 function updateTodayPrice(){
-  const base=getBasePrice();
-  const el=document.getElementById('price-today');
-  const info=document.getElementById('price-today-info');
+  var bp=getBasePrice();
+  var el=document.getElementById('price-today');
+  var info=document.getElementById('price-today-info');
   if(!el) return;
-  if(!base){ el.textContent='—'; if(info)info.textContent='Aggiungi prezzi stagionali per calcolare'; return; }
-  let price=Number(base);
-  const now=new Date();
-  const activeRules=rules.filter(r=>r.attiva);
-  const applied=[];
-  activeRules.forEach(r=>{
-    const old=price;
-    // weekend check
-    if(r.condizione==='weekend'&&[5,6,0].includes(now.getDay())){
-      price=applyRule(price,r); applied.push(r.nome);
-    }
-    // check availability for last_minute/anticipo would need booking data
-    // for now apply all active rules for demo
-  });
-  el.textContent='€'+price+'/notte';
-  if(info) info.textContent=applied.length?'Regole applicate: '+applied.join(', '):'Prezzo base stagionale (nessuna regola attivata oggi)';
+  if(!bp){el.textContent='-';if(info)info.textContent='Aggiungi prezzi stagionali';return;}
+  var price=Number(bp.prezzo);
+  var now=new Date();
+  rules.filter(function(r){return r.attiva&&r.condizione==='weekend'&&[5,6,0].includes(now.getDay());}).forEach(function(r){price=applyRule(price,r);});
+  el.textContent='EUR '+price+'/notte';
+  if(info) info.textContent='Prezzo stagionale base: '+bp.nome;
 }
 
-window._toggleRule=async function(id,val){
-  await updateDoc(doc(db,'rules',id),{attiva:val});
-};
+function renderRules(){
+  var el=document.getElementById('rules-list');
+  if(!el) return;
+  el.innerHTML=rules.length?rules.map(function(r){
+    return '<div class="rule-card"><div class="rule-header"><div class="rule-name">'+(r.nome||'-')+'</div>'+
+    '<div style="display:flex;gap:4px;align-items:center">'+
+    '<span class="badge '+(r.attiva?'badge-green':'badge-amber')+'">'+(r.attiva?'Attiva':'Disattiva')+'</span>'+
+    '<button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="toggleRule(\''+r.id+'\','+(r.attiva?'false':'true')+')">'+(r.attiva?'Disattiva':'Attiva')+'</button>'+
+    '<button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem(\'rules\',\''+r.id+'\')">Elimina</button>'+
+    '</div></div>'+
+    '<div class="rule-desc">Condizione: '+(r.condizione||'-')+' - Azione: '+(r.azione||'-')+' '+r.valore+'</div></div>';
+  }).join(''):'<div class="empty"><div class="empty-icon">&#9881;</div><div class="empty-text">Nessuna regola</div></div>';
+  updateTodayPrice();
+}
+window._tr = async function(id,val){ await updateDoc(doc(db,'rules',id),{attiva:(val==='true'||val===true)}); };
 
-// ── STATS ──
+// STATS
 function renderStats(){
-  const total=bookings.filter(b=>b.stato!=='Cancellata').reduce((s,b)=>s+Number(b.prezzo||0),0);
-  const totalNights=bookings.filter(b=>b.stato!=='Cancellata').reduce((s,b)=>{
-    return s+Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));
-  },0);
-  const avg=totalNights>0?Math.round(total/totalNights):0;
-
-  const el=id=>document.getElementById(id);
-  if(el('stat-total')) el('stat-total').textContent='€'+total.toLocaleString('it-IT');
-  if(el('stat-period')) el('stat-period').textContent='storico completo';
-  if(el('stat-occ')) el('stat-occ').textContent='—';
-  if(el('stat-avg')) el('stat-avg').textContent=avg?'€'+avg:'—';
-  if(el('stat-bcount')) el('stat-bcount').textContent=bookings.filter(b=>b.stato!=='Cancellata').length;
-
-  // revenue by month
-  const byMonth={};
-  bookings.filter(b=>b.stato!=='Cancellata').forEach(b=>{
-    const key=new Date(b.checkin).toLocaleDateString('it-IT',{month:'short',year:'2-digit'});
+  var total=bookings.filter(function(b){return b.stato!=='Cancellata';}).reduce(function(s,b){return s+Number(b.prezzo||0);},0);
+  var totalNights=bookings.filter(function(b){return b.stato!=='Cancellata';}).reduce(function(s,b){return s+Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));},0);
+  var avg=totalNights>0?Math.round(total/totalNights):0;
+  function sid(id){return document.getElementById(id);}
+  if(sid('stat-total')) sid('stat-total').textContent='EUR '+total.toLocaleString('it-IT');
+  if(sid('stat-avg')) sid('stat-avg').textContent=avg?'EUR '+avg:'-';
+  if(sid('stat-bcount')) sid('stat-bcount').textContent=bookings.filter(function(b){return b.stato!=='Cancellata';}).length;
+  var byMonth={};
+  bookings.filter(function(b){return b.stato!=='Cancellata';}).forEach(function(b){
+    var key=new Date(b.checkin).toLocaleDateString('it-IT',{month:'short',year:'2-digit'});
     byMonth[key]=(byMonth[key]||0)+Number(b.prezzo||0);
   });
-  const months=Object.keys(byMonth);
-  const maxV=Math.max(...Object.values(byMonth),1);
-  const chart=document.getElementById('revenue-chart');
-  if(chart){
-    chart.innerHTML=months.length?months.map(m=>`
-      <div class="chart-row">
-        <span class="chart-month">${m}</span>
-        <div class="chart-bg"><div class="chart-fill" style="width:${Math.round(byMonth[m]/maxV*100)}%"></div></div>
-        <span class="chart-val">€${byMonth[m].toLocaleString('it-IT')}</span>
-      </div>`).join(''):
-      '<div class="empty"><div class="empty-text">Nessuna prenotazione ancora</div></div>';
-  }
-
-  // platforms
-  const plats={};
-  bookings.filter(b=>b.stato!=='Cancellata').forEach(b=>{ plats[b.piattaforma]=(plats[b.piattaforma]||0)+Number(b.prezzo||0); });
-  const pEl=document.getElementById('platform-stats');
-  if(pEl){
-    pEl.innerHTML=Object.keys(plats).map(p=>`
-      <div class="stat-card"><div class="stat-label">${p}</div>
-      <div class="stat-value">€${plats[p].toLocaleString('it-IT')}</div></div>`).join('');
-  }
+  var months=Object.keys(byMonth), maxV=Math.max.apply(null,Object.values(byMonth).concat([1]));
+  var chart=document.getElementById('revenue-chart');
+  if(chart) chart.innerHTML=months.length?months.map(function(m){return '<div class="chart-row"><span class="chart-month">'+m+'</span><div class="chart-bg"><div class="chart-fill" style="width:'+Math.round(byMonth[m]/maxV*100)+'%"></div></div><span class="chart-val">EUR '+byMonth[m]+'</span></div>';}).join(''):'<div class="empty"><div class="empty-text">Nessuna prenotazione ancora</div></div>';
+  var plats={};
+  bookings.filter(function(b){return b.stato!=='Cancellata';}).forEach(function(b){plats[b.piattaforma]=(plats[b.piattaforma]||0)+Number(b.prezzo||0);});
+  var pEl=document.getElementById('platform-stats');
+  if(pEl) pEl.innerHTML=Object.keys(plats).map(function(p){return '<div class="stat-card"><div class="stat-label">'+p+'</div><div class="stat-value">EUR '+plats[p].toLocaleString('it-IT')+'</div></div>';}).join('');
 }
 
-// ── MODAL FORMS ──
-const modalDefs={
+// ADEMPIMENTI
+window._ra = function(){
+  var el=document.getElementById('adempimenti-list');
+  if(!el) return;
+  var now=new Date();
+  var active=bookings.filter(function(b){
+    if(b.stato==='Cancellata') return false;
+    var co=new Date(b.checkout); co.setDate(co.getDate()+7);
+    return co>=now;
+  }).sort(function(a,b){return new Date(a.checkin)-new Date(b.checkin);});
+  if(!active.length){el.innerHTML='<div class="empty"><div class="empty-icon">&#128203;</div><div class="empty-text">Nessuna prenotazione attiva</div></div>';return;}
+  el.innerHTML=active.map(function(b){
+    var nights=Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));
+    var hoursCI=(now-new Date(b.checkin))/3600000;
+    var allegKey='adem_alloggiati_'+b.id;
+    var allegDone=localStorage.getItem(allegKey);
+    var allegOverdue=!allegDone&&hoursCI>24&&hoursCI>0;
+    var tur5Key='adem_turismo5_'+b.id;
+    var tur5Done=localStorage.getItem(tur5Key);
+    var tassaKey='adem_tassa_'+b.id;
+    var tassaDone=localStorage.getItem(tassaKey);
+    return '<div class="adempimento-row">'+
+    '<div class="adem-header"><div class="adem-name">'+(b.nome||'Ospite')+'</div><div class="adem-dates">'+formatDate(b.checkin)+' - '+formatDate(b.checkout)+' - '+nights+' notti</div></div>'+
+    '<div class="adem-checks">'+
+    '<div class="adem-check '+(allegDone?'done':allegOverdue?'overdue':'')+'" onclick="toggleAdem(\''+allegKey+'\',\''+b.id+'\')"><div class="adem-icon">&#128658;</div><div class="adem-label"><strong>Alloggiati Web</strong><span>'+(allegDone?'Registrato':allegOverdue?'SCADUTO':'Da fare dopo check-in')+'</span></div><div class="adem-toggle">'+(allegDone?'v':'')+'</div></div>'+
+    '<div class="adem-check '+(tassaDone?'done':'')+'" onclick="toggleAdem(\''+tassaKey+'\',\''+b.id+'\')"><div class="adem-icon">&#128182;</div><div class="adem-label"><strong>Tassa soggiorno</strong><span>'+(tassaDone?'Riscossa':'Da riscuotere')+'</span></div><div class="adem-toggle">'+(tassaDone?'v':'')+'</div></div>'+
+    '<div class="adem-check '+(tur5Done?'done':'')+'" onclick="toggleAdem(\''+tur5Key+'\',\''+b.id+'\')"><div class="adem-icon">&#127963;</div><div class="adem-label"><strong>Turismo5</strong><span>'+(tur5Done?'Comunicato':'Da comunicare')+'</span></div><div class="adem-toggle">'+(tur5Done?'v':'')+'</div></div>'+
+    '<div class="adem-check" style="background:#f8f8f6;cursor:default"><div class="adem-icon">&#128176;</div><div class="adem-label"><strong>Tassa stimata</strong><span>EUR '+(5.50*Math.min(nights,7)).toFixed(2)+' (1 ospite)</span></div></div>'+
+    '</div></div>';
+  }).join('');
+};
+function renderAdempimenti(){ if(window._ra) window._ra(); }
+window._ta = function(key,bid){ if(localStorage.getItem(key)) localStorage.removeItem(key); else localStorage.setItem(key,'1'); renderAdempimenti(); toast('Aggiornato'); };
+
+// DOCUMENTI
+window._rdb = function(){
+  var el=document.getElementById('doc-bookings-list');
+  if(!el) return;
+  var now=new Date();
+  var active=bookings.filter(function(b){
+    if(b.stato==='Cancellata') return false;
+    var co=new Date(b.checkout); co.setDate(co.getDate()+7);
+    return co>=now;
+  }).sort(function(a,b){return new Date(a.checkin)-new Date(b.checkin);});
+  if(!active.length){el.innerHTML='<div class="empty"><div class="empty-icon">&#128197;</div><div class="empty-text">Nessuna prenotazione attiva</div></div>';return;}
+  el.innerHTML=active.map(function(b){
+    var nights=Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));
+    var link=window.location.origin+'/documento.html?b='+b.id;
+    return '<div class="doc-booking-row"><div class="doc-booking-info"><div class="doc-booking-name">'+(b.nome||'Ospite')+'</div><div class="doc-booking-dates">'+formatDate(b.checkin)+' - '+formatDate(b.checkout)+' - '+nights+' notti - '+(b.piattaforma||'-')+'</div></div>'+
+    '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'+
+    '<span class="link-copied" id="copied-'+b.id+'">Copiato!</span>'+
+    '<button class="btn-secondary" style="font-size:12px;padding:5px 10px" onclick="copyDocLink(\''+b.id+'\',\''+link+'\')">Copia link</button>'+
+    '<a href="'+link+'" target="_blank" class="btn-secondary" style="font-size:12px;padding:5px 10px;text-decoration:none">Apri</a>'+
+    '</div></div>';
+  }).join('');
+};
+function renderDocBookings(){ if(window._rdb) window._rdb(); }
+window._cdl = function(bookingId,link){
+  navigator.clipboard.writeText(link).then(function(){
+    var el=document.getElementById('copied-'+bookingId);
+    if(el){el.style.display='inline';setTimeout(function(){el.style.display='none';},2000);}
+    toast('Link copiato!');
+  });
+};
+window._ld = async function(){
+  var el=document.getElementById('documenti-list');
+  if(!el) return;
+  el.innerHTML='<div style="text-align:center;padding:20px;color:#888;font-size:13px">Caricamento...</div>';
+  try{
+    var snap=await getDocs(collection(db,'documenti'));
+    documenti=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    documenti.sort(function(a,b){return (b.uploadedAt&&b.uploadedAt.seconds||0)-(a.uploadedAt&&a.uploadedAt.seconds||0);});
+    renderDocumenti();
+  }catch(e){el.innerHTML='<div class="empty"><div class="empty-text">Errore caricamento</div></div>';}
+};
+function renderDocumenti(){
+  var el=document.getElementById('documenti-list');
+  if(!el) return;
+  if(!documenti.length){el.innerHTML='<div class="empty"><div class="empty-icon">&#128196;</div><div class="empty-text">Nessun documento ricevuto</div></div>';return;}
+  el.innerHTML=documenti.map(function(d){
+    var initials=((d.guestNome||'?')[0]+(d.guestCognome||'?')[0]).toUpperCase();
+    var uploadDate=d.uploadedAt?new Date(d.uploadedAt.seconds*1000).toLocaleDateString('it-IT'):'-';
+    return '<div class="doc-card"><div class="doc-card-header"><div class="doc-avatar">'+initials+'</div><div><div class="doc-name">'+(d.guestNome||'-')+' '+(d.guestCognome||'')+'</div><div class="doc-meta">Caricato il '+uploadDate+' - Check-in '+formatDate(d.checkin)+'</div></div><span class="delete-badge">Elimina il '+(d.deleteAfter||'-')+'</span></div>'+
+    '<div class="doc-fields">'+
+    '<div class="doc-field"><div class="doc-field-label">Data nascita</div><div class="doc-field-value">'+(d.guestNascita||'-')+'</div></div>'+
+    '<div class="doc-field"><div class="doc-field-label">Nazionalita</div><div class="doc-field-value">'+(d.guestNazionalita||'-')+'</div></div>'+
+    '<div class="doc-field"><div class="doc-field-label">Tipo documento</div><div class="doc-field-value">'+(d.tipoDocumento||'-')+'</div></div>'+
+    '<div class="doc-field"><div class="doc-field-label">Numero</div><div class="doc-field-value">'+(d.numeroDocumento||'-')+'</div></div>'+
+    '<div class="doc-field" style="grid-column:1/-1"><div class="doc-field-label">Residenza</div><div class="doc-field-value">'+(d.residenza||'-')+'</div></div>'+
+    '</div>'+
+    '<div class="doc-actions">'+
+    '<a href="'+(d.fileURL||'#')+'" target="_blank" class="btn-primary" style="font-size:12px;padding:6px 12px;text-decoration:none">Vedi documento</a>'+
+    '<button class="btn-secondary" style="font-size:12px;padding:6px 12px" onclick="copyGuestData(\''+d.id+'\')">Copia dati</button>'+
+    '<button class="btn-danger" style="font-size:12px;padding:5px 10px" onclick="deleteDocumento(\''+d.id+'\',\''+(d.filePath||'')+'\')">Elimina</button>'+
+    '</div></div>';
+  }).join('');
+}
+window._cgd = function(docId){
+  var d=documenti.find(function(x){return x.id===docId;});
+  if(!d) return;
+  var text='DATI OSPITE - Alloggiati Web\n'+
+  'Nome: '+(d.guestNome||'-')+'\n'+
+  'Cognome: '+(d.guestCognome||'-')+'\n'+
+  'Data nascita: '+(d.guestNascita||'-')+'\n'+
+  'Nazionalita: '+(d.guestNazionalita||'-')+'\n'+
+  'Tipo documento: '+(d.tipoDocumento||'-')+'\n'+
+  'Numero documento: '+(d.numeroDocumento||'-')+'\n'+
+  'Residenza: '+(d.residenza||'-')+'\n'+
+  'Check-in: '+(d.checkin||'-')+'\n'+
+  'Check-out: '+(d.checkout||'-');
+  navigator.clipboard.writeText(text).then(function(){toast('Dati copiati!');});
+};
+window._dd = async function(docId,filePath){
+  if(!confirm('Eliminare questo documento?')) return;
+  try{
+    if(filePath){try{await deleteObject(sRef(storage,filePath));}catch(e){}}
+    await deleteDoc(doc(db,'documenti',docId));
+    documenti=documenti.filter(function(d){return d.id!==docId;});
+    renderDocumenti();
+    toast('Documento eliminato');
+  }catch(e){toast('Errore eliminazione');}
+};
+
+// MODAL FORMS
+var modalDefs={
   booking:{
     title:'Aggiungi prenotazione',
-    html:(d='')=>`
-      <div class="form-row-2">
-        <div class="form-row"><label>Nome ospite</label><input id="f-nome" placeholder="es. Mario Rossi" value="${d.nome||''}"></div>
-        <div class="form-row"><label>Piattaforma</label><select id="f-piattaforma">
-          <option ${d.piattaforma==='Airbnb'?'selected':''}>Airbnb</option>
-          <option ${d.piattaforma==='Booking.com'?'selected':''}>Booking.com</option>
-          <option ${d.piattaforma==='Diretto'?'selected':''}>Diretto</option>
-        </select></div>
-      </div>
-      <div class="form-row-2">
-        <div class="form-row"><label>Check-in</label><input id="f-checkin" type="date" value="${d.checkin||''}"></div>
-        <div class="form-row"><label>Check-out</label><input id="f-checkout" type="date" value="${d.checkout||''}"></div>
-      </div>
-      <div class="form-row-2">
-        <div class="form-row"><label>Prezzo totale (€)</label><input id="f-prezzo" type="number" min="0" placeholder="0" value="${d.prezzo||''}"></div>
-        <div class="form-row"><label>Stato</label><select id="f-stato">
-          <option ${d.stato==='Confermata'?'selected':''}>Confermata</option>
-          <option ${d.stato==='In attesa'?'selected':''}>In attesa</option>
-          <option ${d.stato==='Cancellata'?'selected':''}>Cancellata</option>
-        </select></div>
-      </div>
-      <div class="form-row"><label>Note (opzionale)</label><input id="f-note" placeholder="Richieste speciali..." value="${d.note||''}"></div>
-      <button class="save-btn" onclick="saveBooking()">💾 Salva prenotazione</button>`
+    html:function(d){d=d||{};return '<div class="form-row-2"><div class="form-row"><label>Nome ospite</label><input id="f-nome" placeholder="Mario Rossi" value="'+(d.nome||'')+'"></div><div class="form-row"><label>Piattaforma</label><select id="f-piattaforma"><option '+(d.piattaforma==='Airbnb'?'selected':'')+'>Airbnb</option><option '+(d.piattaforma==='Booking.com'?'selected':'')+'>Booking.com</option><option '+(d.piattaforma==='Diretto'?'selected':'')+'>Diretto</option></select></div></div><div class="form-row-2"><div class="form-row"><label>Check-in</label><input id="f-checkin" type="date" value="'+(d.checkin||'')+'"></div><div class="form-row"><label>Check-out</label><input id="f-checkout" type="date" value="'+(d.checkout||'')+'"></div></div><div class="form-row-2"><div class="form-row"><label>Prezzo (EUR)</label><input id="f-prezzo" type="number" min="0" value="'+(d.prezzo||'')+'"></div><div class="form-row"><label>Stato</label><select id="f-stato"><option '+(d.stato==='Confermata'?'selected':'')+'>Confermata</option><option '+(d.stato==='In attesa'?'selected':'')+'>In attesa</option><option '+(d.stato==='Cancellata'?'selected':'')+'>Cancellata</option></select></div></div><div class="form-row"><label>Note</label><input id="f-note" placeholder="Note..." value="'+(d.note||'')+'"></div><button class="save-btn" onclick="saveBooking()">Salva prenotazione</button>';}
   },
   message:{
     title:'Template messaggio',
-    html:(d='')=>`
-      <div class="form-row"><label>Titolo</label><input id="f-titolo" placeholder="es. Messaggio di benvenuto" value="${d.titolo||''}"></div>
-      <div class="form-row"><label>Quando inviare</label><select id="f-trigger">
-        <option ${d.trigger==='Al check-in'?'selected':''}>Al check-in</option>
-        <option ${d.trigger==='2 giorni prima'?'selected':''}>2 giorni prima</option>
-        <option ${d.trigger==='1 giorno prima'?'selected':''}>1 giorno prima</option>
-        <option ${d.trigger==='Metà soggiorno'?'selected':''}>Metà soggiorno</option>
-        <option ${d.trigger==='1 ora dopo checkout'?'selected':''}>1 ora dopo checkout</option>
-        <option ${d.trigger==='Personalizzato'?'selected':''}>Personalizzato</option>
-      </select></div>
-      <div class="form-row"><label>Testo</label><textarea id="f-testo" rows="5" placeholder="Caro ospite, benvenuto...">${d.testo||''}</textarea></div>
-      <button class="save-btn" onclick="saveMessage()">💾 Salva template</button>`
+    html:function(d){d=d||{};return '<div class="form-row"><label>Titolo</label><input id="f-titolo" placeholder="es. Messaggio di benvenuto" value="'+(d.titolo||'')+'"></div><div class="form-row"><label>Quando inviare</label><select id="f-trigger"><option '+(d.trigger==='Al check-in'?'selected':'')+'>Al check-in</option><option '+(d.trigger==='2 giorni prima'?'selected':'')+'>2 giorni prima</option><option '+(d.trigger==='1 giorno prima'?'selected':'')+'>1 giorno prima</option><option '+(d.trigger==='Meta soggiorno'?'selected':'')+'>Meta soggiorno</option><option '+(d.trigger==='1 ora dopo checkout'?'selected':'')+'>1 ora dopo checkout</option><option '+(d.trigger==='Personalizzato'?'selected':'')+'>Personalizzato</option></select></div><div class="form-row"><label>Testo</label><textarea id="f-testo" rows="6" placeholder="Caro ospite...">'+(d.testo||'')+'</textarea></div><button class="save-btn" onclick="saveMessage()">Salva template</button>';}
   },
   task:{
-    title:'Nuova attività pulizie',
-    html:(d='')=>`
-      <div class="form-row"><label>Descrizione</label><input id="f-descrizione" placeholder="es. Cambio biancheria" value="${d.descrizione||''}"></div>
-      <div class="form-row-2">
-        <div class="form-row"><label>Zona</label><select id="f-zona">
-          ${['Camera','Bagno','Cucina','Soggiorno','Generale'].map(z=>`<option ${d.zona===z?'selected':''}>${z}</option>`).join('')}
-        </select></div>
-        <div class="form-row"><label>Assegnata a</label><select id="f-assegnata">
-          ${['Chiunque','Pulizie','Admin'].map(a=>`<option ${d.assegnata===a?'selected':''}>${a}</option>`).join('')}
-        </select></div>
-      </div>
-      <button class="save-btn" onclick="saveTask()">💾 Salva attività</button>`
+    title:'Nuova attivita pulizie',
+    html:function(d){d=d||{};return '<div class="form-row"><label>Descrizione</label><input id="f-descrizione" placeholder="es. Cambio biancheria" value="'+(d.descrizione||'')+'"></div><div class="form-row-2"><div class="form-row"><label>Zona</label><select id="f-zona"><option '+(d.zona==='Camera'?'selected':'')+'>Camera</option><option '+(d.zona==='Bagno'?'selected':'')+'>Bagno</option><option '+(d.zona==='Cucina'?'selected':'')+'>Cucina</option><option '+(d.zona==='Soggiorno'?'selected':'')+'>Soggiorno</option><option '+(d.zona==='Generale'?'selected':'')+'>Generale</option></select></div><div class="form-row"><label>Assegnata a</label><select id="f-assegnata"><option>Chiunque</option><option>Pulizie</option><option>Admin</option></select></div></div><button class="save-btn" onclick="saveTask()">Salva attivita</button>';}
   },
   price:{
     title:'Periodo prezzi',
-    html:(d='')=>`
-      <div class="form-row"><label>Nome periodo</label><input id="f-nome" placeholder="es. Alta stagione" value="${d.nome||''}"></div>
-      <div class="form-row"><label>Descrizione</label><input id="f-descrizione" placeholder="es. Giu – Set" value="${d.descrizione||''}"></div>
-      <div class="form-row-2">
-        <div class="form-row"><label>Prezzo/notte (€)</label><input id="f-prezzo" type="number" min="0" placeholder="0" value="${d.prezzo||''}"></div>
-        <div class="form-row"><label>Tipo</label><select id="f-tipo">
-          ${['Normale','Alta','Evento'].map(t=>`<option ${d.tipo===t?'selected':''}>${t}</option>`).join('')}
-        </select></div>
-      </div>
-      <button class="save-btn" onclick="savePrice()">💾 Salva prezzo</button>`
+    html:function(d){d=d||{};return '<div class="form-row"><label>Nome periodo</label><input id="f-nome" placeholder="es. Alta stagione" value="'+(d.nome||'')+'"></div><div class="form-row"><label>Descrizione</label><input id="f-descrizione" placeholder="es. Giu - Set" value="'+(d.descrizione||'')+'"></div><div class="form-row-2"><div class="form-row"><label>Prezzo/notte (EUR)</label><input id="f-prezzo" type="number" min="0" value="'+(d.prezzo||'')+'"></div><div class="form-row"><label>Tipo</label><select id="f-tipo"><option '+(d.tipo==='Normale'?'selected':'')+'>Normale</option><option '+(d.tipo==='Alta'?'selected':'')+'>Alta</option><option '+(d.tipo==='Evento'?'selected':'')+'>Evento</option></select></div></div><button class="save-btn" onclick="savePrice()">Salva prezzo</button>';}
   },
   rule:{
     title:'Nuova regola dinamica',
-    html:()=>`
-      <div class="form-row"><label>Nome regola</label><input id="f-nome" placeholder="es. Sconto last minute"></div>
-      <div class="form-row"><label>Condizione</label><select id="f-condizione" onchange="updateRuleForm()">
-        <option value="last_minute">Last minute (X giorni prima)</option>
-        <option value="anticipo">Prenotazione anticipata (X giorni prima)</option>
-        <option value="weekend">Weekend (ven/sab/dom)</option>
-        <option value="min_soggiorno">Soggiorno breve (meno di X notti)</option>
-      </select></div>
-      <div class="form-row" id="f-giorni-row"><label>Numero di giorni / notti</label><input id="f-giorni" type="number" min="1" value="7" placeholder="7"></div>
-      <div class="form-row-2">
-        <div class="form-row"><label>Azione</label><select id="f-azione">
-          <option value="sconto">Sconto (%)</option>
-          <option value="aumento">Aumento (%)</option>
-          <option value="fisso">Prezzo fisso (€)</option>
-        </select></div>
-        <div class="form-row"><label>Valore</label><input id="f-valore" type="number" min="0" placeholder="10" value="10"></div>
-      </div>
-      <button class="save-btn" onclick="saveRule()">💾 Salva regola</button>`
+    html:function(){return '<div class="form-row"><label>Nome regola</label><input id="f-nome" placeholder="es. Sconto last minute"></div><div class="form-row"><label>Condizione</label><select id="f-condizione" onchange="updateRuleForm()"><option value="last_minute">Last minute (X giorni prima)</option><option value="weekend">Weekend (ven/sab/dom)</option><option value="anticipo">Prenotazione anticipata</option></select></div><div class="form-row" id="f-giorni-row"><label>Numero giorni</label><input id="f-giorni" type="number" min="1" value="7"></div><div class="form-row-2"><div class="form-row"><label>Azione</label><select id="f-azione"><option value="sconto">Sconto (%)</option><option value="aumento">Aumento (%)</option><option value="fisso">Prezzo fisso (EUR)</option></select></div><div class="form-row"><label>Valore</label><input id="f-valore" type="number" min="0" value="10"></div></div><button class="save-btn" onclick="saveRule()">Salva regola</button>';}
   }
 };
 
-window._updateRuleForm=function(){
-  const cond=document.getElementById('f-condizione')?.value;
-  const row=document.getElementById('f-giorni-row');
-  if(row) row.style.display=cond==='weekend'?'none':'block';
-};
-
-window._openModal=function(type, data=null){
-  editingId=data?.id||null;
-  editingCollection=null;
-  const def=modalDefs[type];
-  document.getElementById('modal-title').textContent=(editingId?'Modifica':'Aggiungi')+' '+def.title.toLowerCase();
-  document.getElementById('modal-body').innerHTML=def.html(data||'');
+window._urf = function(){ var cond=document.getElementById('f-condizione'); var row=document.getElementById('f-giorni-row'); if(row) row.style.display=cond&&cond.value==='weekend'?'none':'block'; };
+window._om = function(type,data){
+  editingId=data?data.id:null;
+  var def=modalDefs[type];
+  if(!def) return;
+  document.getElementById('modal-title').textContent=(editingId?'Modifica ':'Aggiungi ')+def.title;
+  document.getElementById('modal-body').innerHTML=def.html(data||{});
   document.getElementById('modal-overlay').classList.add('open');
 };
-window._closeModal=function(){ document.getElementById('modal-overlay').classList.remove('open'); editingId=null; };
+window._cm = function(){ document.getElementById('modal-overlay').classList.remove('open'); editingId=null; };
 
-// ── SAVE FUNCTIONS ──
-window._saveBooking=async function(){
-  const data={
-    nome:v('f-nome'),piattaforma:v('f-piattaforma'),
-    checkin:v('f-checkin'),checkout:v('f-checkout'),
-    prezzo:Number(v('f-prezzo'))||0,stato:v('f-stato'),note:v('f-note'),
-    updatedAt:serverTimestamp()
-  };
+function v(id){ var el=document.getElementById(id); return el?(el.value||'').trim():''; }
+
+window._sb = async function(){
+  var data={nome:v('f-nome'),piattaforma:v('f-piattaforma'),checkin:v('f-checkin'),checkout:v('f-checkout'),prezzo:Number(v('f-prezzo'))||0,stato:v('f-stato'),note:v('f-note'),updatedAt:serverTimestamp()};
   if(!data.nome||!data.checkin||!data.checkout){toast('Compila i campi obbligatori');return;}
   if(editingId) await updateDoc(doc(db,'bookings',editingId),data);
-  else await addDoc(collection(db,'bookings'),{...data,createdAt:serverTimestamp()});
-  closeModal(); toast(editingId?'Prenotazione aggiornata ✓':'Prenotazione aggiunta ✓');
+  else await addDoc(collection(db,'bookings'),Object.assign(data,{createdAt:serverTimestamp()}));
+  window._cm(); toast(editingId?'Prenotazione aggiornata':'Prenotazione aggiunta');
 };
-
-window._saveMessage=async function(){
-  const data={titolo:v('f-titolo'),trigger:v('f-trigger'),testo:v('f-testo'),updatedAt:serverTimestamp()};
+window._sm = async function(){
+  var data={titolo:v('f-titolo'),trigger:v('f-trigger'),testo:v('f-testo'),updatedAt:serverTimestamp()};
   if(!data.titolo||!data.testo){toast('Compila tutti i campi');return;}
   if(editingId) await updateDoc(doc(db,'messages',editingId),data);
-  else await addDoc(collection(db,'messages'),{...data,createdAt:serverTimestamp()});
-  closeModal(); toast('Template salvato ✓');
+  else await addDoc(collection(db,'messages'),Object.assign(data,{createdAt:serverTimestamp()}));
+  window._cm(); toast('Template salvato');
 };
-
-window._saveTask=async function(){
-  const data={descrizione:v('f-descrizione'),zona:v('f-zona'),assegnata:v('f-assegnata'),done:false,updatedAt:serverTimestamp()};
-  if(!data.descrizione){toast('Inserisci una descrizione');return;}
+window._stk = async function(){
+  var data={descrizione:v('f-descrizione'),zona:v('f-zona'),assegnata:v('f-assegnata'),done:false,updatedAt:serverTimestamp()};
+  if(!data.descrizione){toast('Inserisci descrizione');return;}
   if(editingId) await updateDoc(doc(db,'tasks',editingId),data);
-  else await addDoc(collection(db,'tasks'),{...data,createdAt:serverTimestamp()});
-  closeModal(); toast('Attività salvata ✓');
+  else await addDoc(collection(db,'tasks'),Object.assign(data,{createdAt:serverTimestamp()}));
+  window._cm(); toast('Attivita salvata');
 };
-
-window._savePrice=async function(){
-  const data={nome:v('f-nome'),descrizione:v('f-descrizione'),prezzo:Number(v('f-prezzo'))||0,tipo:v('f-tipo'),updatedAt:serverTimestamp()};
+window._sp = async function(){
+  var data={nome:v('f-nome'),descrizione:v('f-descrizione'),prezzo:Number(v('f-prezzo'))||0,tipo:v('f-tipo'),updatedAt:serverTimestamp()};
   if(!data.nome||!data.prezzo){toast('Nome e prezzo obbligatori');return;}
   if(editingId) await updateDoc(doc(db,'prices',editingId),data);
-  else await addDoc(collection(db,'prices'),{...data,createdAt:serverTimestamp()});
-  closeModal(); toast('Prezzo salvato ✓');
+  else await addDoc(collection(db,'prices'),Object.assign(data,{createdAt:serverTimestamp()}));
+  window._cm(); toast('Prezzo salvato');
 };
-
-window._saveRule=async function(){
-  const data={nome:v('f-nome'),condizione:v('f-condizione'),giorni:Number(v('f-giorni'))||7,azione:v('f-azione'),valore:Number(v('f-valore'))||10,attiva:true,updatedAt:serverTimestamp()};
+window._sr = async function(){
+  var data={nome:v('f-nome'),condizione:v('f-condizione'),giorni:Number(v('f-giorni'))||7,azione:v('f-azione'),valore:Number(v('f-valore'))||10,attiva:true,updatedAt:serverTimestamp()};
   if(!data.nome){toast('Dai un nome alla regola');return;}
-  await addDoc(collection(db,'rules'),{...data,createdAt:serverTimestamp()});
-  closeModal(); toast('Regola salvata ✓');
+  await addDoc(collection(db,'rules'),Object.assign(data,{createdAt:serverTimestamp()}));
+  window._cm(); toast('Regola salvata');
 };
 
-// ── EDIT ──
-window._editBooking=function(id){ const b=bookings.find(x=>x.id===id); if(b) openModal('booking',b); };
-window._editMessage=function(id){ const m=messages.find(x=>x.id===id); if(m) openModal('message',m); };
-window._editPrice=function(id){ const p=prices.find(x=>x.id===id); if(p) openModal('price',p); };
+window._eb = function(id){var b=bookings.find(function(x){return x.id===id;});if(b)window._om('booking',b);};
+window._em = function(id){var m=messages.find(function(x){return x.id===id;});if(m)window._om('message',m);};
+window._ep = function(id){var p=prices.find(function(x){return x.id===id;});if(p)window._om('price',p);};
+window._di = async function(coll,id){if(!confirm('Eliminare?'))return;await deleteDoc(doc(db,coll,id));toast('Eliminato');};
 
-// ── DELETE ──
-window._deleteItem=async function(coll,id){
-  if(!confirm('Eliminare questo elemento?')) return;
-  await deleteDoc(doc(db,coll,id));
-  toast('Eliminato ✓');
+// DEFAULT TEMPLATES
+var T={
+  benvenuto:{titolo:'Messaggio di benvenuto',trigger:'Al check-in',testo:'Caro/a {nome},\n\nBenvenuto/a nel mio appartamento a Firenze!\nSono felice di ospitarti per queste {notti} notti.\n\nAccesso:\nIndirizzo: Via Capo di Mondo 76, 50136 Firenze\nCodice cassetta chiavi: [CODICE]\nCheck-in: dalle 15:00 - Check-out: entro le 10:00\n\nWiFi:\nRete: [NOME RETE]\nPassword: [PASSWORD]\n\nTrasporti:\nBus 6A, 6B, 17 a 2 min a piedi - centro in 20 min\nTaxi: ItTaxi app o tel. 055 3131\n\nBuon soggiorno a Firenze!\nSean'},
+  guidabenvenuto:{titolo:'Guida del quartiere',trigger:'Al check-in',testo:'Ciao {nome}!\n\nEcco la mia guida al quartiere Campo di Marte / Le Cure.\n\nATTRAZIONI A PIEDI:\nBasilica di Santa Croce - 15 min\nMercato di Sant\'Ambrogio - 10 min\nPiazza Massimo D\'Azeglio - 5 min\nPiazzale Michelangelo - 25 min (tramonto!)\nStadio Artemio Franchi - 10 min\n\nCENTRO STORICO (20-30 min in bus):\nGalleria degli Uffizi - prenotare online!\nDuomo e Cupola del Brunelleschi\nGalleria dell\'Accademia - il David\nPonte Vecchio e Oltrarno\n\nDOVE MANGIARE:\nCotta a Puntino (Via Guido Biagi 6) - pizza\nMercato di Sant\'Ambrogio - pranzo tra i locali\nLe Delizie del Palato - cucina toscana\n\nTRASPORTI:\nBus 6A, 6B, 17 - centro in 20 min\nStazione Campo di Marte - 10 min a piedi\nTaxi: ItTaxi app o 055 3131\n\nCONSIGLI:\nBiglietto bus: 1,70 EUR - acquistabile in tabaccheria\nMusei: prenotare online per evitare code\n\nBuona esplorazione!\nSean'},
+  prearrivo:{titolo:'Promemoria pre-arrivo',trigger:'2 giorni prima',testo:'Ciao {nome}!\n\nMancano 2 giorni al tuo soggiorno a Firenze!\n\nRiepilogo:\nCheck-in: {checkin}\nCheck-out: {checkout}\nIndirizzo: Via Capo di Mondo 76, 50136 Firenze\n\nCome raggiungere l\'appartamento:\n\nDall\'aeroporto Vespucci:\nTram T2 verso SMN, poi bus 6A/6B o 17 (35 min, 2,50 EUR)\nTaxi: 28 EUR tariffa fissa, 15-20 min\nApp: ItTaxi (tel. 055 3131)\n\nDalla Stazione SMN:\nBus 6A, 6B o 17 - 20 min, 1,70 EUR\nTaxi: 11-13 EUR\n\nDa Firenze Campo di Marte:\nA piedi: 10 minuti\n\nA presto!\nSean'},
+  metasoggiorno:{titolo:'Messaggio meta soggiorno',trigger:'Personalizzato',testo:'Ciao {nome}!\n\nSpero che il tuo soggiorno stia andando alla grande!\n\nVolevo assicurarmi che tutto sia di tuo gradimento.\n\nConsigli dal quartiere:\n\nDove mangiare:\nTrattoria L\'Oriuolo - cucina toscana\nMercato di Sant\'Ambrogio - pranzo tra i locali\n\nDa non perdere:\nPiazzale Michelangelo - tramonto mozzafiato\nSanta Croce - 10 min a piedi\nOltrarno - il quartiere piu autentico\n\nTrasporti:\nBus 6A/6B/17 dalla fermata sotto casa\n\nBuon proseguimento!\nSean'},
+  istruzionicheckout:{titolo:'Istruzioni check-out',trigger:'1 giorno prima',testo:'Ciao {nome}!\n\nDomani e il giorno del check-out ({checkout}).\n\nOrario: entro le 10:00\n(Se hai bisogno di piu tempo scrivimi!)\n\nPrima di partire:\nLascia le chiavi nella cassetta (stesso codice)\nMetti i piatti in lavastoviglie e avviala\nSvuota il frigorifero\nButta la spazzatura nei bidoni in cortile\nChiudi finestre, balcone e tapparelle\nSpegni luci, climatizzatore e TV\n\nPer raggiungere l\'aeroporto:\nBus 6A/6B fino a SMN, poi Tram T2 (40 min, 1,70 EUR)\nTaxi: 28 EUR tariffa fissa, tel. 055 3131\n\nStazione Campo di Marte: 10 min a piedi\n\nBuon viaggio!\nSean'},
+  checkout:{titolo:'Ringraziamento post-soggiorno',trigger:'1 ora dopo checkout',testo:'Caro/a {nome},\n\nGrazie mille per aver soggiornato dal {checkin} al {checkout}!\n\nSpero che il tuo soggiorno a Firenze sia stato indimenticabile.\n\nSe l\'esperienza ti e piaciuta, ti sarei molto grato/a se potessi lasciare una recensione su Airbnb - ci vogliono solo 2 minuti!\n\nSpero di rivederti presto a Firenze!\n\nUn caro saluto,\nSean'}
 };
 
-// ── DOCUMENTI ──
-
-let documenti = [];
-
-window._renderDocBookings = function() {
-  const el = document.getElementById('doc-bookings-list');
-  if (!el) return;
-  const now = new Date();
-  const active = bookings.filter(b => {
-    if (b.stato === 'Cancellata') return false;
-    const co = new Date(b.checkout);
-    co.setDate(co.getDate() + 7);
-    return co >= now;
-  }).sort((a,b) => new Date(a.checkin) - new Date(b.checkin));
-
-  if (!active.length) {
-    el.innerHTML = '<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nessuna prenotazione attiva</div></div>';
-    return;
-  }
-  el.innerHTML = active.map(b => {
-    const nights = Math.max(0, Math.round((new Date(b.checkout) - new Date(b.checkin)) / 86400000));
-    const link = window.location.origin + '/documento.html?b=' + b.id;
-    return `<div class="doc-booking-row">
-      <div class="doc-booking-info">
-        <div class="doc-booking-name">${b.nome || 'Ospite'}</div>
-        <div class="doc-booking-dates">${formatDate(b.checkin)} – ${formatDate(b.checkout)} · ${nights} notti · ${b.piattaforma||'—'}</div>
-      </div>
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <span class="link-copied" id="copied-${b.id}">✓ Copiato!</span>
-        <button class="btn-secondary" style="font-size:12px;padding:5px 10px" onclick="copyDocLink('${b.id}','${link}')">🔗 Copia link</button>
-        <a href="${link}" target="_blank" class="btn-secondary" style="font-size:12px;padding:5px 10px;text-decoration:none">👁 Apri</a>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-window._copyDocLink = function(bookingId, link) {
-  navigator.clipboard.writeText(link).then(() => {
-    const el = document.getElementById('copied-' + bookingId);
-    if (el) { el.style.display = 'inline'; setTimeout(() => el.style.display = 'none', 2000); }
-    toast('Link copiato! 🔗');
-  });
+window._adt = async function(key){
+  var t=T[key];
+  if(!t) return;
+  await addDoc(collection(db,'messages'),Object.assign({},t,{createdAt:serverTimestamp(),updatedAt:serverTimestamp()}));
+  toast('Template aggiunto!');
 };
 
-window._loadDocumenti = async function() {
-  const el = document.getElementById('documenti-list');
-  if (!el) return;
-  el.innerHTML = '<div style="text-align:center;padding:20px;color:#888;font-size:13px">⏳ Caricamento...</div>';
-  try {
-    const snap = await getDocs(collection(db, 'documenti'));
-    documenti = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    documenti.sort((a,b) => new Date(b.uploadedAt?.seconds*1000||0) - new Date(a.uploadedAt?.seconds*1000||0));
-    renderDocumenti();
-  } catch(e) {
-    el.innerHTML = '<div class="empty"><div class="empty-text">Errore caricamento documenti</div></div>';
-  }
-};
+// HELPERS
+function formatDate(str){if(!str)return '-';return new Date(str+'T12:00:00').toLocaleDateString('it-IT',{day:'2-digit',month:'short'});}
+function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
 
-function emptyDocHTML() {
-  return '<div class="empty"><div class="empty-icon">📄</div><div class="empty-text">Nessun documento ricevuto.<br>Genera un link e invialo agli ospiti!</div></div>';
-}
-
-function renderDocumenti() {
-  const el = document.getElementById('documenti-list');
-  if (!el) return;
-  if (!documenti.length) {
-    el.innerHTML = emptyDocHTML();
-    return;
-  }
-  el.innerHTML = documenti.map(d => {
-    const initials = ((d.guestNome||'?')[0] + (d.guestCognome||'?')[0]).toUpperCase();
-    const uploadDate = d.uploadedAt ? new Date(d.uploadedAt.seconds*1000).toLocaleDateString('it-IT') : '—';
-    return `<div class="doc-card">
-      <div class="doc-card-header">
-        <div class="doc-avatar">${initials}</div>
-        <div>
-          <div class="doc-name">${d.guestNome||'—'} ${d.guestCognome||''}</div>
-          <div class="doc-meta">Caricato il ${uploadDate} · Check-in ${formatDate(d.checkin)}</div>
-        </div>
-        <span class="delete-badge">🗑 Elimina il ${d.deleteAfter||'—'}</span>
-      </div>
-      <div class="doc-fields">
-        <div class="doc-field"><div class="doc-field-label">Data nascita</div><div class="doc-field-value">${d.guestNascita||'—'}</div></div>
-        <div class="doc-field"><div class="doc-field-label">Nazionalità</div><div class="doc-field-value">${d.guestNazionalita||'—'}</div></div>
-        <div class="doc-field"><div class="doc-field-label">Tipo documento</div><div class="doc-field-value">${d.tipoDocumento||'—'}</div></div>
-        <div class="doc-field"><div class="doc-field-label">Numero</div><div class="doc-field-value">${d.numeroDocumento||'—'}</div></div>
-        <div class="doc-field" style="grid-column:1/-1"><div class="doc-field-label">Residenza</div><div class="doc-field-value">${d.residenza||'—'}</div></div>
-      </div>
-      <div class="doc-actions">
-        <a href="${d.fileURL}" target="_blank" class="btn-primary" style="font-size:12px;padding:6px 12px;text-decoration:none">📄 Vedi documento</a>
-        <a href="${d.fileURL}" download class="btn-secondary" style="font-size:12px;padding:6px 12px;text-decoration:none">⬇️ Scarica</a>
-        <button class="btn-secondary" style="font-size:12px;padding:6px 12px" onclick="copyGuestData('${d.id}')">📋 Copia dati</button>
-        <button class="btn-danger" style="font-size:12px;padding:5px 10px" onclick="deleteDocumento('${d.id}','${d.filePath||''}')">🗑 Elimina</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-window._copyGuestData = function(docId) {
-  const d = documenti.find(x => x.id === docId);
-  if (!d) return;
-  const text = [
-    'DATI OSPITE — Alloggiati Web',
-    '─────────────────────────',
-    'Nome: ' + (d.guestNome||'—'),
-    'Cognome: ' + (d.guestCognome||'—'),
-    'Data nascita: ' + (d.guestNascita||'—'),
-    'Nazionalità: ' + (d.guestNazionalita||'—'),
-    'Tipo documento: ' + (d.tipoDocumento||'—'),
-    'Numero documento: ' + (d.numeroDocumento||'—'),
-    'Residenza: ' + (d.residenza||'—'),
-    '─────────────────────────',
-    'Check-in: ' + (d.checkin||'—'),
-    'Check-out: ' + (d.checkout||'—'),
-  ].join('
-');
-  navigator.clipboard.writeText(text).then(() => toast('Dati copiati! 📋'));
-};
-
-window._deleteDocumento = async function(docId, filePath) {
-  if (!confirm('Eliminare questo documento? Operazione irreversibile.')) return;
-  try {
-    if (filePath) {
-      try { await deleteObject(storageRef(storage, filePath)); } catch(e) { console.warn('File già eliminato'); }
-    }
-    await deleteDoc(doc(db, 'documenti', docId));
-    documenti = documenti.filter(d => d.id !== docId);
-    renderDocumenti();
-    toast('Documento eliminato ✓');
-  } catch(e) { toast('Errore eliminazione'); }
-};
-
-// ── ADEMPIMENTI ──
-function renderAdempimenti(){
-  const el = document.getElementById('adempimenti-list');
-  if(!el) return;
-  const now = new Date();
-  const active = bookings.filter(b => {
-    if(b.stato === 'Cancellata') return false;
-    const co = new Date(b.checkout);
-    co.setDate(co.getDate() + 7); // mostra fino a 7 giorni dopo checkout
-    return co >= now;
-  }).sort((a,b) => new Date(a.checkin) - new Date(b.checkin));
-
-  if(!active.length){
-    el.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Nessuna prenotazione attiva o imminente</div></div>';
-    return;
-  }
-
-  el.innerHTML = active.map(b => {
-    const checkinDate = new Date(b.checkin);
-    const checkoutDate = new Date(b.checkout);
-    const nights = Math.max(0, Math.round((checkoutDate - checkinDate)/86400000));
-    const hoursFromCheckin = (now - checkinDate) / 3600000;
-    const daysFromCheckin = hoursFromCheckin / 24;
-
-    // Stato alloggiati (entro 24h da checkin)
-    const allegKey = 'adem_alloggiati_' + b.id;
-    const allegDone = localStorage.getItem(allegKey);
-    const allegOverdue = !allegDone && hoursFromCheckin > 24 && hoursFromCheckin > 0;
-    const allegUrgent = !allegDone && hoursFromCheckin >= 0 && hoursFromCheckin <= 24;
-
-    // Stato turismo5 (entro 16 del mese successivo)
-    const tur5Key = 'adem_turismo5_' + b.id;
-    const tur5Done = localStorage.getItem(tur5Key);
-    const tur5Month = checkoutDate.getMonth();
-    const tur5Deadline = new Date(checkoutDate.getFullYear(), tur5Month + 1, 16);
-    const daysToTur5 = Math.ceil((tur5Deadline - now) / 86400000);
-    const tur5Urgent = !tur5Done && daysToTur5 <= 5;
-    const tur5Overdue = !tur5Done && daysToTur5 < 0;
-
-    // Stato tassa riscossa
-    const tassaKey = 'adem_tassa_' + b.id;
-    const tassaDone = localStorage.getItem(tassaKey);
-
-    const allegClass = allegDone ? 'done' : allegOverdue ? 'overdue' : allegUrgent ? 'urgent' : '';
-    const tur5Class = tur5Done ? 'done' : tur5Overdue ? 'overdue' : tur5Urgent ? 'urgent' : '';
-    const tassaClass = tassaDone ? 'done' : '';
-
-    return `<div class="adempimento-row">
-      <div class="adem-header">
-        <div class="adem-name">${b.nome||'Ospite'}</div>
-        <div class="adem-dates">${formatDate(b.checkin)} – ${formatDate(b.checkout)} · ${nights} notti · ${b.piattaforma||'—'}</div>
-      </div>
-      <div class="adem-checks">
-
-        <div class="adem-check ${allegClass}" onclick="toggleAdem('${allegKey}','${b.id}')">
-          <div class="adem-icon">🚔</div>
-          <div class="adem-label">
-            <strong>Alloggiati Web</strong>
-            <span>${allegDone ? '✅ Registrato' : allegOverdue ? '⚠️ SCADUTO — fai subito!' : allegUrgent ? '⏰ Entro 24h!' : 'Da fare dopo check-in'}</span>
-          </div>
-          <div class="adem-toggle">${allegDone ? '✓' : ''}</div>
-        </div>
-
-        <div class="adem-check ${tassaClass}" onclick="toggleAdem('${tassaKey}','${b.id}')">
-          <div class="adem-icon">💶</div>
-          <div class="adem-label">
-            <strong>Tassa soggiorno</strong>
-            <span>${tassaDone ? '✅ Riscossa' : 'Da riscuotere all&#39;arrivo'}</span>
-          </div>
-          <div class="adem-toggle">${tassaDone ? '✓' : ''}</div>
-        </div>
-
-        <div class="adem-check ${tur5Class}" onclick="toggleAdem('${tur5Key}','${b.id}')">
-          <div class="adem-icon">🏛️</div>
-          <div class="adem-label">
-            <strong>Turismo5</strong>
-            <span>${tur5Done ? '✅ Comunicato' : tur5Overdue ? '⚠️ SCADUTO!' : 'Entro il 16/' + (tur5Month+2 > 12 ? 1 : tur5Month+2)}</span>
-          </div>
-          <div class="adem-toggle">${tur5Done ? '✓' : ''}</div>
-        </div>
-
-        <div class="adem-check" style="background:#f8f8f6;cursor:default">
-          <div class="adem-icon">💰</div>
-          <div class="adem-label">
-            <strong>Tassa stimata</strong>
-            <span>€5,50 × 1 ospite × ${Math.min(nights,7)} notti = <strong>€${(5.50 * Math.min(nights,7)).toFixed(2)}</strong></span>
-          </div>
-        </div>
-
-      </div>
-    </div>`;
-  }).join('');
-}
-
-window._toggleAdem = function(key, bookingId) {
-  if(localStorage.getItem(key)) localStorage.removeItem(key);
-  else localStorage.setItem(key, '1');
-  renderAdempimenti();
-  toast('Stato aggiornato ✓');
-};
-
-window._refreshAdempimenti = function(){ renderAdempimenti(); toast('Aggiornato ✓'); };
-
-// ── HELPERS ──
-function v(id){ return document.getElementById(id)?.value||''; }
-function formatDate(str){ if(!str) return '—'; return new Date(str).toLocaleDateString('it-IT',{day:'2-digit',month:'short'}); }
-
-window._showSection=function(id, btn){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('section-'+id).classList.add('active');
-  btn.classList.add('active');
-  if(id==='calendar') renderCalendar();
-  if(id==='adempimenti') renderAdempimenti();
-  if(id==='documenti'){ renderDocBookings(); loadDocumenti(); }
-};
-
-function toast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
-
-// init calendar
 renderCalendar();
 </script>
 </body>
