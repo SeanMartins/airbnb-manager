@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Airbnb Manager — Accedi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">🏠</div>
+    <div class="login-title">Via Gioberti Manager</div>
+    <div class="login-sub">Accedi per gestire il tuo appartamento</div>
+    <div class="login-error" id="login-error"></div>
+    <div class="form-row">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="tuaemail@esempio.com" autocomplete="email">
+    </div>
+    <div class="form-row">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="save-btn" id="login-btn" onclick="doLogin()">Accedi</button>
+    <div style="text-align:center;margin-top:16px;font-size:12px;color:#aaa">
+      Airbnb Manager · Appartamento Firenze
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { auth } from './firebase.js';
+import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+onAuthStateChanged(auth, user => {
+  if(user) window.location.href = 'dashboard.html';
+});
+
+window.doLogin = async function() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-error');
+  err.style.display = 'none';
+  if(!email || !password) { showErr('Inserisci email e password.'); return; }
+  btn.disabled = true;
+  btn.textContent = 'Accesso in corso...';
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = 'dashboard.html';
+  } catch(e) {
+    showErr('Email o password errati. Riprova.');
+    btn.disabled = false;
+    btn.textContent = 'Accedi';
+  }
+  function showErr(msg){ err.textContent = msg; err.style.display = 'block'; }
+};
+
+document.getElementById('password').addEventListener('keydown', e => {
+  if(e.key === 'Enter') window.doLogin();
+});
+</script>
+</body>
+</html>

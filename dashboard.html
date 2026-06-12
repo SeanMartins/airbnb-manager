@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Airbnb Manager — Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">
+    <span class="icon">🏠</span>
+    Via Gioberti — Firenze
+  </div>
+  <div class="topbar-right">
+    <span class="role-badge" id="role-badge">Admin</span>
+    <button class="logout-btn" onclick="doLogout()">Esci</button>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('dashboard',this)"><span class="nav-icon">📊</span>Dashboard</button>
+  <button class="nav-btn" onclick="showSection('bookings',this)"><span class="nav-icon">📅</span>Prenotazioni</button>
+  <button class="nav-btn" onclick="showSection('calendar',this)"><span class="nav-icon">🗓</span>Calendario</button>
+  <button class="nav-btn" onclick="showSection('messages',this)"><span class="nav-icon">💬</span>Messaggi</button>
+  <button class="nav-btn" onclick="showSection('tasks',this)"><span class="nav-icon">🧹</span>Pulizie</button>
+  <button class="nav-btn" onclick="showSection('pricing',this)"><span class="nav-icon">💰</span>Prezzi</button>
+  <button class="nav-btn" onclick="showSection('stats',this)"><span class="nav-icon">📈</span>Statistiche</button>
+</div>
+
+<div class="content">
+
+<!-- ── DASHBOARD ── -->
+<div class="section active" id="section-dashboard">
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Entrate mese</div><div class="stat-value green" id="s-revenue">—</div><div class="stat-sub" id="s-month">—</div></div>
+    <div class="stat-card"><div class="stat-label">Notti prenotate</div><div class="stat-value" id="s-nights">—</div><div class="stat-sub">questo mese</div></div>
+    <div class="stat-card"><div class="stat-label">Occupazione</div><div class="stat-value green" id="s-occ">—</div><div class="stat-sub">del mese</div></div>
+    <div class="stat-card"><div class="stat-label">Prenotaz. attive</div><div class="stat-value" id="s-active">—</div><div class="stat-sub">confermate</div></div>
+  </div>
+  <div class="sec-header"><div class="sec-title">Prossimi arrivi</div></div>
+  <div id="dash-bookings"><div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nessuna prenotazione imminente</div></div></div>
+  <div class="sec-header" style="margin-top:20px"><div class="sec-title">Attività pulizie in sospeso</div><a href="pulizie.html" style="font-size:12px;color:#1a6b4a">Vista pulizie →</a></div>
+  <div id="dash-tasks"><div class="empty"><div class="empty-icon">✅</div><div class="empty-text">Nessuna attività in sospeso</div></div></div>
+</div>
+
+<!-- ── PRENOTAZIONI ── -->
+<div class="section" id="section-bookings">
+  <div class="sec-header">
+    <div class="sec-title">Prenotazioni</div>
+    <button class="btn-primary" onclick="openModal('booking')">+ Aggiungi</button>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+    <select id="filter-status" onchange="renderBookings()" style="width:auto;padding:6px 10px;font-size:12px">
+      <option value="">Tutti gli stati</option>
+      <option value="Confermata">Confermata</option>
+      <option value="In attesa">In attesa</option>
+      <option value="Cancellata">Cancellata</option>
+    </select>
+    <select id="filter-platform" onchange="renderBookings()" style="width:auto;padding:6px 10px;font-size:12px">
+      <option value="">Tutte le piattaforme</option>
+      <option value="Airbnb">Airbnb</option>
+      <option value="Booking.com">Booking.com</option>
+      <option value="Diretto">Diretto</option>
+    </select>
+  </div>
+  <div id="bookings-list"></div>
+</div>
+
+<!-- ── CALENDARIO ── -->
+<div class="section" id="section-calendar">
+  <div class="cal-nav">
+    <button class="cal-nav-btn" onclick="changeMonth(-1)">‹ Prec</button>
+    <div class="cal-month" id="cal-title"></div>
+    <button class="cal-nav-btn" onclick="changeMonth(1)">Succ ›</button>
+  </div>
+  <div class="cal-grid">
+    <div class="cal-header">Lun</div><div class="cal-header">Mar</div><div class="cal-header">Mer</div>
+    <div class="cal-header">Gio</div><div class="cal-header">Ven</div><div class="cal-header">Sab</div><div class="cal-header">Dom</div>
+  </div>
+  <div class="cal-grid" id="cal-days" style="margin-top:4px"></div>
+  <div class="cal-legend">
+    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#fff0ec;border:1px solid #fcd9c8"></div>Airbnb</div>
+    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#eff6ff;border:1px solid #bfdbfe"></div>Booking.com</div>
+    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#f0fdf4;border:1px solid #bbf7d0"></div>Diretto</div>
+  </div>
+</div>
+
+<!-- ── MESSAGGI ── -->
+<div class="section" id="section-messages">
+  <div class="sec-header">
+    <div class="sec-title">Template messaggi</div>
+    <button class="btn-primary" onclick="openModal('message')">+ Aggiungi</button>
+  </div>
+  <div id="messages-list"></div>
+</div>
+
+<!-- ── PULIZIE ── -->
+<div class="section" id="section-tasks">
+  <div class="sec-header">
+    <div class="sec-title">Checklist pulizie</div>
+    <button class="btn-primary" onclick="openModal('task')">+ Aggiungi</button>
+  </div>
+  <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">
+    <select id="filter-zone" onchange="renderTasks()" style="width:auto;padding:6px 10px;font-size:12px">
+      <option value="">Tutte le zone</option>
+      <option value="Camera">Camera</option>
+      <option value="Bagno">Bagno</option>
+      <option value="Cucina">Cucina</option>
+      <option value="Soggiorno">Soggiorno</option>
+      <option value="Generale">Generale</option>
+    </select>
+    <label style="display:flex;align-items:center;gap:6px;font-size:12px;margin:0;cursor:pointer">
+      <input type="checkbox" id="show-done" onchange="renderTasks()" style="width:auto"> Mostra completate
+    </label>
+  </div>
+  <div id="tasks-list"></div>
+  <div class="progress-wrap" id="progress-wrap" style="display:none">
+    <div class="progress-label"><span>Completamento sessione</span><span id="prog-text">0/0</span></div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-bar" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- ── PREZZI ── -->
+<div class="section" id="section-pricing">
+  <div class="sec-header">
+    <div class="sec-title">Prezzi stagionali</div>
+    <button class="btn-primary" onclick="openModal('price')">+ Aggiungi</button>
+  </div>
+  <div id="prices-list"></div>
+
+  <div style="margin-top:28px">
+    <div class="sec-header">
+      <div class="sec-title">⚙️ Regole dinamiche automatiche</div>
+      <button class="btn-secondary" onclick="openModal('rule')">+ Aggiungi regola</button>
+    </div>
+    <div style="font-size:12px;color:#888;margin-bottom:14px">Le regole vengono applicate automaticamente al prezzo base stagionale</div>
+    <div id="rules-list"></div>
+    <div style="margin-top:16px;padding:14px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px">
+      <div style="font-size:13px;font-weight:600;color:#166534;margin-bottom:4px">💡 Prezzo suggerito oggi</div>
+      <div style="font-size:12px;color:#166534" id="price-today-info">Calcolo in corso...</div>
+      <div style="font-size:22px;font-weight:700;color:#1a6b4a;margin-top:6px" id="price-today">—</div>
+    </div>
+    <div style="margin-top:12px;padding:14px 16px;background:#fff8ec;border:1px solid #fde68a;border-radius:10px;font-size:12px;color:#92400e">
+      🔗 <strong>Integrazione PriceLabs</strong> — disponibile in futuro. PriceLabs usa dati di mercato reali di Airbnb/Booking per ottimizzare i prezzi automaticamente (~€20/mese).
+    </div>
+  </div>
+</div>
+
+<!-- ── STATISTICHE ── -->
+<div class="section" id="section-stats">
+  <div class="sec-header"><div class="sec-title">Statistiche</div></div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Entrate totali</div><div class="stat-value green" id="stat-total">—</div><div class="stat-sub" id="stat-period">—</div></div>
+    <div class="stat-card"><div class="stat-label">Occupazione media</div><div class="stat-value" id="stat-occ">—</div><div class="stat-sub">media mensile</div></div>
+    <div class="stat-card"><div class="stat-label">Prezzo medio/notte</div><div class="stat-value" id="stat-avg">—</div><div class="stat-sub">tutte le piattaforme</div></div>
+    <div class="stat-card"><div class="stat-label">Prenotazioni totali</div><div class="stat-value" id="stat-bcount">—</div><div class="stat-sub">storico</div></div>
+  </div>
+  <div class="sec-title" style="margin-bottom:12px;font-size:13px">Entrate per mese (€)</div>
+  <div id="revenue-chart" class="card"></div>
+  <div style="margin-top:20px">
+    <div class="sec-title" style="margin-bottom:12px;font-size:13px">Piattaforme</div>
+    <div class="stats-grid" id="platform-stats"></div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title"></div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { auth, db } from './firebase.js';
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  collection, addDoc, getDocs, doc, updateDoc, deleteDoc,
+  query, orderBy, onSnapshot, serverTimestamp, where
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ── AUTH ──
+onAuthStateChanged(auth, user => {
+  if(!user){ window.location.href='index.html'; return; }
+  init();
+});
+window.doLogout = async () => { await signOut(auth); window.location.href='index.html'; };
+
+// ── STATE ──
+let bookings=[], tasks=[], messages=[], prices=[], rules=[];
+let calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
+let editingId=null, editingCollection=null;
+
+// ── INIT ──
+function init(){
+  listenBookings();
+  listenTasks();
+  listenMessages();
+  listenPrices();
+  listenRules();
+}
+
+// ── REALTIME LISTENERS ──
+function listenBookings(){
+  onSnapshot(collection(db,'bookings'), snap=>{
+    bookings = snap.docs.map(d=>({id:d.id,...d.data()}));
+    bookings.sort((a,b)=>new Date(a.checkin)-new Date(b.checkin));
+    renderBookings();
+    renderDashboard();
+    renderCalendar();
+    renderStats();
+  });
+}
+function listenTasks(){
+  onSnapshot(collection(db,'tasks'), snap=>{
+    tasks = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderTasks();
+    renderDashboardTasks();
+  });
+}
+function listenMessages(){
+  onSnapshot(collection(db,'messages'), snap=>{
+    messages = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderMessages();
+  });
+}
+function listenPrices(){
+  onSnapshot(collection(db,'prices'), snap=>{
+    prices = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderPrices();
+    updateTodayPrice();
+  });
+}
+function listenRules(){
+  onSnapshot(collection(db,'rules'), snap=>{
+    rules = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderRules();
+    updateTodayPrice();
+  });
+}
+
+// ── DASHBOARD ──
+function renderDashboard(){
+  const now = new Date();
+  const y=now.getFullYear(), m=now.getMonth();
+  const monthName = now.toLocaleDateString('it-IT',{month:'long',year:'numeric'});
+  const daysInMonth = new Date(y,m+1,0).getDate();
+
+  const monthBookings = bookings.filter(b=>{
+    const ci=new Date(b.checkin), co=new Date(b.checkout);
+    return b.stato!=='Cancellata' && (
+      (ci.getFullYear()===y && ci.getMonth()===m) ||
+      (co.getFullYear()===y && co.getMonth()===m)
+    );
+  });
+
+  const revenue = monthBookings.reduce((s,b)=>s+Number(b.prezzo||0),0);
+  let nights=0;
+  monthBookings.forEach(b=>{
+    const ci=new Date(b.checkin), co=new Date(b.checkout);
+    const start=new Date(Math.max(ci,new Date(y,m,1)));
+    const end=new Date(Math.min(co,new Date(y,m,daysInMonth)));
+    if(end>start) nights+=Math.round((end-start)/(86400000));
+  });
+  const occ=Math.round(nights/daysInMonth*100);
+  const active=bookings.filter(b=>b.stato==='Confermata').length;
+
+  document.getElementById('s-revenue').textContent='€'+revenue.toLocaleString('it-IT');
+  document.getElementById('s-month').textContent=monthName;
+  document.getElementById('s-nights').textContent=nights;
+  document.getElementById('s-occ').textContent=occ+'%';
+  document.getElementById('s-active').textContent=active;
+
+  // prossimi arrivi (prossimi 14 giorni)
+  const upcoming = bookings.filter(b=>{
+    const ci=new Date(b.checkin);
+    const diff=(ci-now)/(86400000);
+    return b.stato!=='Cancellata' && diff>=-1 && diff<=14;
+  }).slice(0,3);
+  const db_el=document.getElementById('dash-bookings');
+  db_el.innerHTML = upcoming.length ? upcoming.map(b=>bookingCardHTML(b)).join('') :
+    '<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nessun arrivo nei prossimi 14 giorni</div></div>';
+}
+
+function renderDashboardTasks(){
+  const pending = tasks.filter(t=>!t.done).slice(0,4);
+  const el=document.getElementById('dash-tasks');
+  el.innerHTML = pending.length ? pending.map(t=>taskItemHTML(t,true)).join('') :
+    '<div class="empty"><div class="empty-icon">✅</div><div class="empty-text">Tutte le attività completate!</div></div>';
+}
+
+// ── BOOKINGS ──
+function bookingCardHTML(b){
+  const initials=(b.nome||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const avClass=b.piattaforma==='Airbnb'?'av-a':b.piattaforma==='Booking.com'?'av-b':'av-d';
+  const badgeClass=b.stato==='Confermata'?'badge-green':b.stato==='In attesa'?'badge-amber':'badge-red';
+  const nights=Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000);
+  return `<div class="booking-card">
+    <div class="b-avatar ${avClass}">${initials}</div>
+    <div class="b-info">
+      <div class="b-name">${b.nome||'—'}</div>
+      <div class="b-dates">${formatDate(b.checkin)} – ${formatDate(b.checkout)} · ${nights} nott${nights===1?'e':'i'}</div>
+      <span class="badge ${badgeClass}">${b.stato||'—'}</span>
+    </div>
+    <div class="b-right">
+      <div class="b-price">€${Number(b.prezzo||0).toLocaleString('it-IT')}</div>
+      <div class="b-platform">${b.piattaforma||'—'}</div>
+      <div style="display:flex;gap:4px;margin-top:6px;justify-content:flex-end">
+        <button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="editBooking('${b.id}')">✏️</button>
+        <button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem('bookings','${b.id}')">🗑</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+window.renderBookings = function(){
+  const statusF=document.getElementById('filter-status')?.value||'';
+  const platF=document.getElementById('filter-platform')?.value||'';
+  let filtered=bookings.filter(b=>{
+    if(statusF && b.stato!==statusF) return false;
+    if(platF && b.piattaforma!==platF) return false;
+    return true;
+  });
+  const el=document.getElementById('bookings-list');
+  if(!el) return;
+  el.innerHTML = filtered.length ? filtered.map(b=>bookingCardHTML(b)).join('') :
+    '<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nessuna prenotazione trovata</div></div>';
+};
+
+// ── CALENDAR ──
+window.changeMonth=function(dir){ calMonth+=dir; if(calMonth>11){calMonth=0;calYear++;}else if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
+
+function renderCalendar(){
+  const title=new Date(calYear,calMonth,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});
+  const el=document.getElementById('cal-title');
+  if(el) el.textContent=title.charAt(0).toUpperCase()+title.slice(1);
+
+  const container=document.getElementById('cal-days');
+  if(!container) return;
+  container.innerHTML='';
+
+  const firstDay=(new Date(calYear,calMonth,1).getDay()+6)%7;
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  const today=new Date();
+
+  // build booked days map
+  const bookedDays={};
+  bookings.filter(b=>b.stato!=='Cancellata').forEach(b=>{
+    let d=new Date(b.checkin);
+    const end=new Date(b.checkout);
+    while(d<end){
+      if(d.getFullYear()===calYear && d.getMonth()===calMonth){
+        const key=d.getDate();
+        bookedDays[key]=b.piattaforma;
+      }
+      d.setDate(d.getDate()+1);
+    }
+  });
+
+  for(let i=0;i<firstDay;i++){
+    const div=document.createElement('div');
+    div.className='cal-day other';
+    container.appendChild(div);
+  }
+  for(let d=1;d<=daysInMonth;d++){
+    const div=document.createElement('div');
+    div.className='cal-day';
+    div.textContent=d;
+    const plat=bookedDays[d];
+    if(plat==='Airbnb') div.classList.add('booked-a');
+    else if(plat==='Booking.com') div.classList.add('booked-b');
+    else if(plat) div.classList.add('booked-d');
+    else div.classList.add('free');
+    if(d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear()) div.classList.add('today');
+    container.appendChild(div);
+  }
+}
+
+// ── MESSAGES ──
+function renderMessages(){
+  const el=document.getElementById('messages-list');
+  if(!el) return;
+  el.innerHTML = messages.length ? messages.map(m=>`
+    <div class="msg-card">
+      <span class="msg-trigger-badge">${m.trigger||'—'}</span>
+      <div class="msg-title-row">
+        <div class="msg-title">${m.titolo||'—'}</div>
+        <div style="display:flex;gap:4px">
+          <button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="editMessage('${m.id}')">✏️</button>
+          <button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem('messages','${m.id}')">🗑</button>
+        </div>
+      </div>
+      <div class="msg-preview">${(m.testo||'').slice(0,120)}${(m.testo||'').length>120?'...':''}</div>
+    </div>`).join('') :
+    '<div class="empty"><div class="empty-icon">💬</div><div class="empty-text">Nessun template. Aggiungine uno!</div></div>';
+}
+
+// ── TASKS ──
+function taskItemHTML(t, compact=false){
+  return `<div class="task-item ${t.done?'done-item':''}" id="task-${t.id}">
+    <div class="task-check ${t.done?'done':''}" onclick="toggleTask('${t.id}','${!t.done}')">
+      ${t.done?'✓':''}
+    </div>
+    <span class="task-label ${t.done?'done':''}">${t.descrizione||'—'}</span>
+    <span class="task-zone">${t.zona||'—'}</span>
+    ${!compact?`<button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem('tasks','${t.id}')">🗑</button>`:''}
+  </div>`;
+}
+
+window.renderTasks=function(){
+  const zoneF=document.getElementById('filter-zone')?.value||'';
+  const showDone=document.getElementById('show-done')?.checked||false;
+  let filtered=tasks.filter(t=>{
+    if(zoneF && t.zona!==zoneF) return false;
+    if(!showDone && t.done) return false;
+    return true;
+  });
+  const el=document.getElementById('tasks-list');
+  if(!el) return;
+  el.innerHTML=filtered.length?filtered.map(t=>taskItemHTML(t)).join(''):
+    '<div class="empty"><div class="empty-icon">🧹</div><div class="empty-text">Nessuna attività. Aggiungine una!</div></div>';
+
+  const all=tasks.length, done=tasks.filter(t=>t.done).length;
+  const pw=document.getElementById('progress-wrap');
+  if(pw){ pw.style.display=all?'block':'none';
+    document.getElementById('prog-text').textContent=done+'/'+all+' completate';
+    document.getElementById('prog-bar').style.width=all?Math.round(done/all*100)+'%':'0%';
+  }
+};
+
+window.toggleTask=async function(id, done){
+  await updateDoc(doc(db,'tasks',id),{done:done==='true'||done===true});
+};
+
+// ── PRICES ──
+function renderPrices(){
+  const el=document.getElementById('prices-list');
+  if(!el) return;
+  const tagMap={Alta:'pt-alta',Normale:'pt-normale',Evento:'pt-evento'};
+  el.innerHTML=prices.length?prices.map(p=>`
+    <div class="price-row">
+      <div class="price-info">
+        <div class="price-name">${p.nome||'—'}</div>
+        <div class="price-desc">${p.descrizione||''}</div>
+      </div>
+      <span class="price-tag ${tagMap[p.tipo]||'pt-normale'}">${p.tipo||'—'}</span>
+      <div class="price-val">€${Number(p.prezzo||0).toLocaleString('it-IT')}/notte</div>
+      <div style="display:flex;gap:4px">
+        <button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="editPrice('${p.id}')">✏️</button>
+        <button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem('prices','${p.id}')">🗑</button>
+      </div>
+    </div>`).join(''):
+    '<div class="empty"><div class="empty-icon">💰</div><div class="empty-text">Nessun prezzo. Aggiungine uno!</div></div>';
+}
+
+// ── DYNAMIC RULES ──
+function renderRules(){
+  const el=document.getElementById('rules-list');
+  if(!el) return;
+  el.innerHTML=rules.length?rules.map(r=>`
+    <div class="rule-card">
+      <div class="rule-header">
+        <div class="rule-name">${r.nome||'—'}</div>
+        <div style="display:flex;gap:4px;align-items:center">
+          <span class="badge ${r.attiva?'badge-green':'badge-amber'}">${r.attiva?'Attiva':'Disattiva'}</span>
+          <button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="toggleRule('${r.id}',${!r.attiva})">${r.attiva?'Disattiva':'Attiva'}</button>
+          <button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem('rules','${r.id}')">🗑</button>
+        </div>
+      </div>
+      <div class="rule-desc">${ruleDescription(r)}</div>
+      <div class="rule-result">${ruleResultText(r)}</div>
+    </div>`).join(''):
+    '<div class="empty"><div class="empty-icon">⚙️</div><div class="empty-text">Nessuna regola. Le regole modificano automaticamente i prezzi.</div></div>';
+  updateTodayPrice();
+}
+
+function ruleDescription(r){
+  const condMap={
+    'last_minute':'Se mancano meno di <strong>'+r.giorni+'</strong> giorni al check-in e il giorno è ancora libero',
+    'anticipo':'Se la prenotazione arriva con più di <strong>'+r.giorni+'</strong> giorni di anticipo',
+    'weekend':'Nei giorni di venerdì, sabato e domenica',
+    'min_soggiorno':'Se la durata del soggiorno è inferiore a <strong>'+r.giorni+'</strong> notti'
+  };
+  const azMap={
+    'sconto':'→ Applica uno sconto del <strong>'+r.valore+'%</strong>',
+    'aumento':'→ Aumenta il prezzo del <strong>'+r.valore+'%</strong>',
+    'fisso':'→ Imposta prezzo fisso a <strong>€'+r.valore+'</strong>/notte'
+  };
+  return (condMap[r.condizione]||r.condizione)+' '+( azMap[r.azione]||r.azione);
+}
+
+function ruleResultText(r){
+  const base=getBasePrice();
+  if(!base) return 'Aggiungi un prezzo base per vedere il risultato';
+  const result=applyRule(base,r);
+  return '💶 Prezzo base €'+base+' → con questa regola: €'+result+'/notte';
+}
+
+function getBasePrice(){
+  if(!prices.length) return null;
+  const now=new Date();
+  const m=now.getMonth();
+  // season detection
+  if(m>=5&&m<=8) return prices.find(p=>p.tipo==='Alta')?.prezzo || prices[0]?.prezzo;
+  if(m>=2&&m<=4||m===9) return prices.find(p=>p.nome?.toLowerCase().includes('media'))?.prezzo || prices[0]?.prezzo;
+  return prices.find(p=>p.tipo==='Normale'||p.nome?.toLowerCase().includes('bassa'))?.prezzo || prices[0]?.prezzo;
+}
+
+function applyRule(base,r){
+  if(!r.attiva) return base;
+  base=Number(base);
+  if(r.azione==='sconto') return Math.round(base*(1-r.valore/100));
+  if(r.azione==='aumento') return Math.round(base*(1+r.valore/100));
+  if(r.azione==='fisso') return Number(r.valore);
+  return base;
+}
+
+function updateTodayPrice(){
+  const base=getBasePrice();
+  const el=document.getElementById('price-today');
+  const info=document.getElementById('price-today-info');
+  if(!el) return;
+  if(!base){ el.textContent='—'; if(info)info.textContent='Aggiungi prezzi stagionali per calcolare'; return; }
+  let price=Number(base);
+  const now=new Date();
+  const activeRules=rules.filter(r=>r.attiva);
+  const applied=[];
+  activeRules.forEach(r=>{
+    const old=price;
+    // weekend check
+    if(r.condizione==='weekend'&&[5,6,0].includes(now.getDay())){
+      price=applyRule(price,r); applied.push(r.nome);
+    }
+    // check availability for last_minute/anticipo would need booking data
+    // for now apply all active rules for demo
+  });
+  el.textContent='€'+price+'/notte';
+  if(info) info.textContent=applied.length?'Regole applicate: '+applied.join(', '):'Prezzo base stagionale (nessuna regola attivata oggi)';
+}
+
+window.toggleRule=async function(id,val){
+  await updateDoc(doc(db,'rules',id),{attiva:val});
+};
+
+// ── STATS ──
+function renderStats(){
+  const total=bookings.filter(b=>b.stato!=='Cancellata').reduce((s,b)=>s+Number(b.prezzo||0),0);
+  const totalNights=bookings.filter(b=>b.stato!=='Cancellata').reduce((s,b)=>{
+    return s+Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));
+  },0);
+  const avg=totalNights>0?Math.round(total/totalNights):0;
+
+  const el=id=>document.getElementById(id);
+  if(el('stat-total')) el('stat-total').textContent='€'+total.toLocaleString('it-IT');
+  if(el('stat-period')) el('stat-period').textContent='storico completo';
+  if(el('stat-occ')) el('stat-occ').textContent='—';
+  if(el('stat-avg')) el('stat-avg').textContent=avg?'€'+avg:'—';
+  if(el('stat-bcount')) el('stat-bcount').textContent=bookings.filter(b=>b.stato!=='Cancellata').length;
+
+  // revenue by month
+  const byMonth={};
+  bookings.filter(b=>b.stato!=='Cancellata').forEach(b=>{
+    const key=new Date(b.checkin).toLocaleDateString('it-IT',{month:'short',year:'2-digit'});
+    byMonth[key]=(byMonth[key]||0)+Number(b.prezzo||0);
+  });
+  const months=Object.keys(byMonth);
+  const maxV=Math.max(...Object.values(byMonth),1);
+  const chart=document.getElementById('revenue-chart');
+  if(chart){
+    chart.innerHTML=months.length?months.map(m=>`
+      <div class="chart-row">
+        <span class="chart-month">${m}</span>
+        <div class="chart-bg"><div class="chart-fill" style="width:${Math.round(byMonth[m]/maxV*100)}%"></div></div>
+        <span class="chart-val">€${byMonth[m].toLocaleString('it-IT')}</span>
+      </div>`).join(''):
+      '<div class="empty"><div class="empty-text">Nessuna prenotazione ancora</div></div>';
+  }
+
+  // platforms
+  const plats={};
+  bookings.filter(b=>b.stato!=='Cancellata').forEach(b=>{ plats[b.piattaforma]=(plats[b.piattaforma]||0)+Number(b.prezzo||0); });
+  const pEl=document.getElementById('platform-stats');
+  if(pEl){
+    pEl.innerHTML=Object.keys(plats).map(p=>`
+      <div class="stat-card"><div class="stat-label">${p}</div>
+      <div class="stat-value">€${plats[p].toLocaleString('it-IT')}</div></div>`).join('');
+  }
+}
+
+// ── MODAL FORMS ──
+const modalDefs={
+  booking:{
+    title:'Aggiungi prenotazione',
+    html:(d='')=>`
+      <div class="form-row-2">
+        <div class="form-row"><label>Nome ospite</label><input id="f-nome" placeholder="es. Mario Rossi" value="${d.nome||''}"></div>
+        <div class="form-row"><label>Piattaforma</label><select id="f-piattaforma">
+          <option ${d.piattaforma==='Airbnb'?'selected':''}>Airbnb</option>
+          <option ${d.piattaforma==='Booking.com'?'selected':''}>Booking.com</option>
+          <option ${d.piattaforma==='Diretto'?'selected':''}>Diretto</option>
+        </select></div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-row"><label>Check-in</label><input id="f-checkin" type="date" value="${d.checkin||''}"></div>
+        <div class="form-row"><label>Check-out</label><input id="f-checkout" type="date" value="${d.checkout||''}"></div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-row"><label>Prezzo totale (€)</label><input id="f-prezzo" type="number" min="0" placeholder="0" value="${d.prezzo||''}"></div>
+        <div class="form-row"><label>Stato</label><select id="f-stato">
+          <option ${d.stato==='Confermata'?'selected':''}>Confermata</option>
+          <option ${d.stato==='In attesa'?'selected':''}>In attesa</option>
+          <option ${d.stato==='Cancellata'?'selected':''}>Cancellata</option>
+        </select></div>
+      </div>
+      <div class="form-row"><label>Note (opzionale)</label><input id="f-note" placeholder="Richieste speciali..." value="${d.note||''}"></div>
+      <button class="save-btn" onclick="saveBooking()">💾 Salva prenotazione</button>`
+  },
+  message:{
+    title:'Template messaggio',
+    html:(d='')=>`
+      <div class="form-row"><label>Titolo</label><input id="f-titolo" placeholder="es. Messaggio di benvenuto" value="${d.titolo||''}"></div>
+      <div class="form-row"><label>Quando inviare</label><select id="f-trigger">
+        <option ${d.trigger==='Al check-in'?'selected':''}>Al check-in</option>
+        <option ${d.trigger==='2 giorni prima'?'selected':''}>2 giorni prima</option>
+        <option ${d.trigger==='1 giorno prima'?'selected':''}>1 giorno prima</option>
+        <option ${d.trigger==='1 ora dopo checkout'?'selected':''}>1 ora dopo checkout</option>
+        <option ${d.trigger==='Personalizzato'?'selected':''}>Personalizzato</option>
+      </select></div>
+      <div class="form-row"><label>Testo</label><textarea id="f-testo" rows="5" placeholder="Caro ospite, benvenuto...">${d.testo||''}</textarea></div>
+      <button class="save-btn" onclick="saveMessage()">💾 Salva template</button>`
+  },
+  task:{
+    title:'Nuova attività pulizie',
+    html:(d='')=>`
+      <div class="form-row"><label>Descrizione</label><input id="f-descrizione" placeholder="es. Cambio biancheria" value="${d.descrizione||''}"></div>
+      <div class="form-row-2">
+        <div class="form-row"><label>Zona</label><select id="f-zona">
+          ${['Camera','Bagno','Cucina','Soggiorno','Generale'].map(z=>`<option ${d.zona===z?'selected':''}>${z}</option>`).join('')}
+        </select></div>
+        <div class="form-row"><label>Assegnata a</label><select id="f-assegnata">
+          ${['Chiunque','Pulizie','Admin'].map(a=>`<option ${d.assegnata===a?'selected':''}>${a}</option>`).join('')}
+        </select></div>
+      </div>
+      <button class="save-btn" onclick="saveTask()">💾 Salva attività</button>`
+  },
+  price:{
+    title:'Periodo prezzi',
+    html:(d='')=>`
+      <div class="form-row"><label>Nome periodo</label><input id="f-nome" placeholder="es. Alta stagione" value="${d.nome||''}"></div>
+      <div class="form-row"><label>Descrizione</label><input id="f-descrizione" placeholder="es. Giu – Set" value="${d.descrizione||''}"></div>
+      <div class="form-row-2">
+        <div class="form-row"><label>Prezzo/notte (€)</label><input id="f-prezzo" type="number" min="0" placeholder="0" value="${d.prezzo||''}"></div>
+        <div class="form-row"><label>Tipo</label><select id="f-tipo">
+          ${['Normale','Alta','Evento'].map(t=>`<option ${d.tipo===t?'selected':''}>${t}</option>`).join('')}
+        </select></div>
+      </div>
+      <button class="save-btn" onclick="savePrice()">💾 Salva prezzo</button>`
+  },
+  rule:{
+    title:'Nuova regola dinamica',
+    html:()=>`
+      <div class="form-row"><label>Nome regola</label><input id="f-nome" placeholder="es. Sconto last minute"></div>
+      <div class="form-row"><label>Condizione</label><select id="f-condizione" onchange="updateRuleForm()">
+        <option value="last_minute">Last minute (X giorni prima)</option>
+        <option value="anticipo">Prenotazione anticipata (X giorni prima)</option>
+        <option value="weekend">Weekend (ven/sab/dom)</option>
+        <option value="min_soggiorno">Soggiorno breve (meno di X notti)</option>
+      </select></div>
+      <div class="form-row" id="f-giorni-row"><label>Numero di giorni / notti</label><input id="f-giorni" type="number" min="1" value="7" placeholder="7"></div>
+      <div class="form-row-2">
+        <div class="form-row"><label>Azione</label><select id="f-azione">
+          <option value="sconto">Sconto (%)</option>
+          <option value="aumento">Aumento (%)</option>
+          <option value="fisso">Prezzo fisso (€)</option>
+        </select></div>
+        <div class="form-row"><label>Valore</label><input id="f-valore" type="number" min="0" placeholder="10" value="10"></div>
+      </div>
+      <button class="save-btn" onclick="saveRule()">💾 Salva regola</button>`
+  }
+};
+
+window.updateRuleForm=function(){
+  const cond=document.getElementById('f-condizione')?.value;
+  const row=document.getElementById('f-giorni-row');
+  if(row) row.style.display=cond==='weekend'?'none':'block';
+};
+
+window.openModal=function(type, data=null){
+  editingId=data?.id||null;
+  editingCollection=null;
+  const def=modalDefs[type];
+  document.getElementById('modal-title').textContent=(editingId?'Modifica':'Aggiungi')+' '+def.title.toLowerCase();
+  document.getElementById('modal-body').innerHTML=def.html(data||'');
+  document.getElementById('modal-overlay').classList.add('open');
+};
+window.closeModal=function(){ document.getElementById('modal-overlay').classList.remove('open'); editingId=null; };
+
+// ── SAVE FUNCTIONS ──
+window.saveBooking=async function(){
+  const data={
+    nome:v('f-nome'),piattaforma:v('f-piattaforma'),
+    checkin:v('f-checkin'),checkout:v('f-checkout'),
+    prezzo:Number(v('f-prezzo'))||0,stato:v('f-stato'),note:v('f-note'),
+    updatedAt:serverTimestamp()
+  };
+  if(!data.nome||!data.checkin||!data.checkout){toast('Compila i campi obbligatori');return;}
+  if(editingId) await updateDoc(doc(db,'bookings',editingId),data);
+  else await addDoc(collection(db,'bookings'),{...data,createdAt:serverTimestamp()});
+  closeModal(); toast(editingId?'Prenotazione aggiornata ✓':'Prenotazione aggiunta ✓');
+};
+
+window.saveMessage=async function(){
+  const data={titolo:v('f-titolo'),trigger:v('f-trigger'),testo:v('f-testo'),updatedAt:serverTimestamp()};
+  if(!data.titolo||!data.testo){toast('Compila tutti i campi');return;}
+  if(editingId) await updateDoc(doc(db,'messages',editingId),data);
+  else await addDoc(collection(db,'messages'),{...data,createdAt:serverTimestamp()});
+  closeModal(); toast('Template salvato ✓');
+};
+
+window.saveTask=async function(){
+  const data={descrizione:v('f-descrizione'),zona:v('f-zona'),assegnata:v('f-assegnata'),done:false,updatedAt:serverTimestamp()};
+  if(!data.descrizione){toast('Inserisci una descrizione');return;}
+  if(editingId) await updateDoc(doc(db,'tasks',editingId),data);
+  else await addDoc(collection(db,'tasks'),{...data,createdAt:serverTimestamp()});
+  closeModal(); toast('Attività salvata ✓');
+};
+
+window.savePrice=async function(){
+  const data={nome:v('f-nome'),descrizione:v('f-descrizione'),prezzo:Number(v('f-prezzo'))||0,tipo:v('f-tipo'),updatedAt:serverTimestamp()};
+  if(!data.nome||!data.prezzo){toast('Nome e prezzo obbligatori');return;}
+  if(editingId) await updateDoc(doc(db,'prices',editingId),data);
+  else await addDoc(collection(db,'prices'),{...data,createdAt:serverTimestamp()});
+  closeModal(); toast('Prezzo salvato ✓');
+};
+
+window.saveRule=async function(){
+  const data={nome:v('f-nome'),condizione:v('f-condizione'),giorni:Number(v('f-giorni'))||7,azione:v('f-azione'),valore:Number(v('f-valore'))||10,attiva:true,updatedAt:serverTimestamp()};
+  if(!data.nome){toast('Dai un nome alla regola');return;}
+  await addDoc(collection(db,'rules'),{...data,createdAt:serverTimestamp()});
+  closeModal(); toast('Regola salvata ✓');
+};
+
+// ── EDIT ──
+window.editBooking=function(id){ const b=bookings.find(x=>x.id===id); if(b) openModal('booking',b); };
+window.editMessage=function(id){ const m=messages.find(x=>x.id===id); if(m) openModal('message',m); };
+window.editPrice=function(id){ const p=prices.find(x=>x.id===id); if(p) openModal('price',p); };
+
+// ── DELETE ──
+window.deleteItem=async function(coll,id){
+  if(!confirm('Eliminare questo elemento?')) return;
+  await deleteDoc(doc(db,coll,id));
+  toast('Eliminato ✓');
+};
+
+// ── HELPERS ──
+function v(id){ return document.getElementById(id)?.value||''; }
+function formatDate(str){ if(!str) return '—'; return new Date(str).toLocaleDateString('it-IT',{day:'2-digit',month:'short'}); }
+
+window.showSection=function(id, btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='calendar') renderCalendar();
+};
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// init calendar
+renderCalendar();
+</script>
+</body>
+</html>
