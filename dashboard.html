@@ -1185,7 +1185,7 @@ var modalDefs={
 };
 
 window._urf = function(){ var c=document.getElementById('f-condizione'); var r=document.getElementById('f-giorni-row'); if(r)r.style.display=c&&c.value==='weekend'?'none':'block'; };
-window._om = function(type,data){ editingId=data?data.id:null; var def=modalDefs[type]; if(!def)return; document.getElementById('modal-title').textContent=(editingId?'Modifica ':'Aggiungi ')+def.title; document.getElementById('modal-body').innerHTML=def.html(data||{}); document.getElementById('modal-overlay').classList.add('open'); };
+window._om = function(type,data){ editingId=data?data.id:null; var def=modalDefs[type]; if(!def)return; document.getElementById('modal-title').textContent=(editingId?'Modifica ':'Aggiungi ')+def.title; document.getElementById('modal-body').innerHTML=def.html(data||{}); document.getElementById('modal-overlay').classList.add('open'); if(def.afterOpen) setTimeout(def.afterOpen,50); };
 window._cm = function(){ document.getElementById('modal-overlay').classList.remove('open'); editingId=null; };
 
 function v(id){ var el=document.getElementById(id); return el?(el.value||'').trim():''; }
