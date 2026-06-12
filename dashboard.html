@@ -1258,7 +1258,7 @@ import { ref as storageRef, deleteObject } from "https://www.gstatic.com/firebas
 
 let documenti = [];
 
-function renderDocBookings() {
+window.renderDocBookings = function() {
   const el = document.getElementById('doc-bookings-list');
   if (!el) return;
   const now = new Date();
@@ -1316,7 +1316,7 @@ function renderDocumenti() {
   const el = document.getElementById('documenti-list');
   if (!el) return;
   if (!documenti.length) {
-    el.innerHTML = '<div class="empty"><div class="empty-icon">📄</div><div class="empty-text">Nessun documento ricevuto ancora.<br>Genera un link e invialo all'ospite!</div></div>';
+    el.innerHTML = "<div class="empty "><div class="empty-icon ">📄</div><div class="empty-text ">Nessun documento ricevuto. Genera un link per gli ospiti!</div></div>";
     return;
   }
   el.innerHTML = documenti.map(d => {
