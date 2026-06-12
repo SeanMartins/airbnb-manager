@@ -323,6 +323,51 @@
 
 <div class="toast" id="toast"></div>
 
+<script>
+// Funzioni globali accessibili dagli onclick HTML
+// Devono stare in uno script normale (non module) per essere globali
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  var el = document.getElementById('section-' + id);
+  if (el) el.classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id === 'calendar') { if(window._renderCalendar) window._renderCalendar(); }
+  if (id === 'adempimenti') { if(window._renderAdempimenti) window._renderAdempimenti(); }
+  if (id === 'documenti') { if(window._renderDocBookings) window._renderDocBookings(); if(window._loadDocumenti) window._loadDocumenti(); }
+}
+function doLogout() { if(window._doLogout) window._doLogout(); }
+function openModal(t,d) { if(window._openModal) window._openModal(t,d); }
+function closeModal() { if(window._closeModal) window._closeModal(); }
+function toggleTask(id,v) { if(window._toggleTask) window._toggleTask(id,v); }
+function renderBookings() { if(window._renderBookings) window._renderBookings(); }
+function renderTasks() { if(window._renderTasks) window._renderTasks(); }
+function changeMonth(d) { if(window._changeMonth) window._changeMonth(d); }
+function saveBooking() { if(window._saveBooking) window._saveBooking(); }
+function saveMessage() { if(window._saveMessage) window._saveMessage(); }
+function saveTask() { if(window._saveTask) window._saveTask(); }
+function savePrice() { if(window._savePrice) window._savePrice(); }
+function saveRule() { if(window._saveRule) window._saveRule(); }
+function editBooking(id) { if(window._editBooking) window._editBooking(id); }
+function editMessage(id) { if(window._editMessage) window._editMessage(id); }
+function editPrice(id) { if(window._editPrice) window._editPrice(id); }
+function deleteItem(c,id) { if(window._deleteItem) window._deleteItem(c,id); }
+function toggleRule(id,v) { if(window._toggleRule) window._toggleRule(id,v); }
+function updateRuleForm() { if(window._updateRuleForm) window._updateRuleForm(); }
+function openPreview(a,b,c) { if(window._openPreview) window._openPreview(a,b,c); }
+function closePreview() { if(window._closePreview) window._closePreview(); }
+function copyPreview() { if(window._copyPreview) window._copyPreview(); }
+function markSent() { if(window._markSent) window._markSent(); }
+function openMsgPreviewFromTemplate(id) { if(window._openMsgPreviewFromTemplate) window._openMsgPreviewFromTemplate(id); }
+function addDefaultTemplate(k) { if(window._addDefaultTemplate) window._addDefaultTemplate(k); }
+function toggleAdem(k,id) { if(window._toggleAdem) window._toggleAdem(k,id); }
+function refreshAdempimenti() { if(window._refreshAdempimenti) window._refreshAdempimenti(); }
+function copyDocLink(id,l) { if(window._copyDocLink) window._copyDocLink(id,l); }
+function copyGuestData(id) { if(window._copyGuestData) window._copyGuestData(id); }
+function deleteDocumento(id,p) { if(window._deleteDocumento) window._deleteDocumento(id,p); }
+function loadDocumenti() { if(window._loadDocumenti) window._loadDocumenti(); }
+</script>
+
 <script type="module">
 import { auth, db, storage } from './firebase.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -336,7 +381,7 @@ onAuthStateChanged(auth, user => {
   if(!user){ window.location.href='index.html'; return; }
   init();
 });
-window.doLogout = async () => { await signOut(auth); window.location.href='index.html'; };
+window._doLogout = async () => { await signOut(auth); window.location.href='index.html'; };
 
 // ── STATE ──
 let bookings=[], tasks=[], messages=[], prices=[], rules=[];
@@ -469,7 +514,7 @@ function bookingCardHTML(b){
   </div>`;
 }
 
-window.renderBookings = function(){
+window._renderBookings = function(){
   const statusF=document.getElementById('filter-status')?.value||'';
   const platF=document.getElementById('filter-platform')?.value||'';
   let filtered=bookings.filter(b=>{
@@ -484,7 +529,7 @@ window.renderBookings = function(){
 };
 
 // ── CALENDAR ──
-window.changeMonth=function(dir){ calMonth+=dir; if(calMonth>11){calMonth=0;calYear++;}else if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
+window._changeMonth=function(dir){ calMonth+=dir; if(calMonth>11){calMonth=0;calYear++;}else if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
 
 function renderCalendar(){
   const title=new Date(calYear,calMonth,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});
@@ -600,7 +645,7 @@ function renderReminders(){
 }
 
 let currentSentKey = null;
-window.openPreview = function(msgId, bookingId, sentKey){
+window._openPreview = function(msgId, bookingId, sentKey){
   const m = messages.find(x=>x.id===msgId);
   const b = bookings.find(x=>x.id===bookingId);
   if(!m||!b) return;
@@ -613,14 +658,14 @@ window.openPreview = function(msgId, bookingId, sentKey){
   document.getElementById('preview-overlay').classList.add('open');
 };
 
-window.closePreview = function(){ document.getElementById('preview-overlay').classList.remove('open'); };
+window._closePreview = function(){ document.getElementById('preview-overlay').classList.remove('open'); };
 
-window.copyPreview = function(){
+window._copyPreview = function(){
   const text = document.getElementById('preview-body').textContent;
   navigator.clipboard.writeText(text).then(()=>toast('Messaggio copiato! 📋'));
 };
 
-window.markSent = function(){
+window._markSent = function(){
   if(currentSentKey){
     localStorage.setItem(currentSentKey, '1');
     document.getElementById('preview-sent-badge').style.display='block';
@@ -658,7 +703,7 @@ function renderMessages(){
     </div>`;
 }
 
-window.openMsgPreviewFromTemplate = function(msgId){
+window._openMsgPreviewFromTemplate = function(msgId){
   const m = messages.find(x=>x.id===msgId);
   if(!m) return;
   // trova la prossima prenotazione per anteprima
@@ -888,7 +933,7 @@ Sono sempre disponibile per altri consigli. Buona esplorazione! 🌸
 Sean`
   }
 };
-window.addDefaultTemplate = async function(key){
+window._addDefaultTemplate = async function(key){
   const t = defaultTemplates[key];
   if(!t) return;
   await addDoc(collection(db,'messages'),{...t, createdAt:serverTimestamp(), updatedAt:serverTimestamp()});
@@ -907,7 +952,7 @@ function taskItemHTML(t, compact=false){
   </div>`;
 }
 
-window.renderTasks=function(){
+window._renderTasks=function(){
   const zoneF=document.getElementById('filter-zone')?.value||'';
   const showDone=document.getElementById('show-done')?.checked||false;
   let filtered=tasks.filter(t=>{
@@ -928,7 +973,7 @@ window.renderTasks=function(){
   }
 };
 
-window.toggleTask=async function(id, done){
+window._toggleTask=async function(id, done){
   await updateDoc(doc(db,'tasks',id),{done:done==='true'||done===true});
 };
 
@@ -1038,7 +1083,7 @@ function updateTodayPrice(){
   if(info) info.textContent=applied.length?'Regole applicate: '+applied.join(', '):'Prezzo base stagionale (nessuna regola attivata oggi)';
 }
 
-window.toggleRule=async function(id,val){
+window._toggleRule=async function(id,val){
   await updateDoc(doc(db,'rules',id),{attiva:val});
 };
 
@@ -1180,13 +1225,13 @@ const modalDefs={
   }
 };
 
-window.updateRuleForm=function(){
+window._updateRuleForm=function(){
   const cond=document.getElementById('f-condizione')?.value;
   const row=document.getElementById('f-giorni-row');
   if(row) row.style.display=cond==='weekend'?'none':'block';
 };
 
-window.openModal=function(type, data=null){
+window._openModal=function(type, data=null){
   editingId=data?.id||null;
   editingCollection=null;
   const def=modalDefs[type];
@@ -1194,10 +1239,10 @@ window.openModal=function(type, data=null){
   document.getElementById('modal-body').innerHTML=def.html(data||'');
   document.getElementById('modal-overlay').classList.add('open');
 };
-window.closeModal=function(){ document.getElementById('modal-overlay').classList.remove('open'); editingId=null; };
+window._closeModal=function(){ document.getElementById('modal-overlay').classList.remove('open'); editingId=null; };
 
 // ── SAVE FUNCTIONS ──
-window.saveBooking=async function(){
+window._saveBooking=async function(){
   const data={
     nome:v('f-nome'),piattaforma:v('f-piattaforma'),
     checkin:v('f-checkin'),checkout:v('f-checkout'),
@@ -1210,7 +1255,7 @@ window.saveBooking=async function(){
   closeModal(); toast(editingId?'Prenotazione aggiornata ✓':'Prenotazione aggiunta ✓');
 };
 
-window.saveMessage=async function(){
+window._saveMessage=async function(){
   const data={titolo:v('f-titolo'),trigger:v('f-trigger'),testo:v('f-testo'),updatedAt:serverTimestamp()};
   if(!data.titolo||!data.testo){toast('Compila tutti i campi');return;}
   if(editingId) await updateDoc(doc(db,'messages',editingId),data);
@@ -1218,7 +1263,7 @@ window.saveMessage=async function(){
   closeModal(); toast('Template salvato ✓');
 };
 
-window.saveTask=async function(){
+window._saveTask=async function(){
   const data={descrizione:v('f-descrizione'),zona:v('f-zona'),assegnata:v('f-assegnata'),done:false,updatedAt:serverTimestamp()};
   if(!data.descrizione){toast('Inserisci una descrizione');return;}
   if(editingId) await updateDoc(doc(db,'tasks',editingId),data);
@@ -1226,7 +1271,7 @@ window.saveTask=async function(){
   closeModal(); toast('Attività salvata ✓');
 };
 
-window.savePrice=async function(){
+window._savePrice=async function(){
   const data={nome:v('f-nome'),descrizione:v('f-descrizione'),prezzo:Number(v('f-prezzo'))||0,tipo:v('f-tipo'),updatedAt:serverTimestamp()};
   if(!data.nome||!data.prezzo){toast('Nome e prezzo obbligatori');return;}
   if(editingId) await updateDoc(doc(db,'prices',editingId),data);
@@ -1234,7 +1279,7 @@ window.savePrice=async function(){
   closeModal(); toast('Prezzo salvato ✓');
 };
 
-window.saveRule=async function(){
+window._saveRule=async function(){
   const data={nome:v('f-nome'),condizione:v('f-condizione'),giorni:Number(v('f-giorni'))||7,azione:v('f-azione'),valore:Number(v('f-valore'))||10,attiva:true,updatedAt:serverTimestamp()};
   if(!data.nome){toast('Dai un nome alla regola');return;}
   await addDoc(collection(db,'rules'),{...data,createdAt:serverTimestamp()});
@@ -1242,12 +1287,12 @@ window.saveRule=async function(){
 };
 
 // ── EDIT ──
-window.editBooking=function(id){ const b=bookings.find(x=>x.id===id); if(b) openModal('booking',b); };
-window.editMessage=function(id){ const m=messages.find(x=>x.id===id); if(m) openModal('message',m); };
-window.editPrice=function(id){ const p=prices.find(x=>x.id===id); if(p) openModal('price',p); };
+window._editBooking=function(id){ const b=bookings.find(x=>x.id===id); if(b) openModal('booking',b); };
+window._editMessage=function(id){ const m=messages.find(x=>x.id===id); if(m) openModal('message',m); };
+window._editPrice=function(id){ const p=prices.find(x=>x.id===id); if(p) openModal('price',p); };
 
 // ── DELETE ──
-window.deleteItem=async function(coll,id){
+window._deleteItem=async function(coll,id){
   if(!confirm('Eliminare questo elemento?')) return;
   await deleteDoc(doc(db,coll,id));
   toast('Eliminato ✓');
@@ -1258,7 +1303,7 @@ import { ref as storageRef, deleteObject } from "https://www.gstatic.com/firebas
 
 let documenti = [];
 
-window.renderDocBookings = function() {
+window._renderDocBookings = function() {
   const el = document.getElementById('doc-bookings-list');
   if (!el) return;
   const now = new Date();
@@ -1290,7 +1335,7 @@ window.renderDocBookings = function() {
   }).join('');
 }
 
-window.copyDocLink = function(bookingId, link) {
+window._copyDocLink = function(bookingId, link) {
   navigator.clipboard.writeText(link).then(() => {
     const el = document.getElementById('copied-' + bookingId);
     if (el) { el.style.display = 'inline'; setTimeout(() => el.style.display = 'none', 2000); }
@@ -1298,7 +1343,7 @@ window.copyDocLink = function(bookingId, link) {
   });
 };
 
-window.loadDocumenti = async function() {
+window._loadDocumenti = async function() {
   const el = document.getElementById('documenti-list');
   if (!el) return;
   el.innerHTML = '<div style="text-align:center;padding:20px;color:#888;font-size:13px">⏳ Caricamento...</div>';
@@ -1312,11 +1357,15 @@ window.loadDocumenti = async function() {
   }
 };
 
+function emptyDocHTML() {
+  return '<div class="empty"><div class="empty-icon">📄</div><div class="empty-text">Nessun documento ricevuto.<br>Genera un link e invialo agli ospiti!</div></div>';
+}
+
 function renderDocumenti() {
   const el = document.getElementById('documenti-list');
   if (!el) return;
   if (!documenti.length) {
-    el.innerHTML = "<div class="empty "><div class="empty-icon ">📄</div><div class="empty-text ">Nessun documento ricevuto. Genera un link per gli ospiti!</div></div>";
+    el.innerHTML = emptyDocHTML();
     return;
   }
   el.innerHTML = documenti.map(d => {
@@ -1348,7 +1397,7 @@ function renderDocumenti() {
   }).join('');
 }
 
-window.copyGuestData = function(docId) {
+window._copyGuestData = function(docId) {
   const d = documenti.find(x => x.id === docId);
   if (!d) return;
   const text = [
@@ -1369,7 +1418,7 @@ window.copyGuestData = function(docId) {
   navigator.clipboard.writeText(text).then(() => toast('Dati copiati! 📋'));
 };
 
-window.deleteDocumento = async function(docId, filePath) {
+window._deleteDocumento = async function(docId, filePath) {
   if (!confirm('Eliminare questo documento? Operazione irreversibile.')) return;
   try {
     if (filePath) {
@@ -1476,20 +1525,20 @@ function renderAdempimenti(){
   }).join('');
 }
 
-window.toggleAdem = function(key, bookingId) {
+window._toggleAdem = function(key, bookingId) {
   if(localStorage.getItem(key)) localStorage.removeItem(key);
   else localStorage.setItem(key, '1');
   renderAdempimenti();
   toast('Stato aggiornato ✓');
 };
 
-window.refreshAdempimenti = function(){ renderAdempimenti(); toast('Aggiornato ✓'); };
+window._refreshAdempimenti = function(){ renderAdempimenti(); toast('Aggiornato ✓'); };
 
 // ── HELPERS ──
 function v(id){ return document.getElementById(id)?.value||''; }
 function formatDate(str){ if(!str) return '—'; return new Date(str).toLocaleDateString('it-IT',{day:'2-digit',month:'short'}); }
 
-window.showSection=function(id, btn){
+window._showSection=function(id, btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('section-'+id).classList.add('active');
