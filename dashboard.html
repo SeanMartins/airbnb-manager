@@ -22,6 +22,22 @@
 .msg-title{font-size:14px;font-weight:600}
 .msg-preview{font-size:12px;color:#888;line-height:1.5}
 .msg-actions{display:flex;gap:4px;flex-shrink:0}
+.doc-booking-row{background:#fff;border:1px solid #e8e8e4;border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.doc-booking-info{flex:1;min-width:0}
+.doc-booking-name{font-size:13px;font-weight:600}
+.doc-booking-dates{font-size:11px;color:#888;margin-top:2px}
+.doc-card{background:#fff;border:1px solid #e8e8e4;border-radius:10px;padding:14px 16px;margin-bottom:10px}
+.doc-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.doc-avatar{width:36px;height:36px;border-radius:50%;background:#eff6ff;color:#1e40af;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.doc-name{font-size:14px;font-weight:600}
+.doc-meta{font-size:11px;color:#888;margin-top:2px}
+.doc-fields{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.doc-field{background:#f8f8f6;border-radius:6px;padding:7px 10px}
+.doc-field-label{font-size:10px;color:#888;margin-bottom:2px;text-transform:uppercase;letter-spacing:0.03em}
+.doc-field-value{font-size:12px;font-weight:600}
+.doc-actions{display:flex;gap:8px;flex-wrap:wrap}
+.delete-badge{font-size:10px;color:#92400e;background:#fef3c7;padding:2px 8px;border-radius:20px;font-weight:500}
+.link-copied{font-size:11px;color:#166534;background:#dcfce7;padding:2px 8px;border-radius:6px;display:none}
 .adempimento-row{background:#fff;border:1px solid #e8e8e4;border-radius:10px;padding:14px 16px;margin-bottom:10px}
 .adem-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .adem-name{font-size:14px;font-weight:600;flex:1}
@@ -62,6 +78,7 @@
   <button class="nav-btn" onclick="showSection('pricing',this)"><span class="nav-icon">💰</span>Prezzi</button>
   <button class="nav-btn" onclick="showSection('stats',this)"><span class="nav-icon">📈</span>Statistiche</button>
   <button class="nav-btn" onclick="showSection('adempimenti',this)"><span class="nav-icon">📋</span>Adempimenti</button>
+  <button class="nav-btn" onclick="showSection('documenti',this)"><span class="nav-icon">📁</span>Documenti</button>
   <a href="impostazioni.html" class="nav-btn"><span class="nav-icon">⚙️</span>Impostazioni</a>
 </div>
 
@@ -196,6 +213,33 @@
   </div>
 </div>
 
+<!-- ── DOCUMENTI ── -->
+<div class="section" id="section-documenti">
+  <div class="sec-header">
+    <div class="sec-title">📁 Documenti ospiti</div>
+  </div>
+
+  <div style="padding:12px 16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;margin-bottom:20px;font-size:12px;color:#1e40af;line-height:1.7">
+    <strong>💡 Come funziona:</strong><br>
+    1. Seleziona una prenotazione → clicca <strong>"Genera link"</strong><br>
+    2. Invia il link all'ospite via Airbnb/WhatsApp<br>
+    3. L'ospite carica il documento direttamente dalla sua pagina<br>
+    4. Il documento appare qui pronto per Alloggiati Web<br>
+    5. Eliminazione automatica 30 giorni dopo il checkout
+  </div>
+
+  <div class="sec-header" style="margin-bottom:10px">
+    <div style="font-size:13px;font-weight:600">Prenotazioni attive</div>
+  </div>
+  <div id="doc-bookings-list" style="margin-bottom:24px"></div>
+
+  <div class="sec-header">
+    <div style="font-size:13px;font-weight:600">📄 Documenti ricevuti</div>
+    <button class="btn-secondary" style="font-size:12px;padding:5px 12px" onclick="loadDocumenti()">🔄 Aggiorna</button>
+  </div>
+  <div id="documenti-list"></div>
+</div>
+
 <!-- ── ADEMPIMENTI ── -->
 <div class="section" id="section-adempimenti">
   <div class="sec-header">
@@ -280,7 +324,7 @@
 <div class="toast" id="toast"></div>
 
 <script type="module">
-import { auth, db } from './firebase.js';
+import { auth, db, storage } from './firebase.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   collection, addDoc, getDocs, doc, updateDoc, deleteDoc,
@@ -319,6 +363,7 @@ function listenBookings(){
     renderStats();
     renderReminders();
     renderAdempimenti();
+    renderDocBookings();
   });
 }
 function listenTasks(){
@@ -1208,6 +1253,135 @@ window.deleteItem=async function(coll,id){
   toast('Eliminato ✓');
 };
 
+// ── DOCUMENTI ──
+import { ref as storageRef, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+let documenti = [];
+
+function renderDocBookings() {
+  const el = document.getElementById('doc-bookings-list');
+  if (!el) return;
+  const now = new Date();
+  const active = bookings.filter(b => {
+    if (b.stato === 'Cancellata') return false;
+    const co = new Date(b.checkout);
+    co.setDate(co.getDate() + 7);
+    return co >= now;
+  }).sort((a,b) => new Date(a.checkin) - new Date(b.checkin));
+
+  if (!active.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nessuna prenotazione attiva</div></div>';
+    return;
+  }
+  el.innerHTML = active.map(b => {
+    const nights = Math.max(0, Math.round((new Date(b.checkout) - new Date(b.checkin)) / 86400000));
+    const link = window.location.origin + '/documento.html?b=' + b.id;
+    return `<div class="doc-booking-row">
+      <div class="doc-booking-info">
+        <div class="doc-booking-name">${b.nome || 'Ospite'}</div>
+        <div class="doc-booking-dates">${formatDate(b.checkin)} – ${formatDate(b.checkout)} · ${nights} notti · ${b.piattaforma||'—'}</div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <span class="link-copied" id="copied-${b.id}">✓ Copiato!</span>
+        <button class="btn-secondary" style="font-size:12px;padding:5px 10px" onclick="copyDocLink('${b.id}','${link}')">🔗 Copia link</button>
+        <a href="${link}" target="_blank" class="btn-secondary" style="font-size:12px;padding:5px 10px;text-decoration:none">👁 Apri</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.copyDocLink = function(bookingId, link) {
+  navigator.clipboard.writeText(link).then(() => {
+    const el = document.getElementById('copied-' + bookingId);
+    if (el) { el.style.display = 'inline'; setTimeout(() => el.style.display = 'none', 2000); }
+    toast('Link copiato! 🔗');
+  });
+};
+
+window.loadDocumenti = async function() {
+  const el = document.getElementById('documenti-list');
+  if (!el) return;
+  el.innerHTML = '<div style="text-align:center;padding:20px;color:#888;font-size:13px">⏳ Caricamento...</div>';
+  try {
+    const snap = await getDocs(collection(db, 'documenti'));
+    documenti = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    documenti.sort((a,b) => new Date(b.uploadedAt?.seconds*1000||0) - new Date(a.uploadedAt?.seconds*1000||0));
+    renderDocumenti();
+  } catch(e) {
+    el.innerHTML = '<div class="empty"><div class="empty-text">Errore caricamento documenti</div></div>';
+  }
+};
+
+function renderDocumenti() {
+  const el = document.getElementById('documenti-list');
+  if (!el) return;
+  if (!documenti.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">📄</div><div class="empty-text">Nessun documento ricevuto ancora.<br>Genera un link e invialo all'ospite!</div></div>';
+    return;
+  }
+  el.innerHTML = documenti.map(d => {
+    const initials = ((d.guestNome||'?')[0] + (d.guestCognome||'?')[0]).toUpperCase();
+    const uploadDate = d.uploadedAt ? new Date(d.uploadedAt.seconds*1000).toLocaleDateString('it-IT') : '—';
+    return `<div class="doc-card">
+      <div class="doc-card-header">
+        <div class="doc-avatar">${initials}</div>
+        <div>
+          <div class="doc-name">${d.guestNome||'—'} ${d.guestCognome||''}</div>
+          <div class="doc-meta">Caricato il ${uploadDate} · Check-in ${formatDate(d.checkin)}</div>
+        </div>
+        <span class="delete-badge">🗑 Elimina il ${d.deleteAfter||'—'}</span>
+      </div>
+      <div class="doc-fields">
+        <div class="doc-field"><div class="doc-field-label">Data nascita</div><div class="doc-field-value">${d.guestNascita||'—'}</div></div>
+        <div class="doc-field"><div class="doc-field-label">Nazionalità</div><div class="doc-field-value">${d.guestNazionalita||'—'}</div></div>
+        <div class="doc-field"><div class="doc-field-label">Tipo documento</div><div class="doc-field-value">${d.tipoDocumento||'—'}</div></div>
+        <div class="doc-field"><div class="doc-field-label">Numero</div><div class="doc-field-value">${d.numeroDocumento||'—'}</div></div>
+        <div class="doc-field" style="grid-column:1/-1"><div class="doc-field-label">Residenza</div><div class="doc-field-value">${d.residenza||'—'}</div></div>
+      </div>
+      <div class="doc-actions">
+        <a href="${d.fileURL}" target="_blank" class="btn-primary" style="font-size:12px;padding:6px 12px;text-decoration:none">📄 Vedi documento</a>
+        <a href="${d.fileURL}" download class="btn-secondary" style="font-size:12px;padding:6px 12px;text-decoration:none">⬇️ Scarica</a>
+        <button class="btn-secondary" style="font-size:12px;padding:6px 12px" onclick="copyGuestData('${d.id}')">📋 Copia dati</button>
+        <button class="btn-danger" style="font-size:12px;padding:5px 10px" onclick="deleteDocumento('${d.id}','${d.filePath||''}')">🗑 Elimina</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.copyGuestData = function(docId) {
+  const d = documenti.find(x => x.id === docId);
+  if (!d) return;
+  const text = [
+    'DATI OSPITE — Alloggiati Web',
+    '─────────────────────────',
+    'Nome: ' + (d.guestNome||'—'),
+    'Cognome: ' + (d.guestCognome||'—'),
+    'Data nascita: ' + (d.guestNascita||'—'),
+    'Nazionalità: ' + (d.guestNazionalita||'—'),
+    'Tipo documento: ' + (d.tipoDocumento||'—'),
+    'Numero documento: ' + (d.numeroDocumento||'—'),
+    'Residenza: ' + (d.residenza||'—'),
+    '─────────────────────────',
+    'Check-in: ' + (d.checkin||'—'),
+    'Check-out: ' + (d.checkout||'—'),
+  ].join('
+');
+  navigator.clipboard.writeText(text).then(() => toast('Dati copiati! 📋'));
+};
+
+window.deleteDocumento = async function(docId, filePath) {
+  if (!confirm('Eliminare questo documento? Operazione irreversibile.')) return;
+  try {
+    if (filePath) {
+      try { await deleteObject(storageRef(storage, filePath)); } catch(e) { console.warn('File già eliminato'); }
+    }
+    await deleteDoc(doc(db, 'documenti', docId));
+    documenti = documenti.filter(d => d.id !== docId);
+    renderDocumenti();
+    toast('Documento eliminato ✓');
+  } catch(e) { toast('Errore eliminazione'); }
+};
+
 // ── ADEMPIMENTI ──
 function renderAdempimenti(){
   const el = document.getElementById('adempimenti-list');
@@ -1322,6 +1496,7 @@ window.showSection=function(id, btn){
   btn.classList.add('active');
   if(id==='calendar') renderCalendar();
   if(id==='adempimenti') renderAdempimenti();
+  if(id==='documenti'){ renderDocBookings(); loadDocumenti(); }
 };
 
 function toast(msg){

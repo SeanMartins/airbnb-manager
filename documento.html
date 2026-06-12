@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carica documento — Appartamento Firenze</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f5f5f3;color:#1a1a1a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#fff;border-radius:16px;border:1px solid #e8e8e4;padding:28px 24px;width:min(480px,100%)}
+.logo{font-size:32px;text-align:center;margin-bottom:8px}
+.title{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
+.subtitle{font-size:13px;color:#888;text-align:center;margin-bottom:24px}
+.booking-info{background:#f8f8f6;border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:13px}
+.booking-info-row{display:flex;gap:8px;margin-bottom:6px;align-items:center}
+.booking-info-row:last-child{margin-bottom:0}
+.info-label{color:#888;width:80px;flex-shrink:0;font-size:12px}
+.info-value{font-weight:600}
+.section-title{font-size:13px;font-weight:700;margin-bottom:10px;color:#555}
+.guest-form{margin-bottom:20px}
+.form-row{margin-bottom:12px}
+label{display:block;font-size:12px;font-weight:500;color:#555;margin-bottom:5px}
+input,select{width:100%;padding:9px 11px;border:1px solid #e0e0da;border-radius:8px;font-size:13px;font-family:inherit;color:#1a1a1a;outline:none}
+input:focus,select:focus{border-color:#1a6b4a;box-shadow:0 0 0 3px rgba(26,107,74,0.08)}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.upload-area{border:2px dashed #e0e0da;border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:16px;position:relative}
+.upload-area:hover,.upload-area.dragover{border-color:#1a6b4a;background:#f0fdf4}
+.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:32px;margin-bottom:8px}
+.upload-text{font-size:13px;font-weight:600;margin-bottom:4px}
+.upload-sub{font-size:11px;color:#888}
+.preview-wrap{display:none;margin-bottom:16px;border-radius:10px;overflow:hidden;border:1px solid #e8e8e4;position:relative}
+.preview-wrap img{width:100%;max-height:240px;object-fit:contain;background:#f8f8f6}
+.preview-wrap .remove-btn{position:absolute;top:8px;right:8px;background:#fff;border:1px solid #e0e0da;border-radius:6px;padding:4px 8px;cursor:pointer;font-size:12px}
+.submit-btn{width:100%;padding:13px;border-radius:10px;border:none;background:#1a6b4a;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.15s}
+.submit-btn:hover{background:#155a3d}
+.submit-btn:disabled{background:#aaa;cursor:not-allowed}
+.result{display:none;text-align:center;padding:24px 16px}
+.result-icon{font-size:48px;margin-bottom:12px}
+.result-title{font-size:17px;font-weight:700;margin-bottom:8px}
+.result-sub{font-size:13px;color:#888;line-height:1.6}
+.error-msg{background:#fee2e2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-size:12px;color:#991b1b;margin-bottom:12px;display:none}
+.privacy-note{font-size:11px;color:#aaa;text-align:center;margin-top:16px;line-height:1.6}
+.progress-wrap{display:none;margin-bottom:16px}
+.progress-label{font-size:12px;color:#888;margin-bottom:6px;text-align:center}
+.progress-bar-bg{background:#f0f0ec;border-radius:4px;height:8px;overflow:hidden}
+.progress-bar-fill{height:100%;border-radius:4px;background:#1a6b4a;transition:width 0.3s ease;width:0%}
+.loading{display:none;text-align:center;padding:40px 20px;color:#888;font-size:13px}
+.spinner{width:32px;height:32px;border:3px solid #e0e0da;border-top-color:#1a6b4a;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:400px){.form-row-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="card" id="main-card">
+
+  <!-- LOADING -->
+  <div class="loading" id="loading-state">
+    <div class="spinner"></div>
+    Caricamento in corso...
+  </div>
+
+  <!-- FORM -->
+  <div id="form-state" style="display:none">
+    <div class="logo">🏠</div>
+    <div class="title">Carica il tuo documento</div>
+    <div class="subtitle">Appartamento Via Capo di Mondo 76 · Firenze</div>
+
+    <div class="booking-info" id="booking-info"></div>
+
+    <div class="error-msg" id="error-msg"></div>
+
+    <div class="section-title">📋 I tuoi dati</div>
+    <div class="guest-form">
+      <div class="form-row-2">
+        <div class="form-row">
+          <label>Nome *</label>
+          <input id="f-nome" placeholder="Mario" required>
+        </div>
+        <div class="form-row">
+          <label>Cognome *</label>
+          <input id="f-cognome" placeholder="Rossi" required>
+        </div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-row">
+          <label>Data di nascita *</label>
+          <input id="f-nascita" type="date" required>
+        </div>
+        <div class="form-row">
+          <label>Nazionalità *</label>
+          <select id="f-nazionalita">
+            <option value="">Seleziona...</option>
+            <option value="italiana">🇮🇹 Italiana</option>
+            <option value="francese">🇫🇷 Francese</option>
+            <option value="tedesca">🇩🇪 Tedesca</option>
+            <option value="spagnola">🇪🇸 Spagnola</option>
+            <option value="inglese">🇬🇧 Inglese</option>
+            <option value="americana">🇺🇸 Americana</option>
+            <option value="altra">Altra</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-row">
+          <label>Tipo documento *</label>
+          <select id="f-tipdoc">
+            <option value="">Seleziona...</option>
+            <option value="Carta d'identità">Carta d'identità</option>
+            <option value="Passaporto">Passaporto</option>
+            <option value="Patente">Patente</option>
+            <option value="Permesso di soggiorno">Permesso di soggiorno</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Numero documento *</label>
+          <input id="f-numdoc" placeholder="AB1234567">
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Luogo di residenza *</label>
+        <input id="f-residenza" placeholder="es. Roma, Italia">
+      </div>
+    </div>
+
+    <div class="section-title">📷 Foto del documento</div>
+    <div class="upload-area" id="upload-area">
+      <input type="file" id="file-input" accept="image/*,.pdf" onchange="handleFile(this.files[0])">
+      <div class="upload-icon">📎</div>
+      <div class="upload-text">Tocca per scattare una foto o scegliere un file</div>
+      <div class="upload-sub">Foto fronte del documento · JPG, PNG o PDF · max 10MB</div>
+    </div>
+    <div class="preview-wrap" id="preview-wrap">
+      <img id="preview-img" src="" alt="Anteprima documento">
+      <button class="remove-btn" onclick="removeFile()">✕ Rimuovi</button>
+    </div>
+
+    <div class="progress-wrap" id="progress-wrap">
+      <div class="progress-label" id="progress-label">Caricamento...</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar"></div></div>
+    </div>
+
+    <button class="submit-btn" id="submit-btn" onclick="submitDoc()">📤 Invia documento</button>
+
+    <div class="privacy-note">
+      🔒 I tuoi dati sono trattati in conformità al GDPR.<br>
+      Il documento verrà eliminato automaticamente 30 giorni dopo il tuo checkout.<br>
+      Viene utilizzato esclusivamente per gli adempimenti di legge (Alloggiati Web).
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="result" id="success-state">
+    <div class="result-icon">✅</div>
+    <div class="result-title">Documento inviato!</div>
+    <div class="result-sub">Grazie. Il tuo documento è stato ricevuto correttamente.<br>Non è necessario fare altro — ci vediamo al check-in!<br><br>🏠 Via Capo di Mondo 76 · Firenze</div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="result" id="error-state">
+    <div class="result-icon">❌</div>
+    <div class="result-title">Link non valido</div>
+    <div class="result-sub">Questo link non è valido o è scaduto.<br>Contatta il tuo host per ricevere un nuovo link.</div>
+  </div>
+
+  <!-- ALREADY DONE -->
+  <div class="result" id="done-state">
+    <div class="result-icon">✅</div>
+    <div class="result-title">Già inviato</div>
+    <div class="result-sub">Hai già inviato il tuo documento per questa prenotazione.<br>Non è necessario fare altro — ci vediamo al check-in!<br><br>🏠 Via Capo di Mondo 76 · Firenze</div>
+  </div>
+
+</div>
+
+<script type="module">
+import { db, storage } from './firebase.js';
+import {
+  doc, getDoc, collection, addDoc, query, where, getDocs, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  ref, uploadBytesResumable, getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+let bookingId = null;
+let bookingData = null;
+let selectedFile = null;
+
+// Leggi bookingId dalla URL
+const params = new URLSearchParams(window.location.search);
+bookingId = params.get('b');
+
+showState('loading');
+
+if (!bookingId) {
+  showState('error');
+} else {
+  loadBooking();
+}
+
+async function loadBooking() {
+  try {
+    const snap = await getDoc(doc(db, 'bookings', bookingId));
+    if (!snap.exists()) { showState('error'); return; }
+    bookingData = snap.data();
+
+    // Controlla se già inviato
+    const docsSnap = await getDocs(query(
+      collection(db, 'documenti'),
+      where('bookingId', '==', bookingId)
+    ));
+    if (!docsSnap.empty) { showState('done'); return; }
+
+    // Mostra info prenotazione
+    const nights = Math.max(0, Math.round(
+      (new Date(bookingData.checkout) - new Date(bookingData.checkin)) / 86400000
+    ));
+    document.getElementById('booking-info').innerHTML = `
+      <div class="booking-info-row"><span class="info-label">📅 Check-in</span><span class="info-value">${formatDate(bookingData.checkin)}</span></div>
+      <div class="booking-info-row"><span class="info-label">📅 Check-out</span><span class="info-value">${formatDate(bookingData.checkout)}</span></div>
+      <div class="booking-info-row"><span class="info-label">🌙 Notti</span><span class="info-value">${nights}</span></div>
+      <div class="booking-info-row"><span class="info-label">📍 Indirizzo</span><span class="info-value">Via Capo di Mondo 76, Firenze</span></div>`;
+
+    // Pre-compila nome se disponibile
+    if (bookingData.nome) {
+      const parts = bookingData.nome.trim().split(' ');
+      if (parts[0]) document.getElementById('f-nome').value = parts[0];
+      if (parts[1]) document.getElementById('f-cognome').value = parts.slice(1).join(' ');
+    }
+
+    showState('form');
+  } catch(e) {
+    console.error(e);
+    showState('error');
+  }
+}
+
+window.handleFile = function(file) {
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024) { showError('File troppo grande. Massimo 10MB.'); return; }
+  selectedFile = file;
+  if (file.type.startsWith('image/')) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('preview-img').src = e.target.result;
+      document.getElementById('preview-wrap').style.display = 'block';
+      document.getElementById('upload-area').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  } else {
+    document.getElementById('preview-wrap').style.display = 'none';
+    document.getElementById('upload-area').style.display = 'block';
+    document.getElementById('upload-area').querySelector('.upload-text').textContent = '✅ ' + file.name;
+  }
+};
+
+window.removeFile = function() {
+  selectedFile = null;
+  document.getElementById('preview-wrap').style.display = 'none';
+  document.getElementById('upload-area').style.display = 'block';
+  document.getElementById('upload-area').querySelector('.upload-text').textContent = 'Tocca per scattare una foto o scegliere un file';
+  document.getElementById('file-input').value = '';
+};
+
+window.submitDoc = async function() {
+  const nome = v('f-nome'), cognome = v('f-cognome'), nascita = v('f-nascita');
+  const nazionalita = v('f-nazionalita'), tipdoc = v('f-tipdoc');
+  const numdoc = v('f-numdoc'), residenza = v('f-residenza');
+
+  if (!nome || !cognome || !nascita || !nazionalita || !tipdoc || !numdoc || !residenza) {
+    showError('Compila tutti i campi obbligatori.'); return;
+  }
+  if (!selectedFile) { showError('Carica la foto del documento.'); return; }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true; btn.textContent = '⏳ Invio in corso...';
+  document.getElementById('error-msg').style.display = 'none';
+
+  try {
+    // Upload file su Firebase Storage
+    const ext = selectedFile.name.split('.').pop();
+    const filePath = `documenti/${bookingId}/${Date.now()}.${ext}`;
+    const storageRef = ref(storage, filePath);
+    const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+
+    document.getElementById('progress-wrap').style.display = 'block';
+
+    await new Promise((resolve, reject) => {
+      uploadTask.on('state_changed',
+        snap => {
+          const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
+          document.getElementById('progress-bar').style.width = pct + '%';
+          document.getElementById('progress-label').textContent = 'Caricamento... ' + pct + '%';
+        },
+        reject,
+        resolve
+      );
+    });
+
+    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+
+    // Calcola data eliminazione (checkout + 30 giorni)
+    const deleteAfter = new Date(bookingData.checkout);
+    deleteAfter.setDate(deleteAfter.getDate() + 30);
+
+    // Salva metadati su Firestore
+    await addDoc(collection(db, 'documenti'), {
+      bookingId,
+      guestNome: nome,
+      guestCognome: cognome,
+      guestNascita: nascita,
+      guestNazionalita: nazionalita,
+      tipoDocumento: tipdoc,
+      numeroDocumento: numdoc,
+      residenza,
+      fileURL: downloadURL,
+      filePath,
+      checkin: bookingData.checkin,
+      checkout: bookingData.checkout,
+      deleteAfter: deleteAfter.toISOString().split('T')[0],
+      uploadedAt: serverTimestamp(),
+      uploadedByGuest: true
+    });
+
+    showState('success');
+  } catch(e) {
+    console.error(e);
+    showError('Errore durante l\'invio. Riprova o contatta il tuo host.');
+    btn.disabled = false; btn.textContent = '📤 Invia documento';
+    document.getElementById('progress-wrap').style.display = 'none';
+  }
+};
+
+function showState(state) {
+  ['loading','form','success','error','done'].forEach(s => {
+    const el = document.getElementById(s + '-state');
+    if(el) el.style.display = s === state ? 'block' : 'none';
+  });
+}
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg; el.style.display = 'block';
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function v(id) { return document.getElementById(id)?.value?.trim() || ''; }
+function formatDate(str) {
+  if (!str) return '—';
+  return new Date(str + 'T12:00:00').toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
+// Drag & drop
+const ua = document.getElementById('upload-area');
+if(ua) {
+  ua.addEventListener('dragover', e => { e.preventDefault(); ua.classList.add('dragover'); });
+  ua.addEventListener('dragleave', () => ua.classList.remove('dragover'));
+  ua.addEventListener('drop', e => {
+    e.preventDefault(); ua.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if(file) window.handleFile(file);
+  });
+}
+</script>
+</body>
+</html>
