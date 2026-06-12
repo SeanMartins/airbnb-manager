@@ -407,10 +407,6 @@ function closePreview(){if(window._cp)window._cp();}
 function copyPreview(){if(window._cop)window._cop();}
 function markSent(){if(window._ms)window._ms();}
 function toggleTask(id,v){if(window._tt)window._tt(id,v);}
-function renderBookings(){if(window._rb)window._rb();}
-function renderTasks(){if(window._rts)window._rts();}
-function changeMonth(d){if(window._chm)window._chm(d);}
-function saveBooking(){if(window._sb)window._sb();}
 function saveMessage(){if(window._sm)window._sm();}
 function saveTask(){if(window._stk)window._stk();}
 function savePrice(){if(window._sp)window._sp();}
@@ -530,13 +526,6 @@ function renderDashboardTasks(){
 }
 
 // BOOKINGS
-function bookingCardHTML(b){
-  var initials=(b.nome||'?').split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
-  var avClass=b.piattaforma==='Airbnb'?'av-a':b.piattaforma==='Booking.com'?'av-b':'av-d';
-  var badgeClass=b.stato==='Confermata'?'badge-green':b.stato==='In attesa'?'badge-amber':'badge-red';
-  var nights=Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000);
-  return '<div class="booking-card"><div class="b-avatar '+avClass+'">'+initials+'</div><div class="b-info"><div class="b-name">'+(b.nome||'-')+'</div><div class="b-dates">'+formatDate(b.checkin)+' - '+formatDate(b.checkout)+' - '+nights+' notti</div><span class="badge '+badgeClass+'">'+(b.stato||'-')+'</span></div><div class="b-right"><div class="b-price">EUR '+(b.prezzo||0)+'</div><div class="b-platform">'+(b.piattaforma||'-')+'</div><div style="display:flex;gap:4px;margin-top:6px;justify-content:flex-end"><button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="editBooking(\''+b.id+'\')">Modifica</button><button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem(\'bookings\',\''+b.id+'\')">Elimina</button></div></div></div>';
-}
 
 window._rb = function(){
   var statusF=document.getElementById('filter-status')?document.getElementById('filter-status').value:'';
@@ -1021,7 +1010,7 @@ renderCalendar();
 
 // ── NOTIFICHE PUSH FCM ──
 // VAPID KEY: Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
-var VAPID_KEY = 'BH2w_4x4VnHhvpJHfm_H-9NDxjB0v0UbNJPQNFj0faHqQuFWElqoYWdT_4xEDa5WESTioKsmT4ZPKik5xkuXtOQ';
+var VAPID_KEY = 'INSERISCI_LA_TUA_VAPID_KEY_QUI';
 var messaging = null;
 
 try { messaging = getMessaging(); } catch(e) { console.log('FCM non disponibile:', e); }
