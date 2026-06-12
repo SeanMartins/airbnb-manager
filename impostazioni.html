@@ -60,31 +60,32 @@
     <div class="sec-title">⚙️ Impostazioni & Sync Calendario</div>
   </div>
 
-  <!-- AIRBNB ICAL -->
+  <!-- AIRBNB ICAL MULTI -->
   <div class="settings-section">
     <div class="settings-title">
       <span class="platform-badge badge-airbnb">🏠 Airbnb</span>
-      Sincronizzazione calendario
+      Sincronizzazione calendari
     </div>
     <div class="settings-desc">
-      Importa automaticamente le tue prenotazioni Airbnb tramite il link iCal.
-      Le prenotazioni vengono aggiunte a Firebase senza duplicati.
+      Aggiungi tutti i link iCal dei tuoi annunci Airbnb. Puoi avere più annunci per lo stesso appartamento — aggiungili tutti e verranno sincronizzati senza duplicati.
     </div>
 
     <div class="how-to">
       <div class="how-to-title">📋 Come trovare il link iCal su Airbnb:</div>
       <ol>
         <li>Vai su <strong>airbnb.com</strong> → Il tuo account → Annunci</li>
-        <li>Seleziona il tuo appartamento → <strong>Disponibilità</strong></li>
+        <li>Seleziona l'annuncio → <strong>Disponibilità</strong></li>
         <li>Scorri in basso → <strong>Sincronizza calendari</strong></li>
         <li>Clicca <strong>"Esporta calendario"</strong> → copia il link</li>
+        <li>Ripeti per ogni annuncio</li>
       </ol>
     </div>
 
-    <div class="ical-input-row">
-      <input type="url" id="airbnb-url" placeholder="https://www.airbnb.com/calendar/ical/..." value="">
-      <button class="sync-btn" id="airbnb-sync-btn" onclick="syncIcal('airbnb')">🔄 Sincronizza</button>
-    </div>
+    <div id="airbnb-links-list"></div>
+
+    <button class="sync-btn" style="background:#fff;color:#1a6b4a;border:1px solid #1a6b4a;margin-bottom:12px" onclick="addAirbnbRow()">+ Aggiungi annuncio</button>
+    <button class="sync-btn" id="airbnb-sync-all-btn" onclick="syncAllAirbnb()">🔄 Sincronizza tutti</button>
+
     <div class="last-sync" id="airbnb-last-sync"></div>
     <div class="sync-result" id="airbnb-result"></div>
     <div class="imported-list" id="airbnb-imported"></div>
@@ -172,32 +173,113 @@ onAuthStateChanged(auth, user => {
 });
 window.doLogout = async () => { await signOut(auth); window.location.href = 'index.html'; };
 
+// ── AIRBNB MULTI-LINK ──
+let airbnbLinks = []; // [{id, label, url}]
+
+function renderAirbnbRows() {
+  const container = document.getElementById('airbnb-links-list');
+  if (!container) return;
+  if (airbnbLinks.length === 0) {
+    addAirbnbRow();
+    return;
+  }
+  container.innerHTML = airbnbLinks.map((link, i) => `
+    <div style="margin-bottom:12px;padding:12px 14px;background:#f8f8f6;border-radius:8px;border:1px solid #e8e8e4">
+      <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
+        <input value="${link.label||''}" placeholder="Nome annuncio (es. Annuncio 1)" 
+          style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #e0e0da;font-size:12px;font-family:inherit"
+          onchange="updateAirbnbLink(${i},'label',this.value)">
+        ${airbnbLinks.length > 1 ? `<button onclick="removeAirbnbRow(${i})" style="padding:5px 10px;border-radius:7px;border:1px solid #fecaca;background:#fee2e2;color:#991b1b;cursor:pointer;font-size:12px">✕</button>` : ''}
+      </div>
+      <div style="display:flex;gap:8px">
+        <input type="url" value="${link.url||''}" placeholder="https://www.airbnb.com/calendar/ical/..."
+          style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid #e0e0da;font-size:12px;font-family:inherit"
+          onchange="updateAirbnbLink(${i},'url',this.value)">
+        <button class="sync-btn" style="padding:7px 14px;font-size:12px" onclick="syncSingleAirbnb(${i})">🔄</button>
+      </div>
+      <div class="last-sync" id="airbnb-last-sync-${i}" style="margin-top:4px"></div>
+      <div class="sync-result" id="airbnb-result-${i}" style="margin-top:6px;display:none"></div>
+    </div>`).join('');
+}
+
+window.addAirbnbRow = function() {
+  airbnbLinks.push({ id: Date.now(), label: 'Annuncio ' + (airbnbLinks.length + 1), url: '' });
+  renderAirbnbRows();
+};
+
+window.removeAirbnbRow = function(i) {
+  airbnbLinks.splice(i, 1);
+  renderAirbnbRows();
+  saveAirbnbLinks();
+};
+
+window.updateAirbnbLink = function(i, field, value) {
+  airbnbLinks[i][field] = value;
+  saveAirbnbLinks();
+};
+
+async function saveAirbnbLinks() {
+  await setDoc(doc(db, 'settings', 'ical'), { airbnbLinks }, { merge: true });
+}
+
+window.syncSingleAirbnb = async function(i) {
+  const link = airbnbLinks[i];
+  if (!link || !link.url) { toast('Inserisci il link iCal prima'); return; }
+  await saveAirbnbLinks();
+  await syncIcalUrl(link.url, 'Airbnb', `airbnb-result-${i}`, `airbnb-last-sync-${i}`);
+};
+
+window.syncAllAirbnb = async function() {
+  await saveAirbnbLinks();
+  const btn = document.getElementById('airbnb-sync-all-btn');
+  btn.disabled = true; btn.textContent = '⏳ Sincronizzando...';
+  let totalAdded = 0;
+  for (let i = 0; i < airbnbLinks.length; i++) {
+    if (airbnbLinks[i].url) {
+      const added = await syncIcalUrl(airbnbLinks[i].url, 'Airbnb', `airbnb-result-${i}`, `airbnb-last-sync-${i}`);
+      totalAdded += added || 0;
+    }
+  }
+  btn.disabled = false; btn.textContent = '🔄 Sincronizza tutti';
+  const el = document.getElementById('airbnb-result');
+  if (el) { el.style.display='block'; el.className='sync-result success'; el.innerHTML = `✅ Sync completata — ${totalAdded} nuove prenotazioni importate in totale`; }
+  await setDoc(doc(db, 'settings', 'ical'), { airbnbLastSync: new Date().toISOString() }, { merge: true });
+};
+
 // ── LOAD SAVED SETTINGS ──
 async function loadSettings() {
   try {
     const snap = await getDoc(doc(db, 'settings', 'ical'));
     if (snap.exists()) {
       const d = snap.data();
-      if (d.airbnbUrl) document.getElementById('airbnb-url').value = d.airbnbUrl;
-      if (d.bookingUrl) document.getElementById('booking-url').value = d.bookingUrl;
+      // Carica multi-link Airbnb
+      if (d.airbnbLinks && d.airbnbLinks.length > 0) {
+        airbnbLinks = d.airbnbLinks;
+      } else if (d.airbnbUrl) {
+        // Migrazione da vecchio formato singolo
+        airbnbLinks = [{ id: Date.now(), label: 'Annuncio 1', url: d.airbnbUrl }];
+      }
+      renderAirbnbRows();
       if (d.airbnbLastSync) document.getElementById('airbnb-last-sync').textContent = 'Ultima sync: ' + new Date(d.airbnbLastSync).toLocaleString('it-IT');
+      if (d.bookingUrl) document.getElementById('booking-url').value = d.bookingUrl;
       if (d.bookingLastSync) document.getElementById('booking-last-sync').textContent = 'Ultima sync: ' + new Date(d.bookingLastSync).toLocaleString('it-IT');
       if (typeof d.autoSync !== 'undefined') document.getElementById('auto-sync-toggle').checked = d.autoSync;
       if (typeof d.futureOnly !== 'undefined') document.getElementById('future-only-toggle').checked = d.futureOnly;
-
-      // auto sync on load
+      // Auto sync
       if (d.autoSync) {
-        if (d.airbnbUrl) syncIcal('airbnb', true);
+        if (airbnbLinks.some(l => l.url)) syncAllAirbnb();
         if (d.bookingUrl) syncIcal('booking', true);
       }
+    } else {
+      renderAirbnbRows();
     }
-  } catch (e) { console.error(e); }
+  } catch (e) { console.error(e); renderAirbnbRows(); }
 }
 
 // ── SAVE SETTINGS ──
 async function saveIcalUrl(platform, url) {
-  const field = platform === 'airbnb' ? 'airbnbUrl' : 'bookingUrl';
-  await setDoc(doc(db, 'settings', 'ical'), { [field]: url }, { merge: true });
+  const field = platform === 'booking' ? 'bookingUrl' : null;
+  if (field) await setDoc(doc(db, 'settings', 'ical'), { [field]: url }, { merge: true });
 }
 
 window.saveAutoSync = async function() {
@@ -260,6 +342,57 @@ function extractGuestName(summary, platform) {
   // Airbnb format: "Nome Cognome (XXXXXX)"
   const match = summary.match(/^([^(]+)/);
   return match ? match[1].trim() : summary;
+}
+
+// ── SYNC ICAL URL (helper condiviso) ──
+async function syncIcalUrl(url, piattaforma, resultElId, lastSyncElId) {
+  const resultEl = document.getElementById(resultElId);
+  const lastSyncEl = document.getElementById(lastSyncElId);
+  if (resultEl) { resultEl.style.display='block'; resultEl.className='sync-result info'; resultEl.innerHTML='🔄 Download in corso...'; }
+  try {
+    const proxyUrl = '/api/ical-proxy?url=' + encodeURIComponent(url);
+    const response = await fetch(proxyUrl);
+    if (!response.ok) throw new Error('Errore HTTP ' + response.status);
+    const text = await response.text();
+    if (!text.includes('BEGIN:VCALENDAR')) throw new Error('Link non valido — non sembra un calendario iCal');
+    const events = parseIcal(text);
+    const futureOnly = document.getElementById('future-only-toggle')?.checked ?? true;
+    const today = new Date().toISOString().split('T')[0];
+    const existingSnap = await getDocs(collection(db, 'bookings'));
+    const existingUids = new Set(existingSnap.docs.map(d => d.data().icalUid).filter(Boolean));
+    let added = 0, skipped = 0;
+    const addedList = [];
+    for (const event of events) {
+      if (event.isBlocked) continue;
+      if (futureOnly && event.checkout < today) { skipped++; continue; }
+      if (event.uid && existingUids.has(event.uid)) { skipped++; continue; }
+      const nome = extractGuestName(event.summary, 'airbnb');
+      await addDoc(collection(db, 'bookings'), {
+        nome, piattaforma, checkin: event.checkin, checkout: event.checkout,
+        prezzo: 0, stato: 'Confermata', note: 'Importata via iCal',
+        icalUid: event.uid || null,
+        createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+      });
+      added++;
+      addedList.push({ nome, checkin: event.checkin, checkout: event.checkout });
+    }
+    const now = new Date().toLocaleString('it-IT');
+    if (lastSyncEl) lastSyncEl.textContent = 'Ultima sync: ' + now;
+    const msg = added > 0
+      ? `✅ ${added} nuove prenotazioni importate · ${skipped} già presenti`
+      : `✅ Nessuna novità (${skipped} già presenti)`;
+    if (resultEl) { resultEl.style.display='block'; resultEl.className='sync-result success'; resultEl.innerHTML=msg; }
+    if (addedList.length > 0) {
+      const imp = document.getElementById('airbnb-imported');
+      if (imp) imp.innerHTML = '<div style="font-size:11px;font-weight:700;color:#888;margin:8px 0 6px;text-transform:uppercase">Appena importate:</div>' +
+        addedList.map(e => `<div class="imported-item"><span class="imported-name">${e.nome}</span><span class="imported-dates">${formatDate(e.checkin)} – ${formatDate(e.checkout)}</span></div>`).join('');
+    }
+    return added;
+  } catch (err) {
+    console.error(err);
+    if (resultEl) { resultEl.style.display='block'; resultEl.className='sync-result error'; resultEl.innerHTML='❌ ' + err.message; }
+    return 0;
+  }
 }
 
 // ── SYNC ICAL ──
