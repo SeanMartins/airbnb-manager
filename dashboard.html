@@ -5,6 +5,24 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Airbnb Manager — Dashboard</title>
 <link rel="stylesheet" href="style.css">
+<style>
+.reminder-card{background:#fff;border:1px solid #fde68a;border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:flex-start;gap:12px}
+.reminder-card.sent{border-color:#bbf7d0;opacity:0.7}
+.reminder-icon{font-size:22px;flex-shrink:0;margin-top:2px}
+.reminder-info{flex:1;min-width:0}
+.reminder-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.reminder-sub{font-size:12px;color:#888;line-height:1.5}
+.reminder-days{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:#fef3c7;color:#92400e;margin-top:4px;display:inline-block}
+.reminder-days.urgent{background:#fee2e2;color:#991b1b}
+.reminder-days.sent{background:#dcfce7;color:#166534}
+.msg-card{background:#fff;border:1px solid #e8e8e4;border-radius:12px;padding:14px 16px;margin-bottom:10px;transition:border-color 0.15s}
+.msg-card:hover{border-color:#1a6b4a;cursor:pointer}
+.msg-trigger-badge{font-size:11px;color:#1e40af;background:#dbeafe;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:6px;font-weight:500}
+.msg-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.msg-title{font-size:14px;font-weight:600}
+.msg-preview{font-size:12px;color:#888;line-height:1.5}
+.msg-actions{display:flex;gap:4px;flex-shrink:0}
+</style>
 </head>
 <body>
 
@@ -90,11 +108,23 @@
 
 <!-- ── MESSAGGI ── -->
 <div class="section" id="section-messages">
+
+  <!-- PROMEMORIA ATTIVI -->
+  <div id="reminders-wrap" style="margin-bottom:20px;display:none">
+    <div class="sec-header"><div class="sec-title">🔔 Promemoria da inviare</div></div>
+    <div id="reminders-list"></div>
+  </div>
+
+  <!-- TEMPLATE -->
   <div class="sec-header">
     <div class="sec-title">Template messaggi</div>
     <button class="btn-primary" onclick="openModal('message')">+ Aggiungi</button>
   </div>
+  <div style="font-size:12px;color:#888;margin-bottom:14px;padding:10px 14px;background:#f8f8f6;border-radius:8px;line-height:1.6">
+    💡 Usa le variabili: <code style="background:#e8e8e4;padding:1px 5px;border-radius:4px">{nome}</code> = nome ospite &nbsp;|&nbsp; <code style="background:#e8e8e4;padding:1px 5px;border-radius:4px">{checkin}</code> = data arrivo &nbsp;|&nbsp; <code style="background:#e8e8e4;padding:1px 5px;border-radius:4px">{checkout}</code> = data partenza &nbsp;|&nbsp; <code style="background:#e8e8e4;padding:1px 5px;border-radius:4px">{notti}</code> = notti
+  </div>
   <div id="messages-list"></div>
+
 </div>
 
 <!-- ── PULIZIE ── -->
@@ -219,6 +249,7 @@ function listenBookings(){
     renderDashboard();
     renderCalendar();
     renderStats();
+    renderReminders();
   });
 }
 function listenTasks(){
@@ -232,6 +263,7 @@ function listenMessages(){
   onSnapshot(collection(db,'messages'), snap=>{
     messages = snap.docs.map(d=>({id:d.id,...d.data()}));
     renderMessages();
+    renderReminders();
   });
 }
 function listenPrices(){
@@ -387,23 +419,210 @@ function renderCalendar(){
 }
 
 // ── MESSAGES ──
+function fillTemplate(testo, booking){
+  if(!booking) return testo;
+  const nights = Math.max(0, Math.round((new Date(booking.checkout)-new Date(booking.checkin))/86400000));
+  return (testo||'')
+    .replace(/{nome}/g, booking.nome||'Ospite')
+    .replace(/{checkin}/g, formatDate(booking.checkin))
+    .replace(/{checkout}/g, formatDate(booking.checkout))
+    .replace(/{notti}/g, nights);
+}
+
+function getDaysUntil(dateStr){
+  const diff = new Date(dateStr) - new Date();
+  return Math.ceil(diff/86400000);
+}
+
+function renderReminders(){
+  const remWrap = document.getElementById('reminders-wrap');
+  const remList = document.getElementById('reminders-list');
+  if(!remList || !messages.length || !bookings.length){ if(remWrap) remWrap.style.display='none'; return; }
+
+  const now = new Date();
+  const reminders = [];
+
+  bookings.filter(b=>b.stato!=='Cancellata').forEach(b=>{
+    messages.forEach(m=>{
+      const trigger = m.trigger||'';
+      const daysUntilCheckin = getDaysUntil(b.checkin);
+      const daysUntilCheckout = getDaysUntil(b.checkout);
+      let shouldShow = false;
+      let label = '';
+
+      if(trigger==='Al check-in' && daysUntilCheckin>=0 && daysUntilCheckin<=1){ shouldShow=true; label='Check-in oggi/domani'; }
+      else if(trigger==='1 giorno prima' && daysUntilCheckin===1){ shouldShow=true; label='Arrivo domani'; }
+      else if(trigger==='2 giorni prima' && daysUntilCheckin>=1 && daysUntilCheckin<=2){ shouldShow=true; label='Arrivo fra '+daysUntilCheckin+' giorni'; }
+      else if(trigger==='1 ora dopo checkout' && daysUntilCheckout>=0 && daysUntilCheckout<=1){ shouldShow=true; label='Checkout oggi'; }
+
+      if(shouldShow){
+        const sentKey = 'sent_'+b.id+'_'+m.id;
+        const alreadySent = localStorage.getItem(sentKey);
+        reminders.push({ booking:b, message:m, label, daysUntilCheckin, sentKey, sent:!!alreadySent });
+      }
+    });
+  });
+
+  if(!reminders.length){ if(remWrap) remWrap.style.display='none'; return; }
+  if(remWrap) remWrap.style.display='block';
+
+  remList.innerHTML = reminders.map((r,i)=>{
+    const urgent = r.daysUntilCheckin<=0;
+    const daysClass = r.sent?'sent':urgent?'urgent':'';
+    return `<div class="reminder-card ${r.sent?'sent':''}">
+      <div class="reminder-icon">${r.sent?'✅':'🔔'}</div>
+      <div class="reminder-info">
+        <div class="reminder-title">${r.message.titolo} — ${r.booking.nome}</div>
+        <div class="reminder-sub">${r.message.trigger} · ${formatDate(r.booking.checkin)} – ${formatDate(r.booking.checkout)}</div>
+        <span class="reminder-days ${daysClass}">${r.sent?'Inviato':r.label}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
+        <button class="btn-primary" style="padding:6px 12px;font-size:12px" onclick="openPreview('${r.message.id}','${r.booking.id}','${r.sentKey}')">
+          ${r.sent?'👁 Rivedi':'📋 Copia'}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let currentSentKey = null;
+window.openPreview = function(msgId, bookingId, sentKey){
+  const m = messages.find(x=>x.id===msgId);
+  const b = bookings.find(x=>x.id===bookingId);
+  if(!m||!b) return;
+  currentSentKey = sentKey;
+  document.getElementById('preview-title').textContent = m.titolo||'Anteprima';
+  document.getElementById('preview-guest-info').textContent = '👤 '+b.nome+' · '+formatDate(b.checkin)+' – '+formatDate(b.checkout);
+  document.getElementById('preview-body').textContent = fillTemplate(m.testo, b);
+  const sent = localStorage.getItem(sentKey);
+  document.getElementById('preview-sent-badge').style.display = sent?'block':'none';
+  document.getElementById('preview-overlay').classList.add('open');
+};
+
+window.closePreview = function(){ document.getElementById('preview-overlay').classList.remove('open'); };
+
+window.copyPreview = function(){
+  const text = document.getElementById('preview-body').textContent;
+  navigator.clipboard.writeText(text).then(()=>toast('Messaggio copiato! 📋'));
+};
+
+window.markSent = function(){
+  if(currentSentKey){
+    localStorage.setItem(currentSentKey, '1');
+    document.getElementById('preview-sent-badge').style.display='block';
+    renderReminders();
+    toast('Segnato come inviato ✅');
+  }
+};
+
 function renderMessages(){
   const el=document.getElementById('messages-list');
   if(!el) return;
+  renderReminders();
   el.innerHTML = messages.length ? messages.map(m=>`
-    <div class="msg-card">
+    <div class="msg-card" onclick="openMsgPreviewFromTemplate('${m.id}')">
       <span class="msg-trigger-badge">${m.trigger||'—'}</span>
       <div class="msg-title-row">
         <div class="msg-title">${m.titolo||'—'}</div>
-        <div style="display:flex;gap:4px">
+        <div class="msg-actions" onclick="event.stopPropagation()">
           <button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="editMessage('${m.id}')">✏️</button>
           <button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem('messages','${m.id}')">🗑</button>
         </div>
       </div>
-      <div class="msg-preview">${(m.testo||'').slice(0,120)}${(m.testo||'').length>120?'...':''}</div>
+      <div class="msg-preview">${(m.testo||'').slice(0,130)}${(m.testo||'').length>130?'...':''}</div>
+      <div style="font-size:11px;color:#1a6b4a;margin-top:6px">👁 Clicca per vedere anteprima</div>
     </div>`).join('') :
-    '<div class="empty"><div class="empty-icon">💬</div><div class="empty-text">Nessun template. Aggiungine uno!</div></div>';
+    `<div class="empty"><div class="empty-icon">💬</div><div class="empty-text">Nessun template. Aggiungine uno!</div></div>
+    <div style="margin-top:16px">
+      <div style="font-size:13px;font-weight:600;margin-bottom:10px">🚀 Template pronti da usare:</div>
+      <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('benvenuto')">+ Messaggio di benvenuto (check-in)</button>
+      <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('prearrivo')">+ Promemoria pre-arrivo (2 giorni prima)</button>
+      <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('checkout')">+ Ringraziamento post-soggiorno</button>
+    </div>`;
 }
+
+window.openMsgPreviewFromTemplate = function(msgId){
+  const m = messages.find(x=>x.id===msgId);
+  if(!m) return;
+  // trova la prossima prenotazione per anteprima
+  const upcoming = bookings.filter(b=>b.stato!=='Cancellata'&&new Date(b.checkin)>=new Date()).sort((a,b)=>new Date(a.checkin)-new Date(b.checkin))[0];
+  document.getElementById('preview-title').textContent = m.titolo||'Anteprima';
+  document.getElementById('preview-guest-info').textContent = upcoming
+    ? '👤 Anteprima con: '+upcoming.nome+' · '+formatDate(upcoming.checkin)+' – '+formatDate(upcoming.checkout)
+    : '⚠️ Anteprima con dati esempio (nessuna prenotazione attiva)';
+  const fakeBooking = upcoming || { nome:'Mario Rossi', checkin:'2026-07-01', checkout:'2026-07-05' };
+  document.getElementById('preview-body').textContent = fillTemplate(m.testo, fakeBooking);
+  document.getElementById('preview-sent-badge').style.display='none';
+  currentSentKey = null;
+  document.getElementById('preview-overlay').classList.add('open');
+};
+
+const defaultTemplates = {
+  benvenuto:{
+    titolo:'Messaggio di benvenuto',
+    trigger:'Al check-in',
+    testo:`Caro/a {nome},
+
+Benvenuto/a nel mio appartamento a Firenze! 🏠
+
+Sono felice di ospitarti. Ecco le informazioni per il tuo arrivo:
+
+📍 Indirizzo: Via Gioberti, Firenze
+🔑 Codice cassetta chiavi: [inserisci codice]
+📶 WiFi: [nome rete] — Password: [password]
+
+Il check-in è dalle ore 15:00. Se arrivi prima, posso provare ad organizzarmi.
+
+Non esitare a contattarmi per qualsiasi necessità!
+
+Buon soggiorno a Firenze 🌸
+Sean`
+  },
+  prearrivo:{
+    titolo:'Promemoria pre-arrivo',
+    trigger:'2 giorni prima',
+    testo:`Ciao {nome}! 👋
+
+Mancano solo {notti} giorni al tuo soggiorno a Firenze — non vediamo l'ora di accoglierti!
+
+Ecco un breve riepilogo:
+📅 Check-in: {checkin}
+📅 Check-out: {checkout}
+📍 Via Gioberti, Firenze (Campo di Marte)
+
+🚌 Come raggiungerci:
+• Dal centro: tram T1 o autobus linea 6
+• Dall'aeroporto: Volainbus + tram o taxi (~25 min)
+• Stazione SMN: 15 minuti in taxi
+
+Per qualsiasi domanda sono a tua disposizione. A presto!
+
+Sean`
+  },
+  checkout:{
+    titolo:'Ringraziamento post-soggiorno',
+    trigger:'1 ora dopo checkout',
+    testo:`Caro/a {nome},
+
+Grazie mille per aver soggiornato nel mio appartamento! 🙏
+
+Spero che il tuo soggiorno a Firenze sia stato indimenticabile e che tu abbia potuto goderti al meglio questa meravigliosa città.
+
+⭐ Se ti è piaciuta l'esperienza, ti sarei molto grato/a se potessi lasciare una recensione su Airbnb — ci vogliono solo 2 minuti e per me fa una grande differenza!
+
+Spero di rivederti presto a Firenze. Sei sempre il/la benvenuto/a! 😊
+
+Un caro saluto,
+Sean`
+  }
+};
+
+window.addDefaultTemplate = async function(key){
+  const t = defaultTemplates[key];
+  if(!t) return;
+  await addDoc(collection(db,'messages'),{...t, createdAt:serverTimestamp(), updatedAt:serverTimestamp()});
+  toast('Template "'+t.titolo+'" aggiunto! ✓');
+};
 
 // ── TASKS ──
 function taskItemHTML(t, compact=false){
