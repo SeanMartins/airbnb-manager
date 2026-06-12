@@ -537,6 +537,8 @@ function renderMessages(){
       <div style="font-size:13px;font-weight:600;margin-bottom:10px">🚀 Template pronti da usare:</div>
       <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('benvenuto')">+ Messaggio di benvenuto (check-in)</button>
       <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('prearrivo')">+ Promemoria pre-arrivo (2 giorni prima)</button>
+      <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('metasoggiorno')">+ Messaggio metà soggiorno</button>
+      <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('istruzionicheckout')">+ Istruzioni per il check-out (1 giorno prima)</button>
       <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('checkout')">+ Ringraziamento post-soggiorno</button>
     </div>`;
 }
@@ -613,6 +615,53 @@ Spero che il tuo soggiorno a Firenze sia stato indimenticabile e che tu abbia po
 Spero di rivederti presto a Firenze. Sei sempre il/la benvenuto/a! 😊
 
 Un caro saluto,
+Sean`
+  },
+  metasoggiorno:{
+    titolo:'Messaggio metà soggiorno',
+    trigger:'Personalizzato',
+    testo:`Ciao {nome}! 😊
+
+Spero che il tuo soggiorno a Firenze stia andando alla grande!
+
+Volevo solo fare un saluto e assicurarmi che tutto sia di tuo gradimento nell'appartamento.
+
+🏛️ Se hai bisogno di consigli su ristoranti, musei o cosa vedere nei dintorni, sono felice di aiutarti!
+
+Qualche consiglio rapido:
+• Mercato Centrale → ottimo per pranzo, a 15 min a piedi
+• Piazzale Michelangelo → tramonto spettacolare, da non perdere
+• Osteria dell'Enoteca → per una cena speciale
+
+Non esitare a scrivermi per qualsiasi cosa. Buon proseguimento! 🌺
+
+Sean`
+  },
+  istruzionicheckout:{
+    titolo:'Istruzioni per il check-out',
+    trigger:'1 giorno prima',
+    testo:`Ciao {nome}!
+
+Il tuo soggiorno sta per concludersi — domani è il giorno del check-out ({checkout}). 
+
+Ecco le istruzioni per lasciare l'appartamento:
+
+🕐 Orario check-out: entro le ore 10:00
+(Se hai bisogno di più tempo, scrivimi e vedo cosa posso fare)
+
+✅ Prima di partire:
+• Lascia le chiavi nella cassetta fuori dalla porta
+• Metti i piatti usati in lavastoviglie e avviala
+• Svuota il frigorifero da alimenti deperibili
+• Butta la spazzatura nei bidoni in cortile
+• Chiudi bene finestre e balcone
+• Abbassa le tapparelle
+
+🧳 Bagagli:
+Se hai bisogno di lasciare i bagagli dopo il check-out, posso organizzarmi — scrivimi!
+
+È stato un piacere ospitarti. Buon viaggio di ritorno! ✈️
+
 Sean`
   }
 };
@@ -852,6 +901,7 @@ const modalDefs={
         <option ${d.trigger==='Al check-in'?'selected':''}>Al check-in</option>
         <option ${d.trigger==='2 giorni prima'?'selected':''}>2 giorni prima</option>
         <option ${d.trigger==='1 giorno prima'?'selected':''}>1 giorno prima</option>
+        <option ${d.trigger==='Metà soggiorno'?'selected':''}>Metà soggiorno</option>
         <option ${d.trigger==='1 ora dopo checkout'?'selected':''}>1 ora dopo checkout</option>
         <option ${d.trigger==='Personalizzato'?'selected':''}>Personalizzato</option>
       </select></div>
