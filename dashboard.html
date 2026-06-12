@@ -9,26 +9,6 @@
 <meta name="theme-color" content="#1a6b4a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<style>
-.tassa-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px 16px;margin-top:10px}
-.tassa-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.tassa-label{font-size:12px;color:#555;font-weight:500}
-.tassa-val{font-size:18px;font-weight:700;color:#1a6b4a}
-.tassa-note{font-size:11px;color:#888;margin-top:4px}
-.note-interne{background:#fff8ec;border:1px solid #fde68a;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:12px;color:#92400e;line-height:1.5;cursor:pointer}
-.note-interne:hover{border-color:#f59e0b}
-.foto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:12px}
-.foto-thumb{aspect-ratio:4/3;border-radius:8px;object-fit:cover;cursor:pointer;border:1px solid #e8e8e4;transition:transform 0.15s}
-.foto-thumb:hover{transform:scale(1.03)}
-.foto-upload-btn{aspect-ratio:4/3;border-radius:8px;border:2px dashed #e0e0da;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-size:11px;color:#888;gap:4px;background:#f8f8f6}
-.foto-upload-btn:hover{border-color:#1a6b4a;color:#1a6b4a;background:#f0fdf4}
-.foto-lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:500;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px}
-.foto-lightbox.open{display:flex}
-.foto-lightbox img{max-width:90vw;max-height:80vh;border-radius:10px;object-fit:contain}
-.notif-banner{position:fixed;top:0;left:0;right:0;background:#1a6b4a;color:#fff;padding:10px 16px;font-size:13px;font-weight:500;z-index:400;display:none;align-items:center;justify-content:space-between;gap:10px}
-.notif-banner.show{display:flex}
-</style>
 <style>
 .reminder-card{background:#fff;border:1px solid #fde68a;border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:flex-start;gap:12px}
 .reminder-card.sent{border-color:#bbf7d0;opacity:0.7}
@@ -52,9 +32,7 @@
 .adem-dates{font-size:11px;color:#888}
 .adem-checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .adem-check{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;border:1px solid #e8e8e4;cursor:pointer;transition:all 0.15s;font-size:12px}
-.adem-check:hover{border-color:#1a6b4a}
 .adem-check.done{background:#f0fdf4;border-color:#bbf7d0}
-.adem-check.urgent{background:#fff8ec;border-color:#fde68a}
 .adem-check.overdue{background:#fee2e2;border-color:#fecaca}
 .adem-icon{font-size:16px;flex-shrink:0}
 .adem-label{flex:1;line-height:1.4}
@@ -73,7 +51,7 @@
 .doc-meta{font-size:11px;color:#888;margin-top:2px}
 .doc-fields{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
 .doc-field{background:#f8f8f6;border-radius:6px;padding:7px 10px}
-.doc-field-label{font-size:10px;color:#888;margin-bottom:2px;text-transform:uppercase;letter-spacing:0.03em}
+.doc-field-label{font-size:10px;color:#888;margin-bottom:2px;text-transform:uppercase}
 .doc-field-value{font-size:12px;font-weight:600}
 .doc-actions{display:flex;gap:8px;flex-wrap:wrap}
 .delete-badge{font-size:10px;color:#92400e;background:#fef3c7;padding:2px 8px;border-radius:20px;font-weight:500}
@@ -86,8 +64,6 @@
 .rule-card{background:#fff;border:1px solid #e8e8e4;border-radius:10px;padding:14px 16px;margin-bottom:10px}
 .rule-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .rule-name{font-size:13px;font-weight:600}
-.rule-desc{font-size:12px;color:#666;line-height:1.5}
-.rule-result{font-size:12px;color:#1a6b4a;font-weight:600;margin-top:6px}
 .price-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border:1px solid #e8e8e4;border-radius:10px;margin-bottom:8px}
 .price-info{flex:1}
 .price-name{font-size:14px;font-weight:600}
@@ -102,7 +78,7 @@
 .cal-nav-btn{padding:5px 12px;border-radius:8px;border:1px solid #e0e0da;background:#fff;cursor:pointer;font-size:13px}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .cal-header{text-align:center;font-size:11px;color:#888;padding:4px 0;font-weight:600}
-.cal-day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;font-size:12px;cursor:pointer;border:1px solid transparent;transition:all 0.15s}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:12px;cursor:pointer;border:1px solid transparent}
 .cal-day:hover{background:#f5f5f3}
 .cal-day.booked-a{background:#fff0ec;color:#9a3412;border-color:#fcd9c8}
 .cal-day.booked-b{background:#eff6ff;color:#1e40af;border-color:#bfdbfe}
@@ -113,21 +89,33 @@
 .cal-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
 .cal-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#666}
 .cal-legend-dot{width:10px;height:10px;border-radius:2px}
+.tassa-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px 16px;margin-top:10px}
+.tassa-val{font-size:18px;font-weight:700;color:#1a6b4a}
+.note-interne{background:#fff8ec;border:1px solid #fde68a;border-radius:8px;padding:8px 10px;margin-top:6px;font-size:11px;color:#92400e;line-height:1.5}
+.foto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:12px}
+.foto-thumb{aspect-ratio:4/3;border-radius:8px;object-fit:cover;cursor:pointer;border:1px solid #e8e8e4;width:100%}
+.foto-upload-btn{aspect-ratio:4/3;border-radius:8px;border:2px dashed #e0e0da;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-size:11px;color:#888;gap:4px;background:#f8f8f6}
+.foto-lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:500;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.foto-lightbox.open{display:flex}
+.foto-lightbox img{max-width:90vw;max-height:80vh;border-radius:10px;object-fit:contain}
+.notif-banner{position:fixed;top:0;left:0;right:0;background:#1a6b4a;color:#fff;padding:10px 16px;font-size:13px;font-weight:500;z-index:400;display:none;align-items:center;justify-content:space-between;gap:10px}
+.notif-banner.show{display:flex}
 </style>
 </head>
 <body>
 
 <div class="notif-banner" id="notif-banner">
-  <span id="notif-text">Vuoi ricevere notifiche per check-in e pulizie?</span>
+  <span>Vuoi ricevere notifiche per check-in e pulizie?</span>
   <div style="display:flex;gap:8px">
     <button onclick="enableNotifiche()" style="background:#fff;color:#1a6b4a;border:none;padding:5px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">Attiva</button>
     <button onclick="document.getElementById('notif-banner').classList.remove('show')" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.4);padding:5px 10px;border-radius:6px;font-size:12px;cursor:pointer">Dopo</button>
   </div>
 </div>
+
 <div class="topbar">
   <div class="topbar-title"><span class="icon">&#127968;</span> Via Gioberti &mdash; Firenze</div>
   <div class="topbar-right">
-    <span class="role-badge" id="role-badge">Admin</span>
+    <span class="role-badge">Admin</span>
     <button class="logout-btn" onclick="doLogout()">Esci</button>
   </div>
 </div>
@@ -218,7 +206,7 @@
   <div class="modal-overlay" id="preview-overlay" onclick="if(event.target===this)closePreview()" style="z-index:300">
     <div class="modal" style="max-width:520px">
       <div class="modal-header">
-        <div class="modal-title" id="preview-title">Anteprima messaggio</div>
+        <div class="modal-title" id="preview-title">Anteprima</div>
         <button class="modal-close" onclick="closePreview()">x</button>
       </div>
       <div style="font-size:11px;color:#888;margin-bottom:10px" id="preview-guest-info"></div>
@@ -264,15 +252,12 @@
       <div class="sec-title">Regole dinamiche</div>
       <button class="btn-secondary" onclick="openModal('rule')">+ Aggiungi regola</button>
     </div>
-    <div style="font-size:12px;color:#888;margin-bottom:14px">Le regole vengono applicate automaticamente al prezzo base stagionale</div>
+    <div style="font-size:12px;color:#888;margin-bottom:14px">Le regole vengono applicate automaticamente al prezzo base</div>
     <div id="rules-list"></div>
     <div style="margin-top:16px;padding:14px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px">
       <div style="font-size:13px;font-weight:600;color:#166534;margin-bottom:4px">Prezzo suggerito oggi</div>
       <div style="font-size:12px;color:#166534" id="price-today-info">Calcolo in corso...</div>
       <div style="font-size:22px;font-weight:700;color:#1a6b4a;margin-top:6px" id="price-today">-</div>
-    </div>
-    <div style="margin-top:12px;padding:14px 16px;background:#fff8ec;border:1px solid #fde68a;border-radius:10px;font-size:12px;color:#92400e">
-      Integrazione PriceLabs disponibile in futuro (~20 euro/mese).
     </div>
   </div>
 </div>
@@ -281,8 +266,7 @@
 <div class="section" id="section-stats">
   <div class="sec-header"><div class="sec-title">Statistiche</div></div>
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-label">Entrate totali</div><div class="stat-value green" id="stat-total">-</div><div class="stat-sub" id="stat-period">storico</div></div>
-    <div class="stat-card"><div class="stat-label">Occupazione media</div><div class="stat-value" id="stat-occ">-</div><div class="stat-sub">media mensile</div></div>
+    <div class="stat-card"><div class="stat-label">Entrate totali</div><div class="stat-value green" id="stat-total">-</div><div class="stat-sub">storico</div></div>
     <div class="stat-card"><div class="stat-label">Prezzo medio/notte</div><div class="stat-value" id="stat-avg">-</div><div class="stat-sub">tutte le piattaforme</div></div>
     <div class="stat-card"><div class="stat-label">Prenotazioni totali</div><div class="stat-value" id="stat-bcount">-</div><div class="stat-sub">storico</div></div>
   </div>
@@ -302,7 +286,7 @@
       <div class="card" style="cursor:pointer">
         <div style="font-size:22px;margin-bottom:8px">&#128658;</div>
         <div style="font-size:13px;font-weight:700;margin-bottom:4px">Alloggiati Web</div>
-        <div style="font-size:11px;color:#888;line-height:1.5">Polizia di Stato - registrazione ospiti entro 24h dall'arrivo</div>
+        <div style="font-size:11px;color:#888;line-height:1.5">Polizia di Stato - registrazione ospiti entro 24h</div>
         <div style="font-size:11px;color:#1a6b4a;margin-top:8px;font-weight:600">Apri portale &rarr;</div>
       </div>
     </a>
@@ -310,22 +294,18 @@
       <div class="card" style="cursor:pointer">
         <div style="font-size:22px;margin-bottom:8px">&#127963;</div>
         <div style="font-size:13px;font-weight:700;margin-bottom:4px">Turismo5 Toscana</div>
-        <div style="font-size:11px;color:#888;line-height:1.5">Regione Toscana - tassa di soggiorno e comunicazioni statistiche</div>
+        <div style="font-size:11px;color:#888;line-height:1.5">Regione Toscana - tassa di soggiorno</div>
         <div style="font-size:11px;color:#1a6b4a;margin-top:8px;font-weight:600">Apri portale &rarr;</div>
       </div>
     </a>
   </div>
   <div style="padding:12px 16px;background:#fff8ec;border:1px solid #fde68a;border-radius:10px;margin-bottom:20px;font-size:12px;color:#92400e;line-height:1.8">
-    <strong>Scadenze:</strong><br>
-    Alloggiati Web &rarr; entro 24 ore dall'arrivo<br>
-    Turismo5 &rarr; entro il 16 del mese successivo<br>
-    Tassa di soggiorno Firenze &rarr; 5,50 euro/persona/notte (max 7 notti)
+    <strong>Scadenze:</strong> Alloggiati Web &rarr; entro 24h dall'arrivo | Turismo5 &rarr; entro il 16 del mese successivo | Tassa soggiorno Firenze &rarr; 5,50 EUR/persona/notte (max 7 notti)
   </div>
-  <div class="sec-header"><div class="sec-title" style="font-size:14px">Stato adempimenti per prenotazione</div></div>
-  <div id="adempimenti-list"><div class="empty"><div class="empty-icon">&#128203;</div><div class="empty-text">Nessuna prenotazione attiva</div></div></div>
-  <div style="margin-top:20px;padding:14px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;font-size:12px;color:#166534;line-height:1.7">
-    <strong>Calcolo tassa di soggiorno:</strong><br>
-    5,50 euro x numero ospiti x numero notti (max 7 notti per ospite)
+  <div class="sec-header"><div class="sec-title" style="font-size:14px">Stato adempimenti</div></div>
+  <div id="adempimenti-list"></div>
+  <div style="margin-top:16px;padding:14px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;font-size:12px;color:#166534">
+    <strong>Calcolo tassa:</strong> 5,50 EUR x ospiti x notti (max 7 notti per ospite)
   </div>
 </div>
 
@@ -333,12 +313,7 @@
 <div class="section" id="section-documenti">
   <div class="sec-header"><div class="sec-title">Documenti ospiti</div></div>
   <div style="padding:12px 16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;margin-bottom:20px;font-size:12px;color:#1e40af;line-height:1.7">
-    <strong>Come funziona:</strong><br>
-    1. Seleziona una prenotazione e clicca "Copia link"<br>
-    2. Invia il link all'ospite via Airbnb o WhatsApp<br>
-    3. L'ospite carica il documento dalla sua pagina<br>
-    4. Il documento appare qui pronto per Alloggiati Web<br>
-    5. Eliminazione automatica 30 giorni dopo il checkout
+    <strong>Come funziona:</strong> Copia il link prenotazione e invialo all'ospite. L'ospite carica il documento. Appare qui pronto per Alloggiati Web. Eliminazione automatica 30 giorni dopo checkout.
   </div>
   <div class="sec-header" style="margin-bottom:10px"><div style="font-size:13px;font-weight:600">Prenotazioni attive</div></div>
   <div id="doc-bookings-list" style="margin-bottom:24px"></div>
@@ -358,17 +333,14 @@
       <input type="file" id="foto-input" accept="image/*" multiple style="display:none" onchange="uploadFoto(this.files)">
     </label>
   </div>
-  <div style="font-size:12px;color:#888;margin-bottom:12px">
-    Foto visibili agli ospiti nella pagina documento. Massimo 20 foto.
-  </div>
+  <div style="font-size:12px;color:#888;margin-bottom:12px">Foto visibili agli ospiti nella pagina documento.</div>
   <div class="foto-grid" id="foto-grid">
-    <div class="empty" style="grid-column:1/-1"><div class="empty-icon">&#128247;</div><div class="empty-text">Nessuna foto. Aggiungine una!</div></div>
+    <div class="empty" style="grid-column:1/-1"><div class="empty-icon">&#128247;</div><div class="empty-text">Nessuna foto</div></div>
   </div>
-  <div style="margin-top:12px;font-size:11px;color:#aaa">Caricamento su Firebase Storage. Le foto vengono mostrate agli ospiti nella pagina di upload documento.</div>
 </div>
 
 <div class="foto-lightbox" id="foto-lightbox" onclick="closeLightbox()">
-  <img id="lightbox-img" src="" alt="Foto appartamento">
+  <img id="lightbox-img" src="" alt="Foto">
   <button onclick="closeLightbox()" style="color:#fff;background:rgba(255,255,255,0.2);border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:14px">Chiudi</button>
 </div>
 
@@ -388,7 +360,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// Funzioni globali (accessibili dagli onclick HTML)
+// Funzioni globali per onclick HTML
 function showSection(id,btn){
   document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
   document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
@@ -407,6 +379,10 @@ function closePreview(){if(window._cp)window._cp();}
 function copyPreview(){if(window._cop)window._cop();}
 function markSent(){if(window._ms)window._ms();}
 function toggleTask(id,v){if(window._tt)window._tt(id,v);}
+function renderBookings(){if(window._rb)window._rb();}
+function renderTasks(){if(window._rts)window._rts();}
+function changeMonth(d){if(window._chm)window._chm(d);}
+function saveBooking(){if(window._sb)window._sb();}
 function saveMessage(){if(window._sm)window._sm();}
 function saveTask(){if(window._stk)window._stk();}
 function savePrice(){if(window._sp)window._sp();}
@@ -426,14 +402,18 @@ function copyDocLink(id,l){if(window._cdl)window._cdl(id,l);}
 function copyGuestData(id){if(window._cgd)window._cgd(id);}
 function deleteDocumento(id,p){if(window._dd)window._dd(id,p);}
 function loadDocumenti(){if(window._ld)window._ld();}
+function uploadFoto(f){if(window._uf)window._uf(f);}
+function openLightbox(u){if(window._ol)window._ol(u);}
+function closeLightbox(){if(window._cl)window._cl();}
+function enableNotifiche(){if(window._en)window._en();}
+function aggiornaCalcoloTassa(){if(window._act)window._act();}
 </script>
 
 <script type="module">
 import { auth, db, storage } from './firebase.js';
-import { ref as sRef, deleteObject, uploadBytesResumable, getDownloadURL, listAll } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
+import { ref as sRef, deleteObject, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, where, query, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, where, query, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // AUTH
 onAuthStateChanged(auth, function(user){
@@ -443,53 +423,98 @@ onAuthStateChanged(auth, function(user){
 window._dl = async function(){ await signOut(auth); window.location.href='index.html'; };
 
 // STATE
-var bookings=[], tasks=[], messages=[], prices=[], rules=[], documenti=[];
+var bookings=[], tasks=[], messages=[], prices=[], rules=[], documenti=[], fotoList=[];
 var calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
 var editingId=null, currentSentKey=null;
 
 function init(){
   listenBookings(); listenTasks(); listenMessages(); listenPrices(); listenRules();
+  setTimeout(initNotifiche, 2000);
 }
+
+// FCM NOTIFICHE - carica VAPID key da Firebase
+var vapidKey = null;
+
+async function initNotifiche(){
+  if(!('Notification' in window)) return;
+  try {
+    var snap = await getDoc(doc(db, 'settings', 'vapid'));
+    if(snap.exists() && snap.data().key) vapidKey = snap.data().key;
+  } catch(e) {}
+  if(Notification.permission === 'default' && vapidKey) {
+    document.getElementById('notif-banner').classList.add('show');
+  }
+}
+
+window._en = async function(){
+  document.getElementById('notif-banner').classList.remove('show');
+  if(!vapidKey) { toast('VAPID key non trovata su Firebase'); return; }
+  try {
+    var perm = await Notification.requestPermission();
+    if(perm === 'granted'){
+      var { getMessaging, getToken } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js');
+      var messaging = getMessaging();
+      var reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+      var token = await getToken(messaging, { vapidKey: vapidKey, serviceWorkerRegistration: reg });
+      if(token){
+        var uid = auth.currentUser ? auth.currentUser.uid : 'unknown';
+        await setDoc(doc(db,'fcmTokens',uid),{ token:token, uid:uid, email:auth.currentUser?auth.currentUser.email:'', updatedAt:serverTimestamp() },{merge:true});
+        toast('Notifiche attivate!');
+      }
+    }
+  } catch(e){ console.error(e); toast('Errore attivazione notifiche'); }
+};
 
 // LISTENERS
 function listenBookings(){
   onSnapshot(collection(db,'bookings'), function(snap){
-    bookings = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    bookings=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
     bookings.sort(function(a,b){return new Date(a.checkin)-new Date(b.checkin);});
-    renderDashboard(); renderBookings(); renderCalendar(); renderStats();
-    renderReminders(); renderAdempimenti(); renderDocBookings();
+    renderDashboard(); renderBookings(); renderCalendar(); renderStats(); renderReminders(); renderAdempimenti(); renderDocBookings();
   });
 }
 function listenTasks(){
   onSnapshot(collection(db,'tasks'), function(snap){
-    tasks = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    tasks=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
     renderTasks(); renderDashboardTasks();
   });
 }
 function listenMessages(){
   onSnapshot(collection(db,'messages'), function(snap){
-    messages = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    messages=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
     renderMessages(); renderReminders();
   });
 }
 function listenPrices(){
   onSnapshot(collection(db,'prices'), function(snap){
-    prices = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    prices=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
     renderPrices(); updateTodayPrice();
   });
 }
 function listenRules(){
   onSnapshot(collection(db,'rules'), function(snap){
-    rules = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    rules=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
     renderRules(); updateTodayPrice();
   });
 }
 
+// TASSA SOGGIORNO
+function calcolaTassa(notti, ospiti){
+  return (5.50 * Math.min(notti,7) * (ospiti||1)).toFixed(2);
+}
+window._act = function(){
+  var ci=v('f-checkin'), co=v('f-checkout'), ospiti=Number(v('f-ospiti'))||1;
+  if(!ci||!co) return;
+  var nights=Math.max(0,Math.round((new Date(co)-new Date(ci))/86400000));
+  var el=document.getElementById('tassa-calcolo');
+  if(el) el.textContent='EUR '+calcolaTassa(nights,ospiti);
+};
+
 // DASHBOARD
 function renderDashboard(){
   var now=new Date(), y=now.getFullYear(), m=now.getMonth();
-  var monthName=now.toLocaleDateString('it-IT',{month:'long',year:'numeric'});
   var daysInMonth=new Date(y,m+1,0).getDate();
+  var monthName=now.toLocaleDateString('it-IT',{month:'long',year:'numeric'});
   var mb=bookings.filter(function(b){
     if(b.stato==='Cancellata') return false;
     var ci=new Date(b.checkin), co=new Date(b.checkout);
@@ -504,28 +529,72 @@ function renderDashboard(){
     if(e>s) nights+=Math.round((e-s)/86400000);
   });
   var occ=Math.round(nights/daysInMonth*100);
-  var active=bookings.filter(function(b){return b.stato==='Confermata';}).length;
   document.getElementById('s-revenue').textContent='EUR '+revenue.toLocaleString('it-IT');
   document.getElementById('s-month').textContent=monthName;
   document.getElementById('s-nights').textContent=nights;
   document.getElementById('s-occ').textContent=occ+'%';
-  document.getElementById('s-active').textContent=active;
+  document.getElementById('s-active').textContent=bookings.filter(function(b){return b.stato==='Confermata';}).length;
   var upcoming=bookings.filter(function(b){
     if(b.stato==='Cancellata') return false;
     var diff=(new Date(b.checkin)-now)/86400000;
     return diff>=-1&&diff<=14;
   }).slice(0,3);
   var el=document.getElementById('dash-bookings');
-  if(el) el.innerHTML=upcoming.length?upcoming.map(bookingCardHTML).join(''):'<div class="empty"><div class="empty-icon">&#128197;</div><div class="empty-text">Nessun arrivo nei prossimi 14 giorni</div></div>';
+  if(el){ el.innerHTML=''; upcoming.forEach(function(b){el.appendChild(makeBookingCard(b));}); if(!upcoming.length) el.innerHTML='<div class="empty"><div class="empty-icon">&#128197;</div><div class="empty-text">Nessun arrivo nei prossimi 14 giorni</div></div>'; }
 }
-
 function renderDashboardTasks(){
   var pending=tasks.filter(function(t){return !t.done;}).slice(0,4);
   var el=document.getElementById('dash-tasks');
-  if(el) el.innerHTML=pending.length?pending.map(function(t){return taskItemHTML(t,true);}).join(''):'<div class="empty"><div class="empty-icon">&#9989;</div><div class="empty-text">Tutte le attivita completate!</div></div>';
+  if(!el) return;
+  el.innerHTML='';
+  if(!pending.length){ el.innerHTML='<div class="empty"><div class="empty-icon">&#9989;</div><div class="empty-text">Tutte le attivita completate!</div></div>'; return; }
+  pending.forEach(function(t){el.appendChild(makeTaskItem(t,true));});
 }
 
-// BOOKINGS
+// BOOKING CARD - usa DOM per evitare apici annidati
+function makeBookingCard(b){
+  var initials=(b.nome||'?').split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
+  var avClass=b.piattaforma==='Airbnb'?'av-a':b.piattaforma==='Booking.com'?'av-b':'av-d';
+  var badgeClass=b.stato==='Confermata'?'badge-green':b.stato==='In attesa'?'badge-amber':'badge-red';
+  var nights=Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));
+  var ospiti=b.ospiti||1;
+  var tassa=calcolaTassa(nights,ospiti);
+  var el=document.createElement('div');
+  el.className='booking-card';
+  var left=document.createElement('div');
+  left.className='b-avatar '+avClass;
+  left.textContent=initials;
+  var info=document.createElement('div');
+  info.className='b-info';
+  info.innerHTML='<div class="b-name">'+(b.nome||'-')+'</div>'+
+    '<div class="b-dates">'+formatDate(b.checkin)+' - '+formatDate(b.checkout)+' - '+nights+' notti - '+ospiti+' ospiti</div>'+
+    '<span class="badge '+badgeClass+'">'+(b.stato||'-')+'</span>'+
+    (b.note?'<div class="note-interne">Note: '+b.note+'</div>':'');
+  var right=document.createElement('div');
+  right.className='b-right';
+  right.innerHTML='<div class="b-price">EUR '+(b.prezzo||0)+'</div>'+
+    '<div class="b-platform">'+(b.piattaforma||'-')+'</div>'+
+    '<div style="font-size:10px;color:#888;margin-top:2px">Tassa: EUR '+tassa+'</div>';
+  var btns=document.createElement('div');
+  btns.style.cssText='display:flex;gap:4px;margin-top:6px;justify-content:flex-end';
+  var editBtn=document.createElement('button');
+  editBtn.className='btn-secondary';
+  editBtn.style.cssText='padding:4px 8px;font-size:11px';
+  editBtn.textContent='Modifica';
+  editBtn.addEventListener('click',function(e){e.stopPropagation();window._eb(b.id);});
+  var delBtn=document.createElement('button');
+  delBtn.className='btn-danger';
+  delBtn.style.cssText='padding:4px 8px;font-size:11px';
+  delBtn.textContent='Elimina';
+  delBtn.addEventListener('click',function(e){e.stopPropagation();window._di('bookings',b.id);});
+  btns.appendChild(editBtn);
+  btns.appendChild(delBtn);
+  right.appendChild(btns);
+  el.appendChild(left);
+  el.appendChild(info);
+  el.appendChild(right);
+  return el;
+}
 
 window._rb = function(){
   var statusF=document.getElementById('filter-status')?document.getElementById('filter-status').value:'';
@@ -536,7 +605,10 @@ window._rb = function(){
     return true;
   });
   var el=document.getElementById('bookings-list');
-  if(el) el.innerHTML=filtered.length?filtered.map(bookingCardHTML).join(''):'<div class="empty"><div class="empty-icon">&#128197;</div><div class="empty-text">Nessuna prenotazione trovata</div></div>';
+  if(!el) return;
+  el.innerHTML='';
+  if(!filtered.length){ el.innerHTML='<div class="empty"><div class="empty-icon">&#128197;</div><div class="empty-text">Nessuna prenotazione trovata</div></div>'; return; }
+  filtered.forEach(function(b){ el.appendChild(makeBookingCard(b)); });
 };
 function renderBookings(){ if(window._rb) window._rb(); }
 
@@ -590,72 +662,66 @@ function renderReminders(){
   var now=new Date(), reminders=[];
   bookings.filter(function(b){return b.stato!=='Cancellata';}).forEach(function(b){
     messages.forEach(function(m){
-      var trigger=m.trigger||'';
       var daysCI=Math.ceil((new Date(b.checkin)-now)/86400000);
       var daysCO=Math.ceil((new Date(b.checkout)-now)/86400000);
       var show=false, label='';
-      if(trigger==='Al check-in'&&daysCI>=0&&daysCI<=1){show=true;label='Check-in oggi/domani';}
-      else if(trigger==='1 giorno prima'&&daysCI===1){show=true;label='Arrivo domani';}
-      else if(trigger==='2 giorni prima'&&daysCI>=1&&daysCI<=2){show=true;label='Arrivo fra '+daysCI+' giorni';}
-      else if(trigger==='1 ora dopo checkout'&&daysCO>=0&&daysCO<=1){show=true;label='Checkout oggi';}
+      var t=m.trigger||'';
+      if(t==='Al check-in'&&daysCI>=0&&daysCI<=1){show=true;label='Check-in oggi/domani';}
+      else if(t==='1 giorno prima'&&daysCI===1){show=true;label='Arrivo domani';}
+      else if(t==='2 giorni prima'&&daysCI>=1&&daysCI<=2){show=true;label='Arrivo fra '+daysCI+' giorni';}
+      else if(t==='1 ora dopo checkout'&&daysCO>=0&&daysCO<=1){show=true;label='Checkout oggi';}
       if(show){
         var sentKey='sent_'+b.id+'_'+m.id;
-        var sent=!!localStorage.getItem(sentKey);
-        reminders.push({booking:b,message:m,label:label,daysCI:daysCI,sentKey:sentKey,sent:sent});
+        reminders.push({booking:b,message:m,label:label,daysCI:daysCI,sentKey:sentKey,sent:!!localStorage.getItem(sentKey)});
       }
     });
   });
-  if(!reminders.length){if(wrap)wrap.style.display='none';return;}
-  if(wrap) wrap.style.display='block';
-  var frag=document.createDocumentFragment();
+  if(!wrap) return;
+  if(!reminders.length){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  list.innerHTML='';
   reminders.forEach(function(r){
     var div=document.createElement('div');
     div.className='reminder-card'+(r.sent?' sent':'');
     div.innerHTML='<div class="reminder-icon">'+(r.sent?'&#9989;':'&#128276;')+'</div>'+
       '<div class="reminder-info"><div class="reminder-title">'+r.message.titolo+' - '+r.booking.nome+'</div>'+
       '<div class="reminder-sub">'+r.message.trigger+' - '+formatDate(r.booking.checkin)+' / '+formatDate(r.booking.checkout)+'</div>'+
-      '<span class="reminder-days '+(r.sent?'sent':r.daysCI<=0?'urgent':'')+'">'+(r.sent?'Inviato':r.label)+'</span></div>'+
-      '<button class="btn-primary" style="padding:6px 12px;font-size:12px">Copia</button>';
-    div.querySelector('.btn-primary').addEventListener('click',function(){window._op(r.message.id,r.booking.id,r.sentKey);});
-    frag.appendChild(div);
+      '<span class="reminder-days '+(r.sent?'sent':r.daysCI<=0?'urgent':'')+'">'+(r.sent?'Inviato':r.label)+'</span></div>';
+    var btn=document.createElement('button');
+    btn.className='btn-primary';
+    btn.style.cssText='padding:6px 12px;font-size:12px;flex-shrink:0';
+    btn.textContent='Copia';
+    btn.addEventListener('click',function(){window._op(r.message.id,r.booking.id,r.sentKey);});
+    div.appendChild(btn);
+    list.appendChild(div);
   });
-  list.innerHTML='';
-  list.appendChild(frag);
 }
 
 window._op = function(msgId,bookingId,sentKey){
   var m=messages.find(function(x){return x.id===msgId;});
   var b=bookings.find(function(x){return x.id===bookingId;});
   if(!m||!b) return;
-  currentSentKey=sentKey;
+  currentSentKey=sentKey||null;
   document.getElementById('preview-title').textContent=m.titolo||'Anteprima';
   document.getElementById('preview-guest-info').textContent='Ospite: '+b.nome+' - '+formatDate(b.checkin)+' / '+formatDate(b.checkout);
   document.getElementById('preview-body').textContent=fillTemplate(m.testo,b);
-  var sent=localStorage.getItem(sentKey);
-  document.getElementById('preview-sent-badge').style.display=sent?'block':'none';
+  document.getElementById('preview-sent-badge').style.display=sentKey&&localStorage.getItem(sentKey)?'block':'none';
   document.getElementById('preview-overlay').classList.add('open');
 };
 window._cp = function(){ document.getElementById('preview-overlay').classList.remove('open'); };
 window._cop = function(){
-  var text=document.getElementById('preview-body').textContent;
-  navigator.clipboard.writeText(text).then(function(){toast('Messaggio copiato!');});
+  navigator.clipboard.writeText(document.getElementById('preview-body').textContent).then(function(){toast('Messaggio copiato!');});
 };
 window._ms = function(){
-  if(currentSentKey){
-    localStorage.setItem(currentSentKey,'1');
-    document.getElementById('preview-sent-badge').style.display='block';
-    renderReminders();
-    toast('Segnato come inviato');
-  }
+  if(currentSentKey){ localStorage.setItem(currentSentKey,'1'); document.getElementById('preview-sent-badge').style.display='block'; renderReminders(); toast('Segnato come inviato'); }
 };
 window._ompt = function(msgId){
   var m=messages.find(function(x){return x.id===msgId;});
   if(!m) return;
   var upcoming=bookings.filter(function(b){return b.stato!=='Cancellata'&&new Date(b.checkin)>=new Date();}).sort(function(a,b){return new Date(a.checkin)-new Date(b.checkin);})[0];
   document.getElementById('preview-title').textContent=m.titolo||'Anteprima';
-  document.getElementById('preview-guest-info').textContent=upcoming?'Anteprima con: '+upcoming.nome:'Anteprima con dati esempio';
-  var fake=upcoming||{nome:'Mario Rossi',checkin:'2026-07-01',checkout:'2026-07-05'};
-  document.getElementById('preview-body').textContent=fillTemplate(m.testo,fake);
+  document.getElementById('preview-guest-info').textContent=upcoming?'Anteprima con: '+upcoming.nome:'Anteprima dati esempio';
+  document.getElementById('preview-body').textContent=fillTemplate(m.testo,upcoming||{nome:'Mario Rossi',checkin:'2026-07-01',checkout:'2026-07-05'});
   document.getElementById('preview-sent-badge').style.display='none';
   currentSentKey=null;
   document.getElementById('preview-overlay').classList.add('open');
@@ -665,19 +731,23 @@ function renderMessages(){
   var el=document.getElementById('messages-list');
   if(!el) return;
   renderReminders();
+  el.innerHTML='';
   if(!messages.length){
     el.innerHTML='<div class="empty"><div class="empty-icon">&#128172;</div><div class="empty-text">Nessun template</div></div>'+
     '<div style="margin-top:16px"><div style="font-size:13px;font-weight:600;margin-bottom:10px">Template pronti:</div>'+
-    '<button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate(\'benvenuto\')">+ Messaggio di benvenuto (check-in)</button>'+
-    '<button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate(\'guidabenvenuto\')">+ Guida del quartiere</button>'+
-    '<button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate(\'prearrivo\')">+ Promemoria pre-arrivo (2 giorni prima)</button>'+
-    '<button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate(\'metasoggiorno\')">+ Messaggio meta soggiorno</button>'+
-    '<button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate(\'istruzionicheckout\')">+ Istruzioni check-out (1 giorno prima)</button>'+
-    '<button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate(\'checkout\')">+ Ringraziamento post-soggiorno</button>'+
-    '</div>';
+    ['benvenuto:+ Messaggio di benvenuto (check-in)',
+     'guidabenvenuto:+ Guida del quartiere',
+     'prearrivo:+ Promemoria pre-arrivo (2 giorni prima)',
+     'metasoggiorno:+ Messaggio meta soggiorno',
+     'istruzionicheckout:+ Istruzioni check-out (1 giorno prima)',
+     'checkout:+ Ringraziamento post-soggiorno'
+    ].map(function(item){
+      var parts=item.split(':');
+      var key=parts[0], label=parts[1];
+      return '<button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate(\''+key+'\')">'+label+'</button>';
+    }).join('')+'</div>';
     return;
   }
-  var msgFrag=document.createDocumentFragment();
   messages.forEach(function(m){
     var div=document.createElement('div');
     div.className='msg-card';
@@ -692,94 +762,110 @@ function renderMessages(){
     div.addEventListener('click',function(){window._ompt(m.id);});
     div.querySelector('.btn-secondary').addEventListener('click',function(e){e.stopPropagation();window._em(m.id);});
     div.querySelector('.btn-danger').addEventListener('click',function(e){e.stopPropagation();window._di('messages',m.id);});
-    msgFrag.appendChild(div);
+    el.appendChild(div);
   });
-  el.innerHTML='';
-  el.appendChild(msgFrag);
 }
 
 // TASKS
-function taskItemHTML(t,compact){
-  return '<div class="task-item '+(t.done?'done-item':'')+'" id="task-'+t.id+'">'+
-  '<div class="task-check '+(t.done?'done':'')+'" onclick="toggleTask(\''+t.id+'\','+(t.done?'false':'true')+')">'+(t.done?'v':'')+'</div>'+
-  '<span class="task-label '+(t.done?'done':'')+'">'+(t.descrizione||'-')+'</span>'+
-  '<span class="task-zone">'+(t.zona||'-')+'</span>'+
-  (compact?'':'<button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem(\'tasks\',\''+t.id+'\')">Elimina</button>')+
-  '</div>';
+function makeTaskItem(t,compact){
+  var div=document.createElement('div');
+  div.className='task-item'+(t.done?' done-item':'');
+  div.id='task-'+t.id;
+  var check=document.createElement('div');
+  check.className='task-check'+(t.done?' done':'');
+  check.textContent=t.done?'v':'';
+  check.addEventListener('click',function(){window._tt(t.id,!t.done);});
+  var lbl=document.createElement('span');
+  lbl.className='task-label'+(t.done?' done':'');
+  lbl.textContent=t.descrizione||'-';
+  var zone=document.createElement('span');
+  zone.className='task-zone';
+  zone.textContent=t.zona||'-';
+  div.appendChild(check);
+  div.appendChild(lbl);
+  div.appendChild(zone);
+  if(!compact){
+    var del=document.createElement('button');
+    del.className='btn-danger';
+    del.style.cssText='padding:4px 8px;font-size:11px';
+    del.textContent='Elimina';
+    del.addEventListener('click',function(){window._di('tasks',t.id);});
+    div.appendChild(del);
+  }
+  return div;
 }
 window._rts = function(){
   var zoneF=document.getElementById('filter-zone')?document.getElementById('filter-zone').value:'';
   var showDone=document.getElementById('show-done')?document.getElementById('show-done').checked:false;
-  var filtered=tasks.filter(function(t){
-    if(zoneF&&t.zona!==zoneF) return false;
-    if(!showDone&&t.done) return false;
-    return true;
-  });
+  var filtered=tasks.filter(function(t){ if(zoneF&&t.zona!==zoneF)return false; if(!showDone&&t.done)return false; return true; });
   var el=document.getElementById('tasks-list');
-  if(el) el.innerHTML=filtered.length?filtered.map(function(t){return taskItemHTML(t,false);}).join(''):'<div class="empty"><div class="empty-icon">&#129529;</div><div class="empty-text">Nessuna attivita</div></div>';
+  if(!el) return;
+  el.innerHTML='';
+  if(!filtered.length){ el.innerHTML='<div class="empty"><div class="empty-icon">&#129529;</div><div class="empty-text">Nessuna attivita</div></div>'; return; }
+  filtered.forEach(function(t){el.appendChild(makeTaskItem(t,false));});
   var all=tasks.length, done=tasks.filter(function(t){return t.done;}).length;
   var pw=document.getElementById('progress-wrap');
-  if(pw){pw.style.display=all?'block':'none';document.getElementById('prog-text').textContent=done+'/'+all;document.getElementById('prog-bar').style.width=all?Math.round(done/all*100)+'%':'0%';}
+  if(pw){ pw.style.display=all?'block':'none'; document.getElementById('prog-text').textContent=done+'/'+all; document.getElementById('prog-bar').style.width=all?Math.round(done/all*100)+'%':'0%'; }
 };
 function renderTasks(){ if(window._rts) window._rts(); }
-window._tt = async function(id,done){
-  await updateDoc(doc(db,'tasks',id),{done:(done==='true'||done===true)});
-};
+window._tt = async function(id,done){ await updateDoc(doc(db,'tasks',id),{done:done}); };
 
 // PRICES
 function renderPrices(){
   var el=document.getElementById('prices-list');
   if(!el) return;
   var tagMap={'Alta':'pt-alta','Normale':'pt-normale','Evento':'pt-evento'};
-  el.innerHTML=prices.length?prices.map(function(p){
-    return '<div class="price-row"><div class="price-info"><div class="price-name">'+(p.nome||'-')+'</div><div class="price-desc">'+(p.descrizione||'')+'</div></div>'+
-    '<span class="price-tag '+(tagMap[p.tipo]||'pt-normale')+'">'+(p.tipo||'-')+'</span>'+
-    '<div class="price-val">EUR '+(p.prezzo||0)+'/notte</div>'+
-    '<div style="display:flex;gap:4px"><button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="editPrice(\''+p.id+'\')">Modifica</button><button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem(\'prices\',\''+p.id+'\')">Elimina</button></div></div>';
-  }).join(''):'<div class="empty"><div class="empty-icon">&#128176;</div><div class="empty-text">Nessun prezzo. Aggiungine uno!</div></div>';
+  el.innerHTML='';
+  if(!prices.length){ el.innerHTML='<div class="empty"><div class="empty-icon">&#128176;</div><div class="empty-text">Nessun prezzo</div></div>'; return; }
+  prices.forEach(function(p){
+    var div=document.createElement('div');
+    div.className='price-row';
+    div.innerHTML='<div class="price-info"><div class="price-name">'+(p.nome||'-')+'</div><div class="price-desc">'+(p.descrizione||'')+'</div></div>'+
+      '<span class="price-tag '+(tagMap[p.tipo]||'pt-normale')+'">'+(p.tipo||'-')+'</span>'+
+      '<div class="price-val">EUR '+(p.prezzo||0)+'/notte</div>';
+    var btns=document.createElement('div');
+    btns.style='display:flex;gap:4px';
+    var e=document.createElement('button'); e.className='btn-secondary'; e.style='padding:4px 8px;font-size:11px'; e.textContent='Modifica';
+    e.addEventListener('click',function(){window._ep(p.id);});
+    var d=document.createElement('button'); d.className='btn-danger'; d.style='padding:4px 8px;font-size:11px'; d.textContent='Elimina';
+    d.addEventListener('click',function(){window._di('prices',p.id);});
+    btns.appendChild(e); btns.appendChild(d);
+    div.appendChild(btns);
+    el.appendChild(div);
+  });
 }
-
-function getBasePrice(){
-  if(!prices.length) return null;
-  var m=new Date().getMonth();
-  if(m>=5&&m<=8) return prices.find(function(p){return p.tipo==='Alta';})||prices[0];
-  return prices.find(function(p){return p.tipo==='Normale';})||prices[0];
-}
-function applyRule(base,r){
-  base=Number(base);
-  if(r.azione==='sconto') return Math.round(base*(1-r.valore/100));
-  if(r.azione==='aumento') return Math.round(base*(1+r.valore/100));
-  if(r.azione==='fisso') return Number(r.valore);
-  return base;
-}
+function getBasePrice(){ if(!prices.length)return null; var m=new Date().getMonth(); if(m>=5&&m<=8)return prices.find(function(p){return p.tipo==='Alta';})||prices[0]; return prices.find(function(p){return p.tipo==='Normale';})||prices[0]; }
+function applyRule(base,r){ base=Number(base); if(r.azione==='sconto')return Math.round(base*(1-r.valore/100)); if(r.azione==='aumento')return Math.round(base*(1+r.valore/100)); if(r.azione==='fisso')return Number(r.valore); return base; }
 function updateTodayPrice(){
-  var bp=getBasePrice();
-  var el=document.getElementById('price-today');
-  var info=document.getElementById('price-today-info');
-  if(!el) return;
+  var bp=getBasePrice(); var el=document.getElementById('price-today'); var info=document.getElementById('price-today-info');
+  if(!el)return;
   if(!bp){el.textContent='-';if(info)info.textContent='Aggiungi prezzi stagionali';return;}
-  var price=Number(bp.prezzo);
-  var now=new Date();
+  var price=Number(bp.prezzo); var now=new Date();
   rules.filter(function(r){return r.attiva&&r.condizione==='weekend'&&[5,6,0].includes(now.getDay());}).forEach(function(r){price=applyRule(price,r);});
   el.textContent='EUR '+price+'/notte';
-  if(info) info.textContent='Prezzo stagionale base: '+bp.nome;
+  if(info) info.textContent='Base: '+bp.nome;
 }
-
 function renderRules(){
   var el=document.getElementById('rules-list');
-  if(!el) return;
-  el.innerHTML=rules.length?rules.map(function(r){
-    return '<div class="rule-card"><div class="rule-header"><div class="rule-name">'+(r.nome||'-')+'</div>'+
-    '<div style="display:flex;gap:4px;align-items:center">'+
-    '<span class="badge '+(r.attiva?'badge-green':'badge-amber')+'">'+(r.attiva?'Attiva':'Disattiva')+'</span>'+
-    '<button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="toggleRule(\''+r.id+'\','+(r.attiva?'false':'true')+')">'+(r.attiva?'Disattiva':'Attiva')+'</button>'+
-    '<button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem(\'rules\',\''+r.id+'\')">Elimina</button>'+
-    '</div></div>'+
-    '<div class="rule-desc">Condizione: '+(r.condizione||'-')+' - Azione: '+(r.azione||'-')+' '+r.valore+'</div></div>';
-  }).join(''):'<div class="empty"><div class="empty-icon">&#9881;</div><div class="empty-text">Nessuna regola</div></div>';
+  if(!el)return;
+  el.innerHTML='';
+  if(!rules.length){ el.innerHTML='<div class="empty"><div class="empty-icon">&#9881;</div><div class="empty-text">Nessuna regola</div></div>'; return; }
+  rules.forEach(function(r){
+    var div=document.createElement('div'); div.className='rule-card';
+    div.innerHTML='<div class="rule-header"><div class="rule-name">'+(r.nome||'-')+'</div>'+
+      '<div style="display:flex;gap:4px;align-items:center"><span class="badge '+(r.attiva?'badge-green':'badge-amber')+'">'+(r.attiva?'Attiva':'Disattiva')+'</span></div></div>'+
+      '<div style="font-size:12px;color:#666">'+r.condizione+' - '+r.azione+' '+r.valore+'</div>';
+    var toggleBtn=document.createElement('button'); toggleBtn.className='btn-secondary'; toggleBtn.style='padding:4px 8px;font-size:11px;margin-right:4px'; toggleBtn.textContent=r.attiva?'Disattiva':'Attiva';
+    toggleBtn.addEventListener('click',function(){window._tr(r.id,!r.attiva);});
+    var delBtn=document.createElement('button'); delBtn.className='btn-danger'; delBtn.style='padding:4px 8px;font-size:11px'; delBtn.textContent='Elimina';
+    delBtn.addEventListener('click',function(){window._di('rules',r.id);});
+    div.querySelector('.rule-header .d-flex, [style*="gap:4px"]').appendChild(toggleBtn);
+    div.querySelector('[style*="gap:4px"]').appendChild(delBtn);
+    el.appendChild(div);
+  });
   updateTodayPrice();
 }
-window._tr = async function(id,val){ await updateDoc(doc(db,'rules',id),{attiva:(val==='true'||val===true)}); };
+window._tr = async function(id,val){ await updateDoc(doc(db,'rules',id),{attiva:val}); };
 
 // STATS
 function renderStats(){
@@ -797,139 +883,246 @@ function renderStats(){
   });
   var months=Object.keys(byMonth), maxV=Math.max.apply(null,Object.values(byMonth).concat([1]));
   var chart=document.getElementById('revenue-chart');
-  if(chart) chart.innerHTML=months.length?months.map(function(m){return '<div class="chart-row"><span class="chart-month">'+m+'</span><div class="chart-bg"><div class="chart-fill" style="width:'+Math.round(byMonth[m]/maxV*100)+'%"></div></div><span class="chart-val">EUR '+byMonth[m]+'</span></div>';}).join(''):'<div class="empty"><div class="empty-text">Nessuna prenotazione ancora</div></div>';
+  if(chart){ chart.innerHTML=''; if(!months.length){ chart.innerHTML='<div class="empty"><div class="empty-text">Nessuna prenotazione</div></div>'; } else { months.forEach(function(m){ chart.innerHTML+='<div class="chart-row"><span class="chart-month">'+m+'</span><div class="chart-bg"><div class="chart-fill" style="width:'+Math.round(byMonth[m]/maxV*100)+'%"></div></div><span class="chart-val">EUR '+byMonth[m]+'</span></div>'; }); }}
   var plats={};
   bookings.filter(function(b){return b.stato!=='Cancellata';}).forEach(function(b){plats[b.piattaforma]=(plats[b.piattaforma]||0)+Number(b.prezzo||0);});
   var pEl=document.getElementById('platform-stats');
-  if(pEl) pEl.innerHTML=Object.keys(plats).map(function(p){return '<div class="stat-card"><div class="stat-label">'+p+'</div><div class="stat-value">EUR '+plats[p].toLocaleString('it-IT')+'</div></div>';}).join('');
+  if(pEl){ pEl.innerHTML=''; Object.keys(plats).forEach(function(p){ pEl.innerHTML+='<div class="stat-card"><div class="stat-label">'+p+'</div><div class="stat-value">EUR '+plats[p].toLocaleString('it-IT')+'</div></div>'; }); }
 }
 
 // ADEMPIMENTI
 window._ra = function(){
   var el=document.getElementById('adempimenti-list');
-  if(!el) return;
+  if(!el)return;
   var now=new Date();
-  var active=bookings.filter(function(b){
-    if(b.stato==='Cancellata') return false;
-    var co=new Date(b.checkout); co.setDate(co.getDate()+7);
-    return co>=now;
-  }).sort(function(a,b){return new Date(a.checkin)-new Date(b.checkin);});
-  if(!active.length){el.innerHTML='<div class="empty"><div class="empty-icon">&#128203;</div><div class="empty-text">Nessuna prenotazione attiva</div></div>';return;}
-  el.innerHTML=active.map(function(b){
+  var active=bookings.filter(function(b){ if(b.stato==='Cancellata')return false; var co=new Date(b.checkout); co.setDate(co.getDate()+7); return co>=now; }).sort(function(a,b){return new Date(a.checkin)-new Date(b.checkin);});
+  el.innerHTML='';
+  if(!active.length){ el.innerHTML='<div class="empty"><div class="empty-icon">&#128203;</div><div class="empty-text">Nessuna prenotazione attiva</div></div>'; return; }
+  active.forEach(function(b){
     var nights=Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));
     var hoursCI=(now-new Date(b.checkin))/3600000;
-    var allegKey='adem_alloggiati_'+b.id;
-    var allegDone=localStorage.getItem(allegKey);
-    var allegOverdue=!allegDone&&hoursCI>24&&hoursCI>0;
-    var tur5Key='adem_turismo5_'+b.id;
-    var tur5Done=localStorage.getItem(tur5Key);
-    var tassaKey='adem_tassa_'+b.id;
-    var tassaDone=localStorage.getItem(tassaKey);
-    return '<div class="adempimento-row">'+
-    '<div class="adem-header"><div class="adem-name">'+(b.nome||'Ospite')+'</div><div class="adem-dates">'+formatDate(b.checkin)+' - '+formatDate(b.checkout)+' - '+nights+' notti</div></div>'+
-    '<div class="adem-checks">'+
-    '<div class="adem-check '+(allegDone?'done':allegOverdue?'overdue':'')+'" onclick="toggleAdem(\''+allegKey+'\',\''+b.id+'\')"><div class="adem-icon">&#128658;</div><div class="adem-label"><strong>Alloggiati Web</strong><span>'+(allegDone?'Registrato':allegOverdue?'SCADUTO':'Da fare dopo check-in')+'</span></div><div class="adem-toggle">'+(allegDone?'v':'')+'</div></div>'+
-    '<div class="adem-check '+(tassaDone?'done':'')+'" onclick="toggleAdem(\''+tassaKey+'\',\''+b.id+'\')"><div class="adem-icon">&#128182;</div><div class="adem-label"><strong>Tassa soggiorno</strong><span>'+(tassaDone?'Riscossa':'Da riscuotere')+'</span></div><div class="adem-toggle">'+(tassaDone?'v':'')+'</div></div>'+
-    '<div class="adem-check '+(tur5Done?'done':'')+'" onclick="toggleAdem(\''+tur5Key+'\',\''+b.id+'\')"><div class="adem-icon">&#127963;</div><div class="adem-label"><strong>Turismo5</strong><span>'+(tur5Done?'Comunicato':'Da comunicare')+'</span></div><div class="adem-toggle">'+(tur5Done?'v':'')+'</div></div>'+
-    '<div class="adem-check" style="background:#f8f8f6;cursor:default"><div class="adem-icon">&#128176;</div><div class="adem-label"><strong>Tassa stimata</strong><span>EUR '+(5.50*Math.min(nights,7)).toFixed(2)+' (1 ospite)</span></div></div>'+
-    '</div></div>';
-  }).join('');
+    var allegKey='adem_alloggiati_'+b.id, allegDone=localStorage.getItem(allegKey), allegOverdue=!allegDone&&hoursCI>24&&hoursCI>0;
+    var tur5Key='adem_turismo5_'+b.id, tur5Done=localStorage.getItem(tur5Key);
+    var tassaKey='adem_tassa_'+b.id, tassaDone=localStorage.getItem(tassaKey);
+    var div=document.createElement('div'); div.className='adempimento-row';
+    div.innerHTML='<div class="adem-header"><div class="adem-name">'+(b.nome||'Ospite')+'</div><div class="adem-dates">'+formatDate(b.checkin)+' - '+formatDate(b.checkout)+'</div></div>'+
+      '<div class="adem-checks">'+
+      '<div class="adem-check '+(allegDone?'done':allegOverdue?'overdue':'')+'" data-key="'+allegKey+'"><div class="adem-icon">&#128658;</div><div class="adem-label"><strong>Alloggiati Web</strong><span>'+(allegDone?'Registrato':allegOverdue?'SCADUTO':'Da fare dopo check-in')+'</span></div><div class="adem-toggle">'+(allegDone?'v':'')+'</div></div>'+
+      '<div class="adem-check '+(tassaDone?'done':'')+'" data-key="'+tassaKey+'"><div class="adem-icon">&#128182;</div><div class="adem-label"><strong>Tassa soggiorno</strong><span>'+(tassaDone?'Riscossa':'Da riscuotere')+'</span></div><div class="adem-toggle">'+(tassaDone?'v':'')+'</div></div>'+
+      '<div class="adem-check '+(tur5Done?'done':'')+'" data-key="'+tur5Key+'"><div class="adem-icon">&#127963;</div><div class="adem-label"><strong>Turismo5</strong><span>'+(tur5Done?'Comunicato':'Da comunicare')+'</span></div><div class="adem-toggle">'+(tur5Done?'v':'')+'</div></div>'+
+      '<div class="adem-check" style="cursor:default;background:#f8f8f6"><div class="adem-icon">&#128176;</div><div class="adem-label"><strong>Tassa stimata</strong><span>EUR '+(5.50*Math.min(nights,7)).toFixed(2)+'</span></div></div>'+
+      '</div>';
+    div.querySelectorAll('.adem-check[data-key]').forEach(function(ch){
+      ch.addEventListener('click',function(){
+        var key=ch.dataset.key;
+        if(localStorage.getItem(key)) localStorage.removeItem(key); else localStorage.setItem(key,'1');
+        window._ra(); toast('Aggiornato');
+      });
+    });
+    el.appendChild(div);
+  });
 };
 function renderAdempimenti(){ if(window._ra) window._ra(); }
-window._ta = function(key,bid){ if(localStorage.getItem(key)) localStorage.removeItem(key); else localStorage.setItem(key,'1'); renderAdempimenti(); toast('Aggiornato'); };
+window._ta = function(key){ if(localStorage.getItem(key))localStorage.removeItem(key); else localStorage.setItem(key,'1'); renderAdempimenti(); toast('Aggiornato'); };
 
 // DOCUMENTI
 window._rdb = function(){
   var el=document.getElementById('doc-bookings-list');
-  if(!el) return;
+  if(!el)return;
   var now=new Date();
-  var active=bookings.filter(function(b){
-    if(b.stato==='Cancellata') return false;
-    var co=new Date(b.checkout); co.setDate(co.getDate()+7);
-    return co>=now;
-  }).sort(function(a,b){return new Date(a.checkin)-new Date(b.checkin);});
-  if(!active.length){el.innerHTML='<div class="empty"><div class="empty-icon">&#128197;</div><div class="empty-text">Nessuna prenotazione attiva</div></div>';return;}
-  el.innerHTML=active.map(function(b){
+  var active=bookings.filter(function(b){ if(b.stato==='Cancellata')return false; var co=new Date(b.checkout); co.setDate(co.getDate()+7); return co>=now; }).sort(function(a,b){return new Date(a.checkin)-new Date(b.checkin);});
+  el.innerHTML='';
+  if(!active.length){ el.innerHTML='<div class="empty"><div class="empty-icon">&#128197;</div><div class="empty-text">Nessuna prenotazione attiva</div></div>'; return; }
+  active.forEach(function(b){
     var nights=Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));
     var link=window.location.origin+'/documento.html?b='+b.id;
-    return '<div class="doc-booking-row"><div class="doc-booking-info"><div class="doc-booking-name">'+(b.nome||'Ospite')+'</div><div class="doc-booking-dates">'+formatDate(b.checkin)+' - '+formatDate(b.checkout)+' - '+nights+' notti - '+(b.piattaforma||'-')+'</div></div>'+
-    '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'+
-    '<span class="link-copied" id="copied-'+b.id+'">Copiato!</span>'+
-    '<button class="btn-secondary" style="font-size:12px;padding:5px 10px" onclick="copyDocLink(\''+b.id+'\',\''+link+'\')">Copia link</button>'+
-    '<a href="'+link+'" target="_blank" class="btn-secondary" style="font-size:12px;padding:5px 10px;text-decoration:none">Apri</a>'+
-    '</div></div>';
-  }).join('');
-};
-function renderDocBookings(){ if(window._rdb) window._rdb(); }
-window._cdl = function(bookingId,link){
-  navigator.clipboard.writeText(link).then(function(){
-    var el=document.getElementById('copied-'+bookingId);
-    if(el){el.style.display='inline';setTimeout(function(){el.style.display='none';},2000);}
-    toast('Link copiato!');
+    var div=document.createElement('div'); div.className='doc-booking-row';
+    div.innerHTML='<div class="doc-booking-info"><div class="doc-booking-name">'+(b.nome||'Ospite')+'</div><div class="doc-booking-dates">'+formatDate(b.checkin)+' - '+formatDate(b.checkout)+' - '+nights+' notti</div></div>'+
+      '<span class="link-copied" id="copied-'+b.id+'">Copiato!</span>';
+    var copyBtn=document.createElement('button'); copyBtn.className='btn-secondary'; copyBtn.style='font-size:12px;padding:5px 10px'; copyBtn.textContent='Copia link';
+    copyBtn.addEventListener('click',function(){ navigator.clipboard.writeText(link).then(function(){ var sp=document.getElementById('copied-'+b.id); if(sp){sp.style.display='inline';setTimeout(function(){sp.style.display='none';},2000);} toast('Link copiato!'); }); });
+    var openBtn=document.createElement('a'); openBtn.className='btn-secondary'; openBtn.href=link; openBtn.target='_blank'; openBtn.style='font-size:12px;padding:5px 10px;text-decoration:none'; openBtn.textContent='Apri';
+    div.appendChild(copyBtn); div.appendChild(openBtn);
+    el.appendChild(div);
   });
 };
+function renderDocBookings(){ if(window._rdb) window._rdb(); }
+window._cdl = function(id,link){ navigator.clipboard.writeText(link).then(function(){toast('Link copiato!');}); };
+
 window._ld = async function(){
   var el=document.getElementById('documenti-list');
-  if(!el) return;
+  if(!el)return;
   el.innerHTML='<div style="text-align:center;padding:20px;color:#888;font-size:13px">Caricamento...</div>';
   try{
     var snap=await getDocs(collection(db,'documenti'));
     documenti=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
     documenti.sort(function(a,b){return (b.uploadedAt&&b.uploadedAt.seconds||0)-(a.uploadedAt&&a.uploadedAt.seconds||0);});
     renderDocumenti();
-  }catch(e){el.innerHTML='<div class="empty"><div class="empty-text">Errore caricamento</div></div>';}
+  }catch(e){ el.innerHTML='<div class="empty"><div class="empty-text">Errore caricamento</div></div>'; }
+};
+function renderDocumenti(){
+  var el=document.getElementById('documenti-list');
+  if(!el)return;
+  el.innerHTML='';
+  if(!documenti.length){ el.innerHTML='<div class="empty"><div class="empty-icon">&#128196;</div><div class="empty-text">Nessun documento ricevuto</div></div>'; return; }
+  documenti.forEach(function(d){
+    var initials=((d.guestNome||'?')[0]+(d.guestCognome||'?')[0]).toUpperCase();
+    var uploadDate=d.uploadedAt?new Date(d.uploadedAt.seconds*1000).toLocaleDateString('it-IT'):'-';
+    var div=document.createElement('div'); div.className='doc-card';
+    div.innerHTML='<div class="doc-card-header"><div class="doc-avatar">'+initials+'</div><div><div class="doc-name">'+(d.guestNome||'-')+' '+(d.guestCognome||'')+'</div><div class="doc-meta">Caricato il '+uploadDate+'</div></div><span class="delete-badge">Elimina il '+(d.deleteAfter||'-')+'</span></div>'+
+      '<div class="doc-fields">'+
+      '<div class="doc-field"><div class="doc-field-label">Data nascita</div><div class="doc-field-value">'+(d.guestNascita||'-')+'</div></div>'+
+      '<div class="doc-field"><div class="doc-field-label">Nazionalita</div><div class="doc-field-value">'+(d.guestNazionalita||'-')+'</div></div>'+
+      '<div class="doc-field"><div class="doc-field-label">Documento</div><div class="doc-field-value">'+(d.tipoDocumento||'-')+' - '+(d.numeroDocumento||'-')+'</div></div>'+
+      '<div class="doc-field" style="grid-column:1/-1"><div class="doc-field-label">Residenza</div><div class="doc-field-value">'+(d.residenza||'-')+'</div></div>'+
+      '</div>';
+    var viewBtn=document.createElement('a'); viewBtn.className='btn-primary'; viewBtn.href=d.fileURL||'#'; viewBtn.target='_blank'; viewBtn.style='font-size:12px;padding:6px 12px;text-decoration:none'; viewBtn.textContent='Vedi documento';
+    var copyBtn=document.createElement('button'); copyBtn.className='btn-secondary'; copyBtn.style='font-size:12px;padding:6px 12px'; copyBtn.textContent='Copia dati';
+    copyBtn.addEventListener('click',function(){window._cgd(d.id);});
+    var delBtn=document.createElement('button'); delBtn.className='btn-danger'; delBtn.style='font-size:12px;padding:5px 10px'; delBtn.textContent='Elimina';
+    delBtn.addEventListener('click',function(){window._dd(d.id,d.filePath||'');});
+    var actions=document.createElement('div'); actions.className='doc-actions';
+    actions.appendChild(viewBtn); actions.appendChild(copyBtn); actions.appendChild(delBtn);
+    div.appendChild(actions);
+    el.appendChild(div);
+  });
+}
+window._cgd = function(docId){
+  var d=documenti.find(function(x){return x.id===docId;});
+  if(!d)return;
+  var text='DATI OSPITE - Alloggiati Web\nNome: '+(d.guestNome||'-')+'\nCognome: '+(d.guestCognome||'-')+'\nData nascita: '+(d.guestNascita||'-')+'\nNazionalita: '+(d.guestNazionalita||'-')+'\nDocumento: '+(d.tipoDocumento||'-')+' '+(d.numeroDocumento||'-')+'\nResidenza: '+(d.residenza||'-')+'\nCheck-in: '+(d.checkin||'-')+'\nCheck-out: '+(d.checkout||'-');
+  navigator.clipboard.writeText(text).then(function(){toast('Dati copiati!');});
+};
+window._dd = async function(docId,filePath){
+  if(!confirm('Eliminare questo documento?'))return;
+  try{ if(filePath){try{await deleteObject(sRef(storage,filePath));}catch(e){}} await deleteDoc(doc(db,'documenti',docId)); documenti=documenti.filter(function(d){return d.id!==docId;}); renderDocumenti(); toast('Documento eliminato'); }catch(e){toast('Errore eliminazione');}
 };
 
+// FOTO
+window._uf = async function(files){
+  if(!files||!files.length)return;
+  toast('Caricamento...');
+  for(var i=0;i<files.length;i++){
+    var file=files[i];
+    if(file.size>5*1024*1024){toast('Foto troppo grande (max 5MB)');continue;}
+    var path='foto/'+Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+    var storageRef=sRef(storage,path);
+    var task=uploadBytesResumable(storageRef,file);
+    await new Promise(function(res,rej){task.on('state_changed',null,rej,res);});
+    var url=await getDownloadURL(task.snapshot.ref);
+    await addDoc(collection(db,'foto'),{url:url,path:path,nome:file.name,uploadedAt:serverTimestamp()});
+  }
+  toast('Foto caricate!');
+  window.loadFoto();
+};
 window.loadFoto = async function(){
   var el=document.getElementById('foto-grid');
-  if(!el) return;
+  if(!el)return;
   try{
     var snap=await getDocs(collection(db,'foto'));
     fotoList=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
-    if(!fotoList.length){
-      el.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-icon">&#128247;</div><div class="empty-text">Nessuna foto</div></div>';
-      return;
-    }
-    var container=document.createDocumentFragment();
-    fotoList.forEach(function(f){
-      var img=document.createElement('img');
-      img.className='foto-thumb';
-      img.src=f.url;
-      img.alt='Foto';
-      img.title=f.nome||'';
-      img.addEventListener('click',function(){window.openLightbox(f.url);});
-      container.appendChild(img);
-    });
-    var addBtn=document.createElement('label');
-    addBtn.className='foto-upload-btn';
-    addBtn.innerHTML='<input type="file" accept="image/*" multiple style="display:none"><span style="font-size:24px">+</span><span>Aggiungi</span>';
-    addBtn.querySelector('input').addEventListener('change',function(){window.uploadFoto(this.files);});
-    container.appendChild(addBtn);
     el.innerHTML='';
-    el.appendChild(container);
+    if(!fotoList.length){ el.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-icon">&#128247;</div><div class="empty-text">Nessuna foto</div></div>'; return; }
+    fotoList.forEach(function(f){
+      var img=document.createElement('img'); img.className='foto-thumb'; img.src=f.url; img.alt='Foto';
+      img.addEventListener('click',function(){window._ol(f.url);});
+      el.appendChild(img);
+    });
+    var addBtn=document.createElement('label'); addBtn.className='foto-upload-btn';
+    addBtn.innerHTML='<input type="file" accept="image/*" multiple style="display:none"><span style="font-size:24px">+</span><span>Aggiungi</span>';
+    addBtn.querySelector('input').addEventListener('change',function(){window._uf(this.files);});
+    el.appendChild(addBtn);
   }catch(e){console.error(e);}
 };
+window._ol = function(url){ document.getElementById('lightbox-img').src=url; document.getElementById('foto-lightbox').classList.add('open'); };
+window._cl = function(){ document.getElementById('foto-lightbox').classList.remove('open'); };
 
-
-window.openLightbox = function(url) {
-  document.getElementById('lightbox-img').src = url;
-  document.getElementById('foto-lightbox').classList.add('open');
+// MODAL FORMS
+var modalDefs={
+  booking:{
+    title:'Aggiungi prenotazione',
+    html:function(d){d=d||{};return '<div class="form-row-2"><div class="form-row"><label>Nome ospite</label><input id="f-nome" placeholder="Mario Rossi" value="'+(d.nome||'')+'"></div><div class="form-row"><label>Piattaforma</label><select id="f-piattaforma"><option '+(d.piattaforma==='Airbnb'?'selected':'')+'>Airbnb</option><option '+(d.piattaforma==='Booking.com'?'selected':'')+'>Booking.com</option><option '+(d.piattaforma==='Diretto'?'selected':'')+'>Diretto</option></select></div></div><div class="form-row-2"><div class="form-row"><label>Check-in</label><input id="f-checkin" type="date" value="'+(d.checkin||'')+'" onchange="aggiornaCalcoloTassa()"></div><div class="form-row"><label>Check-out</label><input id="f-checkout" type="date" value="'+(d.checkout||'')+'" onchange="aggiornaCalcoloTassa()"></div></div><div class="form-row-2"><div class="form-row"><label>Prezzo (EUR)</label><input id="f-prezzo" type="number" min="0" value="'+(d.prezzo||'')+'"></div><div class="form-row"><label>Ospiti</label><input id="f-ospiti" type="number" min="1" max="20" value="'+(d.ospiti||1)+'" onchange="aggiornaCalcoloTassa()"></div></div><div class="form-row"><label>Stato</label><select id="f-stato"><option '+(d.stato==='Confermata'?'selected':'')+'>Confermata</option><option '+(d.stato==='In attesa'?'selected':'')+'>In attesa</option><option '+(d.stato==='Cancellata'?'selected':'')+'>Cancellata</option></select></div><div class="tassa-box"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:#555;font-weight:500">Tassa di soggiorno da riscuotere</span><span class="tassa-val" id="tassa-calcolo">-</span></div><div style="font-size:11px;color:#888">EUR 5,50 x ospiti x notti (max 7 notti)</div></div><div class="form-row" style="margin-top:10px"><label>Note interne</label><textarea id="f-note" rows="2" placeholder="Arriva tardi, ha un cane...">'+(d.note||'')+'</textarea></div><button class="save-btn" onclick="saveBooking()">Salva prenotazione</button>';}
+  },
+  message:{
+    title:'Template messaggio',
+    html:function(d){d=d||{};return '<div class="form-row"><label>Titolo</label><input id="f-titolo" placeholder="es. Messaggio di benvenuto" value="'+(d.titolo||'')+'"></div><div class="form-row"><label>Quando inviare</label><select id="f-trigger"><option '+(d.trigger==='Al check-in'?'selected':'')+'>Al check-in</option><option '+(d.trigger==='2 giorni prima'?'selected':'')+'>2 giorni prima</option><option '+(d.trigger==='1 giorno prima'?'selected':'')+'>1 giorno prima</option><option '+(d.trigger==='Meta soggiorno'?'selected':'')+'>Meta soggiorno</option><option '+(d.trigger==='1 ora dopo checkout'?'selected':'')+'>1 ora dopo checkout</option><option '+(d.trigger==='Personalizzato'?'selected':'')+'>Personalizzato</option></select></div><div class="form-row"><label>Testo</label><textarea id="f-testo" rows="6" placeholder="Caro ospite...">'+(d.testo||'')+'</textarea></div><button class="save-btn" onclick="saveMessage()">Salva template</button>';}
+  },
+  task:{
+    title:'Nuova attivita',
+    html:function(d){d=d||{};return '<div class="form-row"><label>Descrizione</label><input id="f-descrizione" placeholder="es. Cambio biancheria" value="'+(d.descrizione||'')+'"></div><div class="form-row-2"><div class="form-row"><label>Zona</label><select id="f-zona"><option '+(d.zona==='Camera'?'selected':'')+'>Camera</option><option '+(d.zona==='Bagno'?'selected':'')+'>Bagno</option><option '+(d.zona==='Cucina'?'selected':'')+'>Cucina</option><option '+(d.zona==='Soggiorno'?'selected':'')+'>Soggiorno</option><option '+(d.zona==='Generale'?'selected':'')+'>Generale</option></select></div><div class="form-row"><label>Assegnata a</label><select id="f-assegnata"><option>Chiunque</option><option>Pulizie</option><option>Admin</option></select></div></div><button class="save-btn" onclick="saveTask()">Salva attivita</button>';}
+  },
+  price:{
+    title:'Periodo prezzi',
+    html:function(d){d=d||{};return '<div class="form-row"><label>Nome periodo</label><input id="f-nome" placeholder="es. Alta stagione" value="'+(d.nome||'')+'"></div><div class="form-row"><label>Descrizione</label><input id="f-descrizione" placeholder="es. Giu - Set" value="'+(d.descrizione||'')+'"></div><div class="form-row-2"><div class="form-row"><label>Prezzo/notte (EUR)</label><input id="f-prezzo" type="number" min="0" value="'+(d.prezzo||'')+'"></div><div class="form-row"><label>Tipo</label><select id="f-tipo"><option '+(d.tipo==='Normale'?'selected':'')+'>Normale</option><option '+(d.tipo==='Alta'?'selected':'')+'>Alta</option><option '+(d.tipo==='Evento'?'selected':'')+'>Evento</option></select></div></div><button class="save-btn" onclick="savePrice()">Salva prezzo</button>';}
+  },
+  rule:{
+    title:'Nuova regola dinamica',
+    html:function(){return '<div class="form-row"><label>Nome regola</label><input id="f-nome" placeholder="es. Sconto last minute"></div><div class="form-row"><label>Condizione</label><select id="f-condizione" onchange="updateRuleForm()"><option value="last_minute">Last minute (X giorni prima)</option><option value="weekend">Weekend (ven/sab/dom)</option><option value="anticipo">Prenotazione anticipata</option></select></div><div class="form-row" id="f-giorni-row"><label>Numero giorni</label><input id="f-giorni" type="number" min="1" value="7"></div><div class="form-row-2"><div class="form-row"><label>Azione</label><select id="f-azione"><option value="sconto">Sconto (%)</option><option value="aumento">Aumento (%)</option><option value="fisso">Prezzo fisso (EUR)</option></select></div><div class="form-row"><label>Valore</label><input id="f-valore" type="number" min="0" value="10"></div></div><button class="save-btn" onclick="saveRule()">Salva regola</button>';}
+  }
 };
-window.closeLightbox = function() {
-  document.getElementById('foto-lightbox').classList.remove('open');
+
+window._urf = function(){ var c=document.getElementById('f-condizione'); var r=document.getElementById('f-giorni-row'); if(r)r.style.display=c&&c.value==='weekend'?'none':'block'; };
+window._om = function(type,data){ editingId=data?data.id:null; var def=modalDefs[type]; if(!def)return; document.getElementById('modal-title').textContent=(editingId?'Modifica ':'Aggiungi ')+def.title; document.getElementById('modal-body').innerHTML=def.html(data||{}); document.getElementById('modal-overlay').classList.add('open'); };
+window._cm = function(){ document.getElementById('modal-overlay').classList.remove('open'); editingId=null; };
+
+function v(id){ var el=document.getElementById(id); return el?(el.value||'').trim():''; }
+
+window._sb = async function(){
+  var ospiti=Number(v('f-ospiti'))||1;
+  var data={nome:v('f-nome'),piattaforma:v('f-piattaforma'),checkin:v('f-checkin'),checkout:v('f-checkout'),prezzo:Number(v('f-prezzo'))||0,ospiti:ospiti,stato:v('f-stato'),note:v('f-note'),updatedAt:serverTimestamp()};
+  if(!data.nome||!data.checkin||!data.checkout){toast('Compila i campi obbligatori');return;}
+  if(editingId) await updateDoc(doc(db,'bookings',editingId),data);
+  else await addDoc(collection(db,'bookings'),Object.assign(data,{createdAt:serverTimestamp()}));
+  window._cm(); toast(editingId?'Prenotazione aggiornata':'Prenotazione aggiunta');
 };
+window._sm = async function(){
+  var data={titolo:v('f-titolo'),trigger:v('f-trigger'),testo:v('f-testo'),updatedAt:serverTimestamp()};
+  if(!data.titolo||!data.testo){toast('Compila tutti i campi');return;}
+  if(editingId) await updateDoc(doc(db,'messages',editingId),data);
+  else await addDoc(collection(db,'messages'),Object.assign(data,{createdAt:serverTimestamp()}));
+  window._cm(); toast('Template salvato');
+};
+window._stk = async function(){
+  var data={descrizione:v('f-descrizione'),zona:v('f-zona'),assegnata:v('f-assegnata'),done:false,updatedAt:serverTimestamp()};
+  if(!data.descrizione){toast('Inserisci descrizione');return;}
+  if(editingId) await updateDoc(doc(db,'tasks',editingId),data);
+  else await addDoc(collection(db,'tasks'),Object.assign(data,{createdAt:serverTimestamp()}));
+  window._cm(); toast('Attivita salvata');
+};
+window._sp = async function(){
+  var data={nome:v('f-nome'),descrizione:v('f-descrizione'),prezzo:Number(v('f-prezzo'))||0,tipo:v('f-tipo'),updatedAt:serverTimestamp()};
+  if(!data.nome||!data.prezzo){toast('Nome e prezzo obbligatori');return;}
+  if(editingId) await updateDoc(doc(db,'prices',editingId),data);
+  else await addDoc(collection(db,'prices'),Object.assign(data,{createdAt:serverTimestamp()}));
+  window._cm(); toast('Prezzo salvato');
+};
+window._sr = async function(){
+  var data={nome:v('f-nome'),condizione:v('f-condizione'),giorni:Number(v('f-giorni'))||7,azione:v('f-azione'),valore:Number(v('f-valore'))||10,attiva:true,updatedAt:serverTimestamp()};
+  if(!data.nome){toast('Dai un nome alla regola');return;}
+  await addDoc(collection(db,'rules'),Object.assign(data,{createdAt:serverTimestamp()}));
+  window._cm(); toast('Regola salvata');
+};
+window._eb = function(id){var b=bookings.find(function(x){return x.id===id;});if(b)window._om('booking',b);};
+window._em = function(id){var m=messages.find(function(x){return x.id===id;});if(m)window._om('message',m);};
+window._ep = function(id){var p=prices.find(function(x){return x.id===id;});if(p)window._om('price',p);};
+window._di = async function(coll,id){if(!confirm('Eliminare?'))return;await deleteDoc(doc(db,coll,id));toast('Eliminato');};
 
-// Import mancante setDoc
-var _setDoc = null;
+// DEFAULT TEMPLATES
+var T={
+  benvenuto:{titolo:'Messaggio di benvenuto',trigger:'Al check-in',testo:'Caro/a {nome},\n\nBenvenuto/a nel mio appartamento a Firenze!\nSono felice di ospitarti per queste {notti} notti.\n\nAccesso:\nIndirizzo: Via Capo di Mondo 76, 50136 Firenze\nCodice cassetta chiavi: [CODICE]\nCheck-in: dalle 15:00\nCheck-out: entro le 10:00\n\nWiFi:\nRete: [NOME RETE]\nPassword: [PASSWORD]\n\nTrasporti:\nBus 6A, 6B, 17 a 2 min a piedi - centro in 20 min\nTaxi: ItTaxi app o tel. 055 3131\n\nBuon soggiorno a Firenze!\nSean'},
+  guidabenvenuto:{titolo:'Guida del quartiere',trigger:'Al check-in',testo:'Ciao {nome}!\n\nEcco la mia guida al quartiere Campo di Marte / Le Cure.\n\nATTRAZIONI A PIEDI:\nBasilica di Santa Croce - 15 min\nMercato di Sant Ambrogio - 10 min\nPiazza Massimo D Azeglio - 5 min\nPiazzale Michelangelo - 25 min (tramonto!)\n\nCENTRO STORICO (20-30 min in bus):\nGalleria degli Uffizi - prenotare online!\nDuomo e Cupola del Brunelleschi\nGalleria dell Accademia - il David\n\nDOVE MANGIARE:\nCotta a Puntino (Via Guido Biagi 6) - pizza\nMercato di Sant Ambrogio - pranzo tra i locali\n\nTRASPORTI:\nBus 6A, 6B, 17 - centro in 20 min\nStazione Campo di Marte - 10 min a piedi\nTaxi: ItTaxi app o 055 3131\n\nBuona esplorazione!\nSean'},
+  prearrivo:{titolo:'Promemoria pre-arrivo',trigger:'2 giorni prima',testo:'Ciao {nome}!\n\nMancano 2 giorni al tuo soggiorno!\n\nRiepilogo:\nCheck-in: {checkin}\nCheck-out: {checkout}\nIndirizzo: Via Capo di Mondo 76, 50136 Firenze\n\nCome arrivare:\n\nDall aeroporto Vespucci:\nTram T2 verso SMN, poi bus 6A/6B (35 min, 2,50 EUR)\nTaxi: 28 EUR tariffa fissa\nApp: ItTaxi (tel. 055 3131)\n\nDalla Stazione SMN:\nBus 6A, 6B o 17 - 20 min, 1,70 EUR\n\nA presto!\nSean'},
+  metasoggiorno:{titolo:'Messaggio meta soggiorno',trigger:'Personalizzato',testo:'Ciao {nome}!\n\nSpero che il tuo soggiorno stia andando alla grande!\n\nVolevo assicurarmi che tutto sia di tuo gradimento.\n\nConsigli:\nPiazzale Michelangelo - tramonto mozzafiato\nSanta Croce - 10 min a piedi\nMercato di Sant Ambrogio - pranzo tra i locali\n\nBus 6A/6B/17 dalla fermata sotto casa per il centro.\n\nBuon proseguimento!\nSean'},
+  istruzionicheckout:{titolo:'Istruzioni check-out',trigger:'1 giorno prima',testo:'Ciao {nome}!\n\nDomani e il check-out ({checkout}).\n\nOrario: entro le 10:00\n\nPrima di partire:\nLascia le chiavi nella cassetta (stesso codice)\nMetti i piatti in lavastoviglie e avviala\nSvuota il frigorifero\nButta la spazzatura nei bidoni in cortile\nChiudi finestre, balcone e tapparelle\nSpegni luci, climatizzatore e TV\n\nPer l aeroporto:\nBus 6A/6B fino a SMN, poi Tram T2 (40 min, 1,70 EUR)\nTaxi: 28 EUR, tel. 055 3131\n\nBuon viaggio!\nSean'},
+  checkout:{titolo:'Ringraziamento post-soggiorno',trigger:'1 ora dopo checkout',testo:'Caro/a {nome},\n\nGrazie mille per aver soggiornato dal {checkin} al {checkout}!\n\nSpero che il tuo soggiorno a Firenze sia stato indimenticabile.\n\nSe l esperienza ti e piaciuta, ti sarei molto grato/a se potessi lasciare una recensione su Airbnb!\n\nSpero di rivederti presto a Firenze!\n\nUn caro saluto,\nSean'}
+};
+window._adt = async function(key){ var t=T[key]; if(!t)return; await addDoc(collection(db,'messages'),Object.assign({},t,{createdAt:serverTimestamp(),updatedAt:serverTimestamp()})); toast('Template aggiunto!'); };
 
-// Aggiungi import setDoc
-// Nota: setDoc viene importato dinamicamente se non disponibile
+// HELPERS
+function formatDate(str){ if(!str)return '-'; return new Date(str+'T12:00:00').toLocaleDateString('it-IT',{day:'2-digit',month:'short'}); }
+function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},2500); }
 
-// Init
-setTimeout(function(){
-  initNotifiche();
-}, 1000);
-
+renderCalendar();
 </script>
 </body>
 </html>
