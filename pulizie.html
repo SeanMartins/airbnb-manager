@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Checklist Pulizie</title>
 <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a6b4a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+.notif-banner{position:fixed;top:0;left:0;right:0;background:#1a6b4a;color:#fff;padding:10px 16px;font-size:13px;font-weight:500;z-index:400;display:none;align-items:center;justify-content:space-between;gap:10px}
+.notif-banner.show{display:flex}
+</style>
 <style>
   .pulizie-header{text-align:center;padding:24px 20px 12px;background:#fff;border-bottom:1px solid #e8e8e4}
   .pulizie-logo{font-size:36px;margin-bottom:6px}
@@ -23,6 +31,13 @@
 </head>
 <body>
 
+<div class="notif-banner" id="notif-banner">
+  <span>Attiva notifiche per i promemoria pulizie</span>
+  <div style="display:flex;gap:8px">
+    <button onclick="enableNotifiche()" style="background:#fff;color:#1a6b4a;border:none;padding:5px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">Attiva</button>
+    <button onclick="document.getElementById('notif-banner').classList.remove('show')" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.4);padding:5px 10px;border-radius:6px;font-size:12px;cursor:pointer">Dopo</button>
+  </div>
+</div>
 <div class="pulizie-header">
   <div class="pulizie-logo">🧹</div>
   <div class="pulizie-title">Checklist Pulizie</div>
@@ -132,6 +147,45 @@ function toast(msg){
   t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2000);
 }
+
+// NOTIFICHE FCM
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
+import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+var VAPID_KEY = 'INSERISCI_LA_TUA_VAPID_KEY_QUI';
+var messaging = null;
+try { messaging = getMessaging(); } catch(e) {}
+
+function initNotifiche() {
+  if(!messaging) return;
+  if(Notification.permission === 'granted') registraToken();
+  else if(Notification.permission !== 'denied') {
+    document.getElementById('notif-banner').classList.add('show');
+  }
+}
+
+window.enableNotifiche = async function() {
+  document.getElementById('notif-banner').classList.remove('show');
+  var perm = await Notification.requestPermission();
+  if(perm === 'granted') { await registraToken(); toast('Notifiche attivate!'); }
+};
+
+async function registraToken() {
+  if(!messaging || VAPID_KEY === 'INSERISCI_LA_TUA_VAPID_KEY_QUI') return;
+  try {
+    var reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    var token = await getToken(messaging, { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+    if(token) {
+      var { auth } = await import('./firebase.js');
+      var uid = auth.currentUser ? auth.currentUser.uid : 'pulizie';
+      await setDoc(doc(db, 'fcmTokens', uid), {
+        token, uid, role: 'pulizie', updatedAt: serverTimestamp()
+      }, { merge: true });
+    }
+  } catch(e) { console.error(e); }
+}
+
+setTimeout(initNotifiche, 1000);
 </script>
 </body>
 </html>

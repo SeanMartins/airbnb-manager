@@ -1,0 +1,14 @@
+{
+  "name": "Airbnb Manager - Via Gioberti Firenze",
+  "short_name": "AirbnbMgr",
+  "description": "Gestione appartamento Airbnb Firenze",
+  "start_url": "/dashboard.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1a6b4a",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

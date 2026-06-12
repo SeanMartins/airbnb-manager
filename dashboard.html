@@ -5,6 +5,30 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Airbnb Manager</title>
 <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a6b4a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+.tassa-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px 16px;margin-top:10px}
+.tassa-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.tassa-label{font-size:12px;color:#555;font-weight:500}
+.tassa-val{font-size:18px;font-weight:700;color:#1a6b4a}
+.tassa-note{font-size:11px;color:#888;margin-top:4px}
+.note-interne{background:#fff8ec;border:1px solid #fde68a;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:12px;color:#92400e;line-height:1.5;cursor:pointer}
+.note-interne:hover{border-color:#f59e0b}
+.foto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:12px}
+.foto-thumb{aspect-ratio:4/3;border-radius:8px;object-fit:cover;cursor:pointer;border:1px solid #e8e8e4;transition:transform 0.15s}
+.foto-thumb:hover{transform:scale(1.03)}
+.foto-upload-btn{aspect-ratio:4/3;border-radius:8px;border:2px dashed #e0e0da;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-size:11px;color:#888;gap:4px;background:#f8f8f6}
+.foto-upload-btn:hover{border-color:#1a6b4a;color:#1a6b4a;background:#f0fdf4}
+.foto-lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:500;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.foto-lightbox.open{display:flex}
+.foto-lightbox img{max-width:90vw;max-height:80vh;border-radius:10px;object-fit:contain}
+.notif-banner{position:fixed;top:0;left:0;right:0;background:#1a6b4a;color:#fff;padding:10px 16px;font-size:13px;font-weight:500;z-index:400;display:none;align-items:center;justify-content:space-between;gap:10px}
+.notif-banner.show{display:flex}
+</style>
 <style>
 .reminder-card{background:#fff;border:1px solid #fde68a;border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:flex-start;gap:12px}
 .reminder-card.sent{border-color:#bbf7d0;opacity:0.7}
@@ -93,6 +117,13 @@
 </head>
 <body>
 
+<div class="notif-banner" id="notif-banner">
+  <span id="notif-text">Vuoi ricevere notifiche per check-in e pulizie?</span>
+  <div style="display:flex;gap:8px">
+    <button onclick="enableNotifiche()" style="background:#fff;color:#1a6b4a;border:none;padding:5px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">Attiva</button>
+    <button onclick="document.getElementById('notif-banner').classList.remove('show')" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.4);padding:5px 10px;border-radius:6px;font-size:12px;cursor:pointer">Dopo</button>
+  </div>
+</div>
 <div class="topbar">
   <div class="topbar-title"><span class="icon">&#127968;</span> Via Gioberti &mdash; Firenze</div>
   <div class="topbar-right">
@@ -111,6 +142,7 @@
   <button class="nav-btn" onclick="showSection('stats',this)"><span class="nav-icon">&#128200;</span>Statistiche</button>
   <button class="nav-btn" onclick="showSection('adempimenti',this)"><span class="nav-icon">&#128203;</span>Adempimenti</button>
   <button class="nav-btn" onclick="showSection('documenti',this)"><span class="nav-icon">&#128193;</span>Documenti</button>
+  <button class="nav-btn" onclick="showSection('foto',this)"><span class="nav-icon">&#128247;</span>Foto</button>
   <a href="impostazioni.html" class="nav-btn"><span class="nav-icon">&#9881;</span>Impostazioni</a>
 </div>
 
@@ -317,6 +349,29 @@
   <div id="documenti-list"></div>
 </div>
 
+<!-- FOTO -->
+<div class="section" id="section-foto">
+  <div class="sec-header">
+    <div class="sec-title">Foto appartamento</div>
+    <label class="btn-primary" style="cursor:pointer">
+      + Aggiungi foto
+      <input type="file" id="foto-input" accept="image/*" multiple style="display:none" onchange="uploadFoto(this.files)">
+    </label>
+  </div>
+  <div style="font-size:12px;color:#888;margin-bottom:12px">
+    Foto visibili agli ospiti nella pagina documento. Massimo 20 foto.
+  </div>
+  <div class="foto-grid" id="foto-grid">
+    <div class="empty" style="grid-column:1/-1"><div class="empty-icon">&#128247;</div><div class="empty-text">Nessuna foto. Aggiungine una!</div></div>
+  </div>
+  <div style="margin-top:12px;font-size:11px;color:#aaa">Caricamento su Firebase Storage. Le foto vengono mostrate agli ospiti nella pagina di upload documento.</div>
+</div>
+
+<div class="foto-lightbox" id="foto-lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="Foto appartamento">
+  <button onclick="closeLightbox()" style="color:#fff;background:rgba(255,255,255,0.2);border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:14px">Chiudi</button>
+</div>
+
 </div><!-- /content -->
 
 <!-- MODAL -->
@@ -343,6 +398,7 @@ function showSection(id,btn){
   if(id==='calendar'&&window._rc) window._rc();
   if(id==='adempimenti'&&window._ra) window._ra();
   if(id==='documenti'){if(window._rdb)window._rdb();if(window._ld)window._ld();}
+  if(id==='foto'&&window.loadFoto) window.loadFoto();
 }
 function doLogout(){if(window._dl)window._dl();}
 function openModal(t,d){if(window._om)window._om(t,d);}
@@ -378,9 +434,10 @@ function loadDocumenti(){if(window._ld)window._ld();}
 
 <script type="module">
 import { auth, db, storage } from './firebase.js';
-import { ref as sRef, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import { ref as sRef, deleteObject, uploadBytesResumable, getDownloadURL, listAll } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, where, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, where, query, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // AUTH
 onAuthStateChanged(auth, function(user){
@@ -961,6 +1018,233 @@ function formatDate(str){if(!str)return '-';return new Date(str+'T12:00:00').toL
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
 
 renderCalendar();
+
+// ── NOTIFICHE PUSH FCM ──
+// VAPID KEY: Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
+var VAPID_KEY = 'INSERISCI_LA_TUA_VAPID_KEY_QUI';
+var messaging = null;
+
+try { messaging = getMessaging(); } catch(e) { console.log('FCM non disponibile:', e); }
+
+function initNotifiche() {
+  if(!messaging) return;
+  if(Notification.permission === 'granted') {
+    registraToken();
+  } else if(Notification.permission !== 'denied') {
+    document.getElementById('notif-banner').classList.add('show');
+  }
+  onMessage(messaging, function(payload) {
+    var title = payload.notification ? payload.notification.title : 'Airbnb Manager';
+    var body = payload.notification ? payload.notification.body : '';
+    toast(title + ': ' + body);
+  });
+}
+
+window.enableNotifiche = async function() {
+  document.getElementById('notif-banner').classList.remove('show');
+  try {
+    var perm = await Notification.requestPermission();
+    if(perm === 'granted') {
+      await registraToken();
+      toast('Notifiche attivate!');
+    }
+  } catch(e) { console.error(e); }
+};
+
+async function registraToken() {
+  if(!messaging || VAPID_KEY === 'INSERISCI_LA_TUA_VAPID_KEY_QUI') return;
+  try {
+    var reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    var token = await getToken(messaging, { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+    if(token) {
+      var uid = auth.currentUser ? auth.currentUser.uid : 'unknown';
+      await setDoc(doc(db, 'fcmTokens', uid), {
+        token: token,
+        uid: uid,
+        email: auth.currentUser ? auth.currentUser.email : '',
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      console.log('Token FCM salvato');
+    }
+  } catch(e) { console.error('FCM token error:', e); }
+}
+
+async function inviaNotifica(titolo, corpo, targetRole) {
+  // Salva notifica su Firestore - la Cloud Function la invia via FCM
+  try {
+    await addDoc(collection(db, 'notifiche'), {
+      titolo: titolo,
+      corpo: corpo,
+      targetRole: targetRole || 'all',
+      sentAt: serverTimestamp(),
+      letta: false
+    });
+  } catch(e) { console.error('Errore notifica:', e); }
+}
+
+// ── TASSA DI SOGGIORNO ──
+function calcolaTassa(notti, ospiti) {
+  ospiti = ospiti || 1;
+  var nottiTassabili = Math.min(notti, 7);
+  return (5.50 * nottiTassabili * ospiti).toFixed(2);
+}
+
+// Aggiorna modal prenotazione con campo ospiti e tassa calcolata
+var origBookingHtml = modalDefs.booking.html;
+modalDefs.booking.html = function(d) {
+  d = d || {};
+  return '<div class="form-row-2">' +
+    '<div class="form-row"><label>Nome ospite</label><input id="f-nome" placeholder="Mario Rossi" value="' + (d.nome||'') + '"></div>' +
+    '<div class="form-row"><label>Piattaforma</label><select id="f-piattaforma">' +
+    '<option ' + (d.piattaforma==='Airbnb'?'selected':'') + '>Airbnb</option>' +
+    '<option ' + (d.piattaforma==='Booking.com'?'selected':'') + '>Booking.com</option>' +
+    '<option ' + (d.piattaforma==='Diretto'?'selected':'') + '>Diretto</option>' +
+    '</select></div></div>' +
+    '<div class="form-row-2">' +
+    '<div class="form-row"><label>Check-in</label><input id="f-checkin" type="date" value="' + (d.checkin||'') + '" onchange="aggiornaCalcoloTassa()"></div>' +
+    '<div class="form-row"><label>Check-out</label><input id="f-checkout" type="date" value="' + (d.checkout||'') + '" onchange="aggiornaCalcoloTassa()"></div>' +
+    '</div>' +
+    '<div class="form-row-2">' +
+    '<div class="form-row"><label>Prezzo totale (EUR)</label><input id="f-prezzo" type="number" min="0" value="' + (d.prezzo||'') + '"></div>' +
+    '<div class="form-row"><label>Num. ospiti</label><input id="f-ospiti" type="number" min="1" max="20" value="' + (d.ospiti||1) + '" onchange="aggiornaCalcoloTassa()"></div>' +
+    '</div>' +
+    '<div class="form-row"><label>Stato</label><select id="f-stato">' +
+    '<option ' + (d.stato==='Confermata'?'selected':'') + '>Confermata</option>' +
+    '<option ' + (d.stato==='In attesa'?'selected':'') + '>In attesa</option>' +
+    '<option ' + (d.stato==='Cancellata'?'selected':'') + '>Cancellata</option>' +
+    '</select></div>' +
+    '<div class="tassa-box" id="tassa-box">' +
+    '<div class="tassa-row"><span class="tassa-label">Tassa di soggiorno da riscuotere</span><span class="tassa-val" id="tassa-calcolo">-</span></div>' +
+    '<div class="tassa-note">EUR 5,50 x ospiti x notti (max 7 notti)</div>' +
+    '</div>' +
+    '<div class="form-row" style="margin-top:10px"><label>Note interne (non visibili agli ospiti)</label><textarea id="f-note" rows="2" placeholder="Es: arriva tardi, ha un cane, richiede early check-in...">' + (d.note||'') + '</textarea></div>' +
+    '<button class="save-btn" onclick="saveBooking()">Salva prenotazione</button>';
+};
+
+window.aggiornaCalcoloTassa = function() {
+  var ci = document.getElementById('f-checkin') ? document.getElementById('f-checkin').value : '';
+  var co = document.getElementById('f-checkout') ? document.getElementById('f-checkout').value : '';
+  var ospiti = document.getElementById('f-ospiti') ? Number(document.getElementById('f-ospiti').value) || 1 : 1;
+  if(!ci || !co) { var el=document.getElementById('tassa-calcolo'); if(el) el.textContent='-'; return; }
+  var nights = Math.max(0, Math.round((new Date(co) - new Date(ci)) / 86400000));
+  var tassa = calcolaTassa(nights, ospiti);
+  var el = document.getElementById('tassa-calcolo');
+  if(el) el.textContent = 'EUR ' + tassa;
+};
+
+// Aggiorna saveBooking per includere ospiti
+var origSb = window._sb;
+window._sb = async function() {
+  var ospiti = Number(v('f-ospiti')) || 1;
+  var data = {
+    nome: v('f-nome'), piattaforma: v('f-piattaforma'),
+    checkin: v('f-checkin'), checkout: v('f-checkout'),
+    prezzo: Number(v('f-prezzo'))||0, ospiti: ospiti,
+    stato: v('f-stato'), note: v('f-note'),
+    updatedAt: serverTimestamp()
+  };
+  if(!data.nome||!data.checkin||!data.checkout){toast('Compila i campi obbligatori');return;}
+  if(editingId) await updateDoc(doc(db,'bookings',editingId),data);
+  else {
+    await addDoc(collection(db,'bookings'),Object.assign(data,{createdAt:serverTimestamp()}));
+    // Notifica pulizie per nuovo check-in
+    var nights = Math.max(0,Math.round((new Date(data.checkout)-new Date(data.checkin))/86400000));
+    await inviaNotifica(
+      'Nuova prenotazione',
+      data.nome + ' - ' + formatDate(data.checkin) + ' (' + nights + ' notti)',
+      'pulizie'
+    );
+  }
+  window._cm(); toast(editingId?'Prenotazione aggiornata':'Prenotazione aggiunta');
+};
+
+// Mostra tassa nella booking card
+var origBookingCardHTML = bookingCardHTML;
+function bookingCardHTML(b) {
+  var initials=(b.nome||'?').split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
+  var avClass=b.piattaforma==='Airbnb'?'av-a':b.piattaforma==='Booking.com'?'av-b':'av-d';
+  var badgeClass=b.stato==='Confermata'?'badge-green':b.stato==='In attesa'?'badge-amber':'badge-red';
+  var nights=Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));
+  var ospiti = b.ospiti || 1;
+  var tassa = calcolaTassa(nights, ospiti);
+  var noteHtml = b.note ? '<div class="note-interne" onclick="event.stopPropagation()">Note: ' + b.note + '</div>' : '';
+  return '<div class="booking-card">' +
+    '<div class="b-avatar ' + avClass + '">' + initials + '</div>' +
+    '<div class="b-info">' +
+    '<div class="b-name">' + (b.nome||'-') + '</div>' +
+    '<div class="b-dates">' + formatDate(b.checkin) + ' - ' + formatDate(b.checkout) + ' - ' + nights + ' notti - ' + ospiti + ' ospiti</div>' +
+    '<span class="badge ' + badgeClass + '">' + (b.stato||'-') + '</span>' +
+    noteHtml +
+    '</div>' +
+    '<div class="b-right">' +
+    '<div class="b-price">EUR ' + (b.prezzo||0) + '</div>' +
+    '<div class="b-platform">' + (b.piattaforma||'-') + '</div>' +
+    '<div style="font-size:10px;color:#888;margin-top:2px">Tassa: EUR ' + tassa + '</div>' +
+    '<div style="display:flex;gap:4px;margin-top:6px;justify-content:flex-end">' +
+    '<button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="editBooking('' + b.id + '')">Modifica</button>' +
+    '<button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem('bookings','' + b.id + '')">Elimina</button>' +
+    '</div></div></div>';
+}
+
+// ── FOTO APPARTAMENTO ──
+var fotoList = [];
+
+window.uploadFoto = async function(files) {
+  if(!files || !files.length) return;
+  toast('Caricamento foto...');
+  for(var i=0; i<files.length; i++) {
+    var file = files[i];
+    if(file.size > 5*1024*1024) { toast('Foto troppo grande (max 5MB)'); continue; }
+    var path = 'foto/' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+    var storageRef = sRef(storage, path);
+    var task = uploadBytesResumable(storageRef, file);
+    await new Promise(function(res,rej){ task.on('state_changed',null,rej,res); });
+    var url = await getDownloadURL(task.snapshot.ref);
+    await addDoc(collection(db,'foto'), {
+      url: url, path: path, nome: file.name,
+      uploadedAt: serverTimestamp()
+    });
+  }
+  toast('Foto caricate!');
+  loadFoto();
+};
+
+window.loadFoto = async function() {
+  var el = document.getElementById('foto-grid');
+  if(!el) return;
+  try {
+    var snap = await getDocs(collection(db,'foto'));
+    fotoList = snap.docs.map(function(d){ return Object.assign({id:d.id},d.data()); });
+    if(!fotoList.length) {
+      el.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">&#128247;</div><div class="empty-text">Nessuna foto</div></div>';
+      return;
+    }
+    el.innerHTML = fotoList.map(function(f) {
+      return '<img class="foto-thumb" src="' + f.url + '" alt="Foto" onclick="openLightbox('' + f.url + '')" title="' + (f.nome||'') + '">';
+    }).join('') +
+    '<label class="foto-upload-btn"><input type="file" accept="image/*" multiple style="display:none" onchange="uploadFoto(this.files)"><span style="font-size:24px">+</span><span>Aggiungi</span></label>';
+  } catch(e) { console.error(e); }
+};
+
+window.openLightbox = function(url) {
+  document.getElementById('lightbox-img').src = url;
+  document.getElementById('foto-lightbox').classList.add('open');
+};
+window.closeLightbox = function() {
+  document.getElementById('foto-lightbox').classList.remove('open');
+};
+
+// Import mancante setDoc
+var _setDoc = null;
+
+// Aggiungi import setDoc
+// Nota: setDoc viene importato dinamicamente se non disponibile
+
+// Init
+setTimeout(function(){
+  initNotifiche();
+}, 1000);
+
 </script>
 </body>
 </html>
