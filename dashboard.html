@@ -1010,7 +1010,7 @@ renderCalendar();
 
 // ── NOTIFICHE PUSH FCM ──
 // VAPID KEY: Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
-var VAPID_KEY = 'BH2w_4x4VnHhvpJHfm_H-9NDxjB0v0UbNJPQNFj0faHqQuFWElqoYWdT_4xEDa5WESTioKsmT4ZPKik5xkuXtOQ';
+var VAPID_KEY = 'INSERISCI_LA_TUA_VAPID_KEY_QUI';
 var messaging = null;
 
 try { messaging = getMessaging(); } catch(e) { console.log('FCM non disponibile:', e); }
@@ -1157,23 +1157,28 @@ function bookingCardHTML(b) {
   var ospiti=b.ospiti||1;
   var tassa=calcolaTassa(nights,ospiti);
   var noteHtml=b.note?'<div class="note-interne">Note: '+b.note+'</div>':'';
-  var html='<div class="booking-card">';
-  html+='<div class="b-avatar '+avClass+'">'+initials+'</div>';
-  html+='<div class="b-info">';
-  html+='<div class="b-name">'+(b.nome||'-')+'</div>';
-  html+='<div class="b-dates">'+formatDate(b.checkin)+' - '+formatDate(b.checkout)+' - '+nights+' notti - '+ospiti+' ospiti</div>';
-  html+='<span class="badge '+badgeClass+'">'+(b.stato||'-')+'</span>';
-  html+=noteHtml;
-  html+='</div>';
-  html+='<div class="b-right">';
-  html+='<div class="b-price">EUR '+(b.prezzo||0)+'</div>';
-  html+='<div class="b-platform">'+(b.piattaforma||'-')+'</div>';
-  html+='<div style="font-size:10px;color:#888;margin-top:2px">Tassa: EUR '+tassa+'</div>';
-  html+='<div style="display:flex;gap:4px;margin-top:6px;justify-content:flex-end">';
-  html+='<button class="btn-secondary" style="padding:4px 8px;font-size:11px" onclick="editBooking(''+b.id+'')">Modifica</button>';
-  html+='<button class="btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteItem('bookings',''+b.id+'')">Elimina</button>';
-  html+='</div></div></div>';
-  return html;
+  var el=document.createElement('div');
+  el.className='booking-card';
+  el.innerHTML=[
+    '<div class="b-avatar '+avClass+'">'+initials+'</div>',
+    '<div class="b-info">',
+    '<div class="b-name">'+(b.nome||'-')+'</div>',
+    '<div class="b-dates">'+formatDate(b.checkin)+' - '+formatDate(b.checkout)+' - '+nights+' notti - '+ospiti+' ospiti</div>',
+    '<span class="badge '+badgeClass+'">'+(b.stato||'-')+'</span>',
+    noteHtml,
+    '</div>',
+    '<div class="b-right">',
+    '<div class="b-price">EUR '+(b.prezzo||0)+'</div>',
+    '<div class="b-platform">'+(b.piattaforma||'-')+'</div>',
+    '<div style="font-size:10px;color:#888;margin-top:2px">Tassa: EUR '+tassa+'</div>',
+    '<div style="display:flex;gap:4px;margin-top:6px;justify-content:flex-end">',
+    '<button class="btn-secondary" style="padding:4px 8px;font-size:11px" data-id="'+b.id+'" data-action="edit">Modifica</button>',
+    '<button class="btn-danger" style="padding:4px 8px;font-size:11px" data-id="'+b.id+'" data-action="delete">Elimina</button>',
+    '</div></div>'
+  ].join('');
+  el.querySelector('[data-action="edit"]').addEventListener('click',function(e){e.stopPropagation();window._eb(b.id);});
+  el.querySelector('[data-action="delete"]').addEventListener('click',function(e){e.stopPropagation();window._di('bookings',b.id);});
+  return el.outerHTML;
 }
 
 
