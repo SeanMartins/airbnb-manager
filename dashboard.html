@@ -370,6 +370,7 @@ function loadDocumenti() { if(window._loadDocumenti) window._loadDocumenti(); }
 
 <script type="module">
 import { auth, db, storage } from './firebase.js';
+import { ref as storageRef, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   collection, addDoc, getDocs, doc, updateDoc, deleteDoc,
@@ -1299,7 +1300,6 @@ window._deleteItem=async function(coll,id){
 };
 
 // ── DOCUMENTI ──
-import { ref as storageRef, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 let documenti = [];
 
