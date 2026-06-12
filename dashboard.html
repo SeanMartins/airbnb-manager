@@ -100,6 +100,23 @@
 .foto-lightbox img{max-width:90vw;max-height:80vh;border-radius:10px;object-fit:contain}
 .notif-banner{position:fixed;top:0;left:0;right:0;background:#1a6b4a;color:#fff;padding:10px 16px;font-size:13px;font-weight:500;z-index:400;display:none;align-items:center;justify-content:space-between;gap:10px}
 .notif-banner.show{display:flex}
+.spesa-row{background:#fff;border:1px solid #e8e8e4;border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.spesa-icon{font-size:20px;flex-shrink:0}
+.spesa-info{flex:1;min-width:0}
+.spesa-nome{font-size:13px;font-weight:600}
+.spesa-cat{font-size:11px;color:#888;margin-top:2px}
+.spesa-importo{font-size:16px;font-weight:700;color:#991b1b;white-space:nowrap}
+.profitto-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:18px 20px;margin-bottom:20px}
+.profitto-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px}
+.profitto-row:last-child{margin-bottom:0;padding-top:10px;border-top:1px solid #bbf7d0;font-size:15px;font-weight:700}
+.profitto-label{color:#555}
+.profitto-val-green{color:#1a6b4a;font-weight:600}
+.profitto-val-red{color:#991b1b;font-weight:600}
+.report-month-btn{width:100%;padding:12px 16px;background:#fff;border:1px solid #e8e8e4;border-radius:10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:8px;font-family:inherit;transition:border-color 0.15s}
+.report-month-btn:hover{border-color:#1a6b4a}
+.report-month-name{font-size:14px;font-weight:600}
+.report-month-stats{font-size:12px;color:#888}
+.report-month-arrow{font-size:16px;color:#1a6b4a}
 </style>
 </head>
 <body>
@@ -131,6 +148,8 @@
   <button class="nav-btn" onclick="showSection('adempimenti',this)"><span class="nav-icon">&#128203;</span>Adempimenti</button>
   <button class="nav-btn" onclick="showSection('documenti',this)"><span class="nav-icon">&#128193;</span>Documenti</button>
   <button class="nav-btn" onclick="showSection('foto',this)"><span class="nav-icon">&#128247;</span>Foto</button>
+  <button class="nav-btn" onclick="showSection('spese',this)"><span class="nav-icon">&#128184;</span>Spese</button>
+  <button class="nav-btn" onclick="showSection('report',this)"><span class="nav-icon">&#128196;</span>Report</button>
   <a href="impostazioni.html" class="nav-btn"><span class="nav-icon">&#9881;</span>Impostazioni</a>
 </div>
 
@@ -344,6 +363,47 @@
   <button onclick="closeLightbox()" style="color:#fff;background:rgba(255,255,255,0.2);border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:14px">Chiudi</button>
 </div>
 
+<!-- SPESE -->
+<div class="section" id="section-spese">
+  <div class="sec-header">
+    <div class="sec-title">Spese &amp; Profitto netto</div>
+    <button class="btn-primary" onclick="openModal('spesa')">+ Aggiungi spesa</button>
+  </div>
+
+  <div class="profitto-box" id="profitto-box">
+    <div class="profitto-row"><span class="profitto-label">Entrate totali</span><span class="profitto-val-green" id="prf-entrate">-</span></div>
+    <div class="profitto-row"><span class="profitto-label">Spese totali</span><span class="profitto-val-red" id="prf-spese">-</span></div>
+    <div class="profitto-row"><span class="profitto-label">Tasse soggiorno raccolte (stima)</span><span style="color:#92400e;font-weight:600" id="prf-tasse">-</span></div>
+    <div class="profitto-row"><span class="profitto-label">&#128200; Profitto netto</span><span class="profitto-val-green" id="prf-netto">-</span></div>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+    <select id="filter-spesa-mese" onchange="renderSpese()" style="width:auto;padding:6px 10px;font-size:12px">
+      <option value="">Tutti i mesi</option>
+    </select>
+    <select id="filter-spesa-cat" onchange="renderSpese()" style="width:auto;padding:6px 10px;font-size:12px">
+      <option value="">Tutte le categorie</option>
+      <option value="Pulizie">Pulizie</option>
+      <option value="Biancheria">Biancheria</option>
+      <option value="Manutenzione">Manutenzione</option>
+      <option value="Consumabili">Consumabili</option>
+      <option value="Commissioni">Commissioni piattaforma</option>
+      <option value="Altro">Altro</option>
+    </select>
+  </div>
+
+  <div id="spese-list"></div>
+</div>
+
+<!-- REPORT -->
+<div class="section" id="section-report">
+  <div class="sec-header"><div class="sec-title">Report mensili</div></div>
+  <div style="font-size:12px;color:#888;margin-bottom:16px;padding:10px 14px;background:#f8f8f6;border-radius:8px">
+    Seleziona un mese per generare il report PDF da inviare al commercialista.
+  </div>
+  <div id="report-months-list"></div>
+</div>
+
 </div><!-- /content -->
 
 <!-- MODAL -->
@@ -371,6 +431,8 @@ function showSection(id,btn){
   if(id==='adempimenti'&&window._ra) window._ra();
   if(id==='documenti'){if(window._rdb)window._rdb();if(window._ld)window._ld();}
   if(id==='foto'&&window.loadFoto) window.loadFoto();
+  if(id==='report'&&window.renderReportMonths) window.renderReportMonths();
+  if(id==='spese'){ if(window.renderSpese) window.renderSpese(); }
 }
 function doLogout(){if(window._dl)window._dl();}
 function openModal(t,d){if(window._om)window._om(t,d);}
@@ -403,6 +465,7 @@ function copyGuestData(id){if(window._cgd)window._cgd(id);}
 function deleteDocumento(id,p){if(window._dd)window._dd(id,p);}
 function loadDocumenti(){if(window._ld)window._ld();}
 function uploadFoto(f){if(window._uf)window._uf(f);}
+function saveSpesa(){if(window._sspesa)window._sspesa();}
 function openLightbox(u){if(window._ol)window._ol(u);}
 function closeLightbox(){if(window._cl)window._cl();}
 function enableNotifiche(){if(window._en)window._en();}
@@ -428,7 +491,7 @@ var calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
 var editingId=null, currentSentKey=null;
 
 function init(){
-  listenBookings(); listenTasks(); listenMessages(); listenPrices(); listenRules();
+  listenBookings(); listenTasks(); listenMessages(); listenPrices(); listenRules(); listenSpese();
   setTimeout(initNotifiche, 2000);
 }
 
@@ -470,7 +533,7 @@ function listenBookings(){
   onSnapshot(collection(db,'bookings'), function(snap){
     bookings=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
     bookings.sort(function(a,b){return new Date(a.checkin)-new Date(b.checkin);});
-    renderDashboard(); renderBookings(); renderCalendar(); renderStats(); renderReminders(); renderAdempimenti(); renderDocBookings();
+    renderDashboard(); renderBookings(); renderCalendar(); renderStats(); renderReminders(); renderAdempimenti(); renderDocBookings(); renderProfitto();
   });
 }
 function listenTasks(){
@@ -1055,6 +1118,10 @@ var modalDefs={
     title:'Periodo prezzi',
     html:function(d){d=d||{};return '<div class="form-row"><label>Nome periodo</label><input id="f-nome" placeholder="es. Alta stagione" value="'+(d.nome||'')+'"></div><div class="form-row"><label>Descrizione</label><input id="f-descrizione" placeholder="es. Giu - Set" value="'+(d.descrizione||'')+'"></div><div class="form-row-2"><div class="form-row"><label>Prezzo/notte (EUR)</label><input id="f-prezzo" type="number" min="0" value="'+(d.prezzo||'')+'"></div><div class="form-row"><label>Tipo</label><select id="f-tipo"><option '+(d.tipo==='Normale'?'selected':'')+'>Normale</option><option '+(d.tipo==='Alta'?'selected':'')+'>Alta</option><option '+(d.tipo==='Evento'?'selected':'')+'>Evento</option></select></div></div><button class="save-btn" onclick="savePrice()">Salva prezzo</button>';}
   },
+  spesa:{
+    title:'Nuova spesa',
+    html:function(d){d=d||{};return '<div class="form-row"><label>Descrizione</label><input id="f-nome" placeholder="es. Pulizie maggio" value="'+(d.nome||'')+'"></div><div class="form-row-2"><div class="form-row"><label>Categoria</label><select id="f-categoria"><option '+(d.categoria==='Pulizie'?'selected':'')+'>Pulizie</option><option '+(d.categoria==='Biancheria'?'selected':'')+'>Biancheria</option><option '+(d.categoria==='Manutenzione'?'selected':'')+'>Manutenzione</option><option '+(d.categoria==='Consumabili'?'selected':'')+'>Consumabili</option><option '+(d.categoria==='Commissioni'?'selected':'')+'>Commissioni</option><option '+(d.categoria==='Altro'?'selected':'')+'>Altro</option></select></div><div class="form-row"><label>Importo (EUR)</label><input id="f-importo" type="number" min="0" step="0.01" placeholder="0.00" value="'+(d.importo||'')+'"></div></div><div class="form-row"><label>Data</label><input id="f-data" type="date" value="'+(d.data||new Date().toISOString().split('T')[0])+'"></div><div class="form-row"><label>Note (opzionale)</label><input id="f-note" placeholder="es. Maria - 3 ore" value="'+(d.note||'')+'"></div><button class="save-btn" onclick="window._sspesa ? window._sspesa() : saveSpesa()">Salva spesa</button>';}
+  },
   rule:{
     title:'Nuova regola dinamica',
     html:function(){return '<div class="form-row"><label>Nome regola</label><input id="f-nome" placeholder="es. Sconto last minute"></div><div class="form-row"><label>Condizione</label><select id="f-condizione" onchange="updateRuleForm()"><option value="last_minute">Last minute (X giorni prima)</option><option value="weekend">Weekend (ven/sab/dom)</option><option value="anticipo">Prenotazione anticipata</option></select></div><div class="form-row" id="f-giorni-row"><label>Numero giorni</label><input id="f-giorni" type="number" min="1" value="7"></div><div class="form-row-2"><div class="form-row"><label>Azione</label><select id="f-azione"><option value="sconto">Sconto (%)</option><option value="aumento">Aumento (%)</option><option value="fisso">Prezzo fisso (EUR)</option></select></div><div class="form-row"><label>Valore</label><input id="f-valore" type="number" min="0" value="10"></div></div><button class="save-btn" onclick="saveRule()">Salva regola</button>';}
@@ -1118,7 +1185,191 @@ var T={
 };
 window._adt = async function(key){ var t=T[key]; if(!t)return; await addDoc(collection(db,'messages'),Object.assign({},t,{createdAt:serverTimestamp(),updatedAt:serverTimestamp()})); toast('Template aggiunto!'); };
 
+// SPESE
+var spese = [];
+
+function listenSpese(){
+  onSnapshot(collection(db,'spese'), function(snap){
+    spese = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    spese.sort(function(a,b){return (b.data||'').localeCompare(a.data||'');});
+    renderSpese();
+    renderProfitto();
+    aggiornaFiltroMesi();
+  });
+}
+
+var catIcons = {'Pulizie':'&#129529;','Biancheria':'&#128717;','Manutenzione':'&#128295;','Consumabili':'&#128722;','Commissioni':'&#128184;','Altro':'&#128198;'};
+
+window.renderSpese = function(){
+  var el = document.getElementById('spese-list');
+  if(!el) return;
+  var meseF = document.getElementById('filter-spesa-mese') ? document.getElementById('filter-spesa-mese').value : '';
+  var catF = document.getElementById('filter-spesa-cat') ? document.getElementById('filter-spesa-cat').value : '';
+  var filtered = spese.filter(function(s){
+    if(meseF && !(s.data||'').startsWith(meseF)) return false;
+    if(catF && s.categoria !== catF) return false;
+    return true;
+  });
+  el.innerHTML = '';
+  if(!filtered.length){ el.innerHTML = '<div class="empty"><div class="empty-icon">&#128184;</div><div class="empty-text">Nessuna spesa. Aggiungine una!</div></div>'; return; }
+  filtered.forEach(function(s){
+    var div = document.createElement('div');
+    div.className = 'spesa-row';
+    div.innerHTML = '<div class="spesa-icon">'+(catIcons[s.categoria]||'&#128198;')+'</div>'+
+      '<div class="spesa-info"><div class="spesa-nome">'+(s.nome||'-')+'</div>'+
+      '<div class="spesa-cat">'+(s.categoria||'-')+' &nbsp;|&nbsp; '+(s.data||'-')+'</div>'+
+      (s.note?'<div style="font-size:11px;color:#aaa;margin-top:2px">'+(s.note)+'</div>':'')+
+      '</div>'+
+      '<div class="spesa-importo">- EUR '+(Number(s.importo||0).toFixed(2))+'</div>';
+    var btns = document.createElement('div');
+    btns.style = 'display:flex;gap:4px;flex-shrink:0';
+    var e = document.createElement('button'); e.className='btn-secondary'; e.style='padding:4px 8px;font-size:11px'; e.textContent='Modifica';
+    e.addEventListener('click',function(){window._esp(s.id);});
+    var d = document.createElement('button'); d.className='btn-danger'; d.style='padding:4px 8px;font-size:11px'; d.textContent='Elimina';
+    d.addEventListener('click',function(){window._di('spese',s.id);});
+    btns.appendChild(e); btns.appendChild(d);
+    div.appendChild(btns);
+    el.appendChild(div);
+  });
+};
+
+function renderProfitto(){
+  var totEntrate = bookings.filter(function(b){return b.stato!=='Cancellata';}).reduce(function(s,b){return s+Number(b.prezzo||0);},0);
+  var totSpese = spese.reduce(function(s,sp){return s+Number(sp.importo||0);},0);
+  var totTasse = bookings.filter(function(b){return b.stato!=='Cancellata';}).reduce(function(s,b){
+    var nights = Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));
+    return s + (5.50 * Math.min(nights,7) * (b.ospiti||1));
+  },0);
+  var netto = totEntrate - totSpese;
+  function sid(id){return document.getElementById(id);}
+  if(sid('prf-entrate')) sid('prf-entrate').textContent = 'EUR '+totEntrate.toLocaleString('it-IT');
+  if(sid('prf-spese')) sid('prf-spese').textContent = '- EUR '+totSpese.toFixed(2);
+  if(sid('prf-tasse')) sid('prf-tasse').textContent = 'EUR '+totTasse.toFixed(2);
+  if(sid('prf-netto')){ sid('prf-netto').textContent = 'EUR '+netto.toLocaleString('it-IT'); sid('prf-netto').style.color = netto>=0?'#1a6b4a':'#991b1b'; }
+}
+
+function aggiornaFiltroMesi(){
+  var sel = document.getElementById('filter-spesa-mese');
+  if(!sel) return;
+  var mesi = [...new Set(spese.map(function(s){return (s.data||'').slice(0,7);}).filter(Boolean))].sort().reverse();
+  var cur = sel.value;
+  sel.innerHTML = '<option value="">Tutti i mesi</option>';
+  mesi.forEach(function(m){ sel.innerHTML += '<option value="'+m+'" '+(cur===m?'selected':'')+'>'+m+'</option>'; });
+}
+
+window._esp = function(id){ var s=spese.find(function(x){return x.id===id;}); if(s) window._om('spesa',s); };
+
+// SALVA SPESA
+window._sspesa = async function(){
+  var data={nome:v('f-nome'),categoria:v('f-categoria'),importo:Number(v('f-importo'))||0,data:v('f-data'),note:v('f-note'),updatedAt:serverTimestamp()};
+  if(!data.nome||!data.importo){toast('Nome e importo obbligatori');return;}
+  if(editingId) await updateDoc(doc(db,'spese',editingId),data);
+  else await addDoc(collection(db,'spese'),Object.assign(data,{createdAt:serverTimestamp()}));
+  window._cm(); toast(editingId?'Spesa aggiornata':'Spesa aggiunta');
+};
+
+// REPORT PDF
+window.renderReportMonths = function(){
+  var el = document.getElementById('report-months-list');
+  if(!el) return;
+  var byMonth = {};
+  bookings.filter(function(b){return b.stato!=='Cancellata';}).forEach(function(b){
+    var key = new Date(b.checkin).toLocaleDateString('it-IT',{month:'long',year:'numeric'});
+    var ym = (b.checkin||'').slice(0,7);
+    if(!byMonth[ym]) byMonth[ym] = {label:key, prenotazioni:[], spese:[]};
+    byMonth[ym].prenotazioni.push(b);
+  });
+  spese.forEach(function(s){
+    var ym = (s.data||'').slice(0,7);
+    if(byMonth[ym]) byMonth[ym].spese.push(s);
+  });
+  var months = Object.keys(byMonth).sort().reverse();
+  el.innerHTML = '';
+  if(!months.length){ el.innerHTML='<div class="empty"><div class="empty-icon">&#128196;</div><div class="empty-text">Nessun dato disponibile</div></div>'; return; }
+  months.forEach(function(ym){
+    var data = byMonth[ym];
+    var entrate = data.prenotazioni.reduce(function(s,b){return s+Number(b.prezzo||0);},0);
+    var speseM = data.spese.reduce(function(s,sp){return s+Number(sp.importo||0);},0);
+    var notto = data.prenotazioni.reduce(function(s,b){return s+Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));},0);
+    var btn = document.createElement('button');
+    btn.className = 'report-month-btn';
+    btn.innerHTML = '<div><div class="report-month-name">'+data.label.charAt(0).toUpperCase()+data.label.slice(1)+'</div>'+
+      '<div class="report-month-stats">'+data.prenotazioni.length+' prenotazioni &nbsp;|&nbsp; '+notto+' notti &nbsp;|&nbsp; EUR '+entrate.toLocaleString('it-IT')+(speseM?'  &nbsp;|&nbsp; Spese: EUR '+speseM.toFixed(2):'')+'</div></div>'+
+      '<span class="report-month-arrow">Genera PDF &rarr;</span>';
+    btn.addEventListener('click',function(){ generaPDF(ym, data); });
+    el.appendChild(btn);
+  });
+};
+
+function generaPDF(ym, data){
+  var entrate = data.prenotazioni.reduce(function(s,b){return s+Number(b.prezzo||0);},0);
+  var speseM = data.spese.reduce(function(s,sp){return s+Number(sp.importo||0);},0);
+  var netto = entrate - speseM;
+  var tasse = data.prenotazioni.reduce(function(s,b){
+    var nights=Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));
+    return s+(5.50*Math.min(nights,7)*(b.ospiti||1));
+  },0);
+
+  var html = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8">'+
+    '<title>Report '+data.label+'</title>'+
+    '<style>'+
+    'body{font-family:Arial,sans-serif;font-size:12px;color:#1a1a1a;margin:0;padding:20px}'+
+    'h1{font-size:20px;color:#1a6b4a;margin-bottom:4px}'+
+    '.subtitle{font-size:13px;color:#888;margin-bottom:24px}'+
+    'h2{font-size:14px;color:#1a6b4a;margin:20px 0 8px;border-bottom:1px solid #e0e0da;padding-bottom:4px}'+
+    'table{width:100%;border-collapse:collapse;margin-bottom:16px}'+
+    'th{background:#f0fdf4;color:#1a6b4a;font-size:11px;padding:8px 10px;text-align:left;border:1px solid #e0e0da}'+
+    'td{padding:8px 10px;border:1px solid #e8e8e4;font-size:11px}'+
+    'tr:nth-child(even){background:#f8f8f8}'+
+    '.totale-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px;margin-top:20px}'+
+    '.tot-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid #e0e0da}'+
+    '.tot-row:last-child{border-bottom:none;font-size:15px;font-weight:bold;padding-top:10px}'+
+    '.green{color:#1a6b4a}.red{color:#991b1b}.amber{color:#92400e}'+
+    '.footer{margin-top:40px;font-size:10px;color:#aaa;text-align:center;border-top:1px solid #e0e0da;padding-top:12px}'+
+    '@media print{body{padding:0} .no-print{display:none}}'+
+    '</style></head><body>'+
+    '<button class="no-print" onclick="window.print()" style="background:#1a6b4a;color:#fff;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:20px">&#128438; Stampa / Salva PDF</button>'+
+    '<h1>Report mensile - '+data.label.charAt(0).toUpperCase()+data.label.slice(1)+'</h1>'+
+    '<div class="subtitle">Via Capo di Mondo 76, Firenze &nbsp;|&nbsp; Generato il '+new Date().toLocaleDateString('it-IT')+'</div>'+
+    '<h2>Prenotazioni</h2>'+
+    '<table><tr><th>Ospite</th><th>Piattaforma</th><th>Check-in</th><th>Check-out</th><th>Notti</th><th>Ospiti</th><th>Importo</th><th>Tassa</th><th>Note</th></tr>';
+
+  data.prenotazioni.forEach(function(b){
+    var nights = Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));
+    var tassa = (5.50*Math.min(nights,7)*(b.ospiti||1)).toFixed(2);
+    html += '<tr><td>'+(b.nome||'-')+'</td><td>'+(b.piattaforma||'-')+'</td>'+
+      '<td>'+formatDate(b.checkin)+'</td><td>'+formatDate(b.checkout)+'</td>'+
+      '<td>'+nights+'</td><td>'+(b.ospiti||1)+'</td>'+
+      '<td>EUR '+(b.prezzo||0)+'</td><td>EUR '+tassa+'</td>'+
+      '<td>'+(b.note||'')+'</td></tr>';
+  });
+  html += '</table>';
+
+  if(data.spese.length){
+    html += '<h2>Spese</h2><table><tr><th>Descrizione</th><th>Categoria</th><th>Data</th><th>Importo</th><th>Note</th></tr>';
+    data.spese.forEach(function(s){
+      html += '<tr><td>'+(s.nome||'-')+'</td><td>'+(s.categoria||'-')+'</td><td>'+(s.data||'-')+'</td><td>EUR '+(Number(s.importo||0).toFixed(2))+'</td><td>'+(s.note||'')+'</td></tr>';
+    });
+    html += '</table>';
+  }
+
+  html += '<div class="totale-box">'+
+    '<div class="tot-row"><span>Entrate lorde</span><span class="green">EUR '+entrate.toLocaleString('it-IT')+'</span></div>'+
+    '<div class="tot-row"><span>Spese</span><span class="red">- EUR '+speseM.toFixed(2)+'</span></div>'+
+    '<div class="tot-row"><span>Tassa di soggiorno raccolta</span><span class="amber">EUR '+tasse.toFixed(2)+'</span></div>'+
+    '<div class="tot-row"><span>Profitto netto</span><span class="'+(netto>=0?'green':'red')+'">EUR '+netto.toLocaleString('it-IT')+'</span></div>'+
+    '</div>'+
+    '<div class="footer">Report generato automaticamente da Airbnb Manager | Via Capo di Mondo 76, Firenze</div>'+
+    '</body></html>';
+
+  var blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  window.open(url,'_blank');
+  toast('Report aperto! Usa Stampa per salvare come PDF.');
+}
+
 // HELPERS
+
 function formatDate(str){ if(!str)return '-'; return new Date(str+'T12:00:00').toLocaleDateString('it-IT',{day:'2-digit',month:'short'}); }
 function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},2500); }
 
