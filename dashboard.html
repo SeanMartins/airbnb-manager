@@ -536,6 +536,7 @@ function renderMessages(){
     <div style="margin-top:16px">
       <div style="font-size:13px;font-weight:600;margin-bottom:10px">🚀 Template pronti da usare:</div>
       <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('benvenuto')">+ Messaggio di benvenuto (check-in)</button>
+      <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('guidabenvenuto')">+ Guida del quartiere con attrazioni e ristoranti</button>
       <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('prearrivo')">+ Promemoria pre-arrivo (2 giorni prima)</button>
       <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('metasoggiorno')">+ Messaggio metà soggiorno</button>
       <button class="btn-secondary" style="width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px" onclick="addDefaultTemplate('istruzionicheckout')">+ Istruzioni per il check-out (1 giorno prima)</button>
@@ -567,15 +568,38 @@ const defaultTemplates = {
 
 Benvenuto/a nel mio appartamento a Firenze! 🏠
 
-Sono felice di ospitarti. Ecco le informazioni per il tuo arrivo:
+Sono felice di ospitarti per queste {notti} notti. Ecco tutto quello che ti serve sapere:
 
-📍 Indirizzo: Via Gioberti, Firenze
-🔑 Codice cassetta chiavi: [inserisci codice]
-📶 WiFi: [nome rete] — Password: [password]
+🔑 Accesso all'appartamento:
+• Indirizzo: Via Capo di Mondo 76, 50136 Firenze
+• Codice cassetta chiavi: [INSERISCI CODICE]
+• Check-in: dalle ore 15:00
+• Check-out: entro le ore 10:00
 
-Il check-in è dalle ore 15:00. Se arrivi prima, posso provare ad organizzarmi.
+📶 WiFi:
+• Rete: [NOME RETE]
+• Password: [PASSWORD]
 
-Non esitare a contattarmi per qualsiasi necessità!
+🚌 Come spostarti dal quartiere:
+• Bus 6A, 6B, 17 → fermata a 2 min a piedi → centro in 20 min
+• Stazione Campo di Marte → a 10 min a piedi (treni regionali)
+• Taxi: ItTaxi app o chiama il 055 3131
+
+🏛️ Da non perdere nei dintorni:
+• Basilica di Santa Croce → 15 min a piedi
+• Mercato di Sant'Ambrogio → 10 min a piedi
+• Piazzale Michelangelo → 25 min a piedi (tramonto spettacolare!)
+• Galleria degli Uffizi → 20 min in bus o 30 min a piedi
+
+🍽️ Dove mangiare vicino a casa:
+• Cotta a Puntino (Via Guido Biagi) → ottima pizza, a 5 min
+• Mercato Sant'Ambrogio → pranzo tra i locali, a 10 min
+• Le Delizie del Palato → cucina toscana autentica, vicino allo stadio
+
+🛒 Supermercati:
+• Esselunga / Conad in zona, a 5-10 min a piedi
+
+Per qualsiasi domanda o necessità, sono sempre disponibile. Scrivimi qui su Airbnb!
 
 Buon soggiorno a Firenze 🌸
 Sean`
@@ -585,19 +609,35 @@ Sean`
     trigger:'2 giorni prima',
     testo:`Ciao {nome}! 👋
 
-Mancano solo {notti} giorni al tuo soggiorno a Firenze — non vediamo l'ora di accoglierti!
+Mancano 2 giorni al tuo soggiorno a Firenze — non vediamo l'ora di accoglierti!
 
-Ecco un breve riepilogo:
+📋 Riepilogo:
 📅 Check-in: {checkin}
 📅 Check-out: {checkout}
-📍 Via Gioberti, Firenze (Campo di Marte)
+📍 Via Capo di Mondo 76, 50136 Firenze (quartiere Campo di Marte)
 
-🚌 Come raggiungerci:
-• Dal centro: tram T1 o autobus linea 6
-• Dall'aeroporto: Volainbus + tram o taxi (~25 min)
-• Stazione SMN: 15 minuti in taxi
+🚇 Come raggiungere l'appartamento:
 
-Per qualsiasi domanda sono a tua disposizione. A presto!
+✈️ Dall'aeroporto Vespucci (FLR):
+• Tram T2 → SMN, poi bus 6A/6B o 17 fino a Via Capo di Mondo (~35 min, ~€2,50)
+• Taxi: tariffa fissa €28 fino al centro, ~15-20 min
+• App taxi: ItTaxi (tel. 055 3131) o AppTaxi
+
+🚂 Dalla Stazione SMN (Santa Maria Novella):
+• Bus 6A, 6B o 17 → fermata Landucci/Fra' Paolo Sarpi, 2 min a piedi (~20 min, €1,70)
+• Taxi: ~€11-13, circa 10-15 min
+
+🚉 Da Firenze Campo di Marte (treno):
+• A piedi: ~10 minuti
+
+🚌 Bus utili dalla zona:
+Linee 6A, 6B, 17, 23A, 23B — fermata a 2 minuti a piedi
+
+🅿️ In auto:
+Parcheggio disponibile in strada nelle vie limitrofe.
+La zona non è in area ZTL — nessuna restrizione di accesso.
+
+Per qualsiasi domanda sono a tua disposizione. A presto! 😊
 
 Sean`
   },
@@ -606,13 +646,15 @@ Sean`
     trigger:'1 ora dopo checkout',
     testo:`Caro/a {nome},
 
-Grazie mille per aver soggiornato nel mio appartamento! 🙏
+Grazie mille per aver soggiornato nel mio appartamento dal {checkin} al {checkout}! 🙏
 
-Spero che il tuo soggiorno a Firenze sia stato indimenticabile e che tu abbia potuto goderti al meglio questa meravigliosa città.
+Spero che il tuo soggiorno a Firenze sia stato indimenticabile e che tu abbia potuto goderti questa meravigliosa città.
 
-⭐ Se ti è piaciuta l'esperienza, ti sarei molto grato/a se potessi lasciare una recensione su Airbnb — ci vogliono solo 2 minuti e per me fa una grande differenza!
+⭐ Se l'esperienza ti è piaciuta, ti sarei molto grato/a se potessi lasciare una recensione su Airbnb — ci vogliono solo 2 minuti e per me fa una grande differenza!
 
-Spero di rivederti presto a Firenze. Sei sempre il/la benvenuto/a! 😊
+👉 Puoi lasciare la recensione direttamente dall'app Airbnb o dal sito, nella sezione "I tuoi viaggi".
+
+Spero di rivederti presto a Firenze — sei sempre il/la benvenuto/a! 😊
 
 Un caro saluto,
 Sean`
@@ -624,14 +666,23 @@ Sean`
 
 Spero che il tuo soggiorno a Firenze stia andando alla grande!
 
-Volevo solo fare un saluto e assicurarmi che tutto sia di tuo gradimento nell'appartamento.
+Volevo solo salutarti e assicurarmi che tutto sia di tuo gradimento nell'appartamento.
 
-🏛️ Se hai bisogno di consigli su ristoranti, musei o cosa vedere nei dintorni, sono felice di aiutarti!
+🏛️ Se hai bisogno di consigli su cosa vedere o dove mangiare, sono felice di aiutarti! Qualche idea dal quartiere:
 
-Qualche consiglio rapido:
-• Mercato Centrale → ottimo per pranzo, a 15 min a piedi
-• Piazzale Michelangelo → tramonto spettacolare, da non perdere
-• Osteria dell'Enoteca → per una cena speciale
+🍽️ Dove mangiare vicino a casa:
+• Trattoria da Ruggero (Via Senese) → cucina toscana autentica
+• Mercato di Sant'Ambrogio → pranzo tra i locali, a 10 min a piedi
+• Buca Mario → una delle osterie storiche di Firenze
+
+🏛️ Da non perdere assolutamente:
+• Piazzale Michelangelo → tramonto mozzafiato, 20 min a piedi
+• Santa Croce → a 10 min a piedi, tomba di Michelangelo e Galileo
+• Oltrarno → il quartiere più autentico, 15 min a piedi
+
+🚌 Per spostarti:
+• Bus 6A/6B/17 dalla fermata sotto casa → centro in 20 min
+• Bici/monopattino elettrico: Lime e Dott disponibili in zona
 
 Non esitare a scrivermi per qualsiasi cosa. Buon proseguimento! 🌺
 
@@ -647,25 +698,83 @@ Il tuo soggiorno sta per concludersi — domani è il giorno del check-out ({che
 Ecco le istruzioni per lasciare l'appartamento:
 
 🕐 Orario check-out: entro le ore 10:00
-(Se hai bisogno di più tempo, scrivimi e vedo cosa posso fare)
+(Se hai bisogno di più tempo, scrivimi prima — cercherò di aiutarti!)
 
-✅ Prima di partire:
-• Lascia le chiavi nella cassetta fuori dalla porta
-• Metti i piatti usati in lavastoviglie e avviala
-• Svuota il frigorifero da alimenti deperibili
-• Butta la spazzatura nei bidoni in cortile
-• Chiudi bene finestre e balcone
-• Abbassa le tapparelle
+✅ Prima di partire, ti chiedo gentilmente di:
+• Lasciare le chiavi nella cassetta fuori dalla porta (stesso codice dell'arrivo)
+• Mettere i piatti usati in lavastoviglie e avviarla
+• Svuotare il frigorifero da alimenti deperibili
+• Buttare la spazzatura nei bidoni condominiali in cortile
+• Chiudere bene finestre, balcone e tapparelle
+• Spegnere luci, climatizzatore e TV
 
 🧳 Bagagli:
-Se hai bisogno di lasciare i bagagli dopo il check-out, posso organizzarmi — scrivimi!
+Se hai bisogno di lasciare i bagagli dopo il check-out per qualche ora, scrivimi — posso organizzarmi!
 
-È stato un piacere ospitarti. Buon viaggio di ritorno! ✈️
+✈️ Come raggiungere l'aeroporto Vespucci:
+• Tram T2 da SMN: prendi il bus 6A/6B fino a SMN, poi T2 per l'aeroporto (~40 min, €1,70)
+• Taxi: ~€28 tariffa fissa, chiama ItTaxi al 055 3131
+
+🚂 Stazione Campo di Marte (treni regionali):
+• A 10 minuti a piedi da casa
+
+È stato un vero piacere ospitarti. Buon viaggio di ritorno! ✈️
 
 Sean`
   }
 };
 
+  guidabenvenuto:{
+    titolo:'Guida del quartiere',
+    trigger:'Al check-in',
+    testo:`Ciao {nome}! 🗺️
+
+Ecco la mia guida personale al quartiere Campo di Marte / Le Cure — la zona più autentica di Firenze, lontana dal caos turistico ma vicinissima a tutto!
+
+🏛️ ATTRAZIONI A PIEDI DA CASA:
+• Basilica di Santa Croce → 15 min (tomba di Michelangelo e Galileo!)
+• Mercato di Sant'Ambrogio → 10 min (il mercato preferito dai fiorentini)
+• Piazza Massimo D'Azeglio → 5 min (bellissima per una passeggiata)
+• Piazzale Michelangelo → 25 min (tramonto da non perdere!)
+• Arno e Lungarni → 20 min a piedi
+• Stadio Artemio Franchi → 10 min (se c'è la Fiorentina, l'atmosfera è unica!)
+
+🏛️ CENTRO STORICO (20-30 min in bus o a piedi):
+• Galleria degli Uffizi → prenotare online con anticipo!
+• Duomo e Cupola del Brunelleschi → accesso gratuito alla cattedrale
+• Galleria dell'Accademia → il David di Michelangelo
+• Palazzo Pitti e Giardino di Boboli
+• Ponte Vecchio e Oltrarno
+
+🍽️ DOVE MANGIARE (i miei preferiti):
+• Cotta a Puntino (Via Guido Biagi 6) → miglior pizza della zona ⭐
+• Mercato di Sant'Ambrogio → pranzo autentico tra i locali, prezzi onesti
+• Le Delizie del Palato → cucina toscana e napoletana, zona stadio
+• Trattoria L'Oriuolo → cucina fiorentina tradizionale, centro storico
+• Per un aperitivo: i bar in Piazza D'Azeglio e lungo Viale Mazzini
+
+☕ COLAZIONE:
+• I bar del quartiere aprono dalle 7:00 — cornetto e cappuccino come i fiorentini!
+
+🛒 DOVE FARE LA SPESA:
+• Supermercato Conad / Esselunga → a 5-10 min a piedi
+• Mercato Sant'Ambrogio (mattina) → frutta, verdura e prodotti locali freschi
+
+🚌 TRASPORTI DAL QUARTIERE:
+• Bus 6A, 6B, 17 → centro in 20 min, fermata a 2 min da casa
+• Stazione Campo di Marte → 10 min a piedi (treni per tutta la Toscana!)
+• Taxi: app ItTaxi o chiama 055 3131
+• Bici/monopattino: Lime e Dott disponibili in zona
+
+💡 CONSIGLI PRATICI:
+• Biglietto bus: €1,70 (90 min), acquistabile in tabaccheria o con app Autolinee Toscane
+• Musei: prenota sempre online per evitare code enormi
+• ZTL: il centro storico è ZTL — non entrare in auto senza permesso!
+• Farmacia: in Via Gioberti a 5 min
+
+Sono sempre disponibile per altri consigli. Buona esplorazione! 🌸
+Sean`
+  },
 window.addDefaultTemplate = async function(key){
   const t = defaultTemplates[key];
   if(!t) return;
