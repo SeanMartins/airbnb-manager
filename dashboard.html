@@ -117,6 +117,20 @@
 .report-month-name{font-size:14px;font-weight:600}
 .report-month-stats{font-size:12px;color:#888}
 .report-month-arrow{font-size:16px;color:#1a6b4a}
+.blocco-day{background:#fef2f2;color:#991b1b;border-color:#fecaca !important}
+.blocco-day::after{content:'x';font-size:8px;display:block;line-height:1}
+.val-stars{display:flex;gap:2px;margin:4px 0}
+.val-star{font-size:20px;cursor:pointer;color:#e0e0da;transition:color 0.1s}
+.val-star.active{color:#f59e0b}
+.val-card{background:#fff;border:1px solid #e8e8e4;border-radius:10px;padding:14px 16px;margin-bottom:8px}
+.val-guest{font-size:14px;font-weight:600}
+.val-date{font-size:11px;color:#888;margin-top:2px}
+.val-note{font-size:12px;color:#666;margin-top:6px;font-style:italic}
+.val-badge-green{background:#dcfce7;color:#166534;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.val-badge-amber{background:#fef3c7;color:#92400e;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.val-badge-red{background:#fee2e2;color:#991b1b;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.cal-day.blocco{background:#fef2f2;color:#991b1b;border-color:#fecaca}
+.cal-day.blocco:hover{background:#fee2e2}
 </style>
 </head>
 <body>
@@ -148,6 +162,7 @@
   <button class="nav-btn" onclick="showSection('adempimenti',this)"><span class="nav-icon">&#128203;</span>Adempimenti</button>
   <button class="nav-btn" onclick="showSection('documenti',this)"><span class="nav-icon">&#128193;</span>Documenti</button>
   <button class="nav-btn" onclick="showSection('foto',this)"><span class="nav-icon">&#128247;</span>Foto</button>
+  <button class="nav-btn" onclick="showSection('valutazioni',this)"><span class="nav-icon">&#11088;</span>Ospiti</button>
   <button class="nav-btn" onclick="showSection('spese',this)"><span class="nav-icon">&#128184;</span>Spese</button>
   <button class="nav-btn" onclick="showSection('report',this)"><span class="nav-icon">&#128196;</span>Report</button>
   <a href="impostazioni.html" class="nav-btn"><span class="nav-icon">&#9881;</span>Impostazioni</a>
@@ -205,11 +220,16 @@
     <div class="cal-header">Gio</div><div class="cal-header">Ven</div><div class="cal-header">Sab</div><div class="cal-header">Dom</div>
   </div>
   <div class="cal-grid" id="cal-days" style="margin-top:4px"></div>
-  <div class="cal-legend">
-    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#fff0ec;border:1px solid #fcd9c8"></div>Airbnb</div>
-    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#eff6ff;border:1px solid #bfdbfe"></div>Booking.com</div>
-    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#f0fdf4;border:1px solid #bbf7d0"></div>Diretto</div>
+  <div style="margin-top:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <div class="cal-legend">
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#fff0ec;border:1px solid #fcd9c8"></div>Airbnb</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#eff6ff;border:1px solid #bfdbfe"></div>Booking.com</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#f0fdf4;border:1px solid #bbf7d0"></div>Diretto</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#fef2f2;border:1px solid #fecaca"></div>Bloccato</div>
+    </div>
+    <button class="btn-secondary" style="font-size:12px;padding:6px 12px;margin-left:auto" onclick="openModal('blocco')">+ Blocca date</button>
   </div>
+  <div id="blocchi-list" style="margin-top:14px"></div>
 </div>
 
 <!-- MESSAGGI -->
@@ -363,6 +383,28 @@
   <button onclick="closeLightbox()" style="color:#fff;background:rgba(255,255,255,0.2);border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:14px">Chiudi</button>
 </div>
 
+<!-- VALUTAZIONI -->
+<div class="section" id="section-valutazioni">
+  <div class="sec-header">
+    <div class="sec-title">&#11088; Valutazione ospiti</div>
+    <button class="btn-primary" onclick="openModal('valutazione')">+ Aggiungi</button>
+  </div>
+  <div style="font-size:12px;color:#888;margin-bottom:14px;padding:10px 14px;background:#f8f8f6;border-radius:8px">
+    Note private sugli ospiti — non visibili a nessuno. Utile per ricordare se tornano o per altri host.
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:14px">
+    <select id="filter-val-stars" onchange="renderValutazioni()" style="width:auto;padding:6px 10px;font-size:12px">
+      <option value="">Tutti i voti</option>
+      <option value="5">&#11088;&#11088;&#11088;&#11088;&#11088; Eccellente</option>
+      <option value="4">&#11088;&#11088;&#11088;&#11088; Buono</option>
+      <option value="3">&#11088;&#11088;&#11088; Nella media</option>
+      <option value="2">&#11088;&#11088; Scarso</option>
+      <option value="1">&#11088; Pessimo</option>
+    </select>
+  </div>
+  <div id="valutazioni-list"></div>
+</div>
+
 <!-- SPESE -->
 <div class="section" id="section-spese">
   <div class="sec-header">
@@ -432,6 +474,7 @@ function showSection(id,btn){
   if(id==='documenti'){if(window._rdb)window._rdb();if(window._ld)window._ld();}
   if(id==='foto'&&window.loadFoto) window.loadFoto();
   if(id==='report'&&window.renderReportMonths) window.renderReportMonths();
+  if(id==='valutazioni'&&window.renderValutazioni) window.renderValutazioni();
   if(id==='spese'){ if(window.renderSpese) window.renderSpese(); }
 }
 function doLogout(){if(window._dl)window._dl();}
@@ -466,6 +509,8 @@ function deleteDocumento(id,p){if(window._dd)window._dd(id,p);}
 function loadDocumenti(){if(window._ld)window._ld();}
 function uploadFoto(f){if(window._uf)window._uf(f);}
 function saveSpesa(){if(window._sspesa)window._sspesa();}
+function saveBlocco(){if(window._sblocco)window._sblocco();}
+function saveVal(){if(window._sval)window._sval();}
 function openLightbox(u){if(window._ol)window._ol(u);}
 function closeLightbox(){if(window._cl)window._cl();}
 function enableNotifiche(){if(window._en)window._en();}
@@ -491,7 +536,7 @@ var calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
 var editingId=null, currentSentKey=null;
 
 function init(){
-  listenBookings(); listenTasks(); listenMessages(); listenPrices(); listenRules(); listenSpese();
+  listenBookings(); listenTasks(); listenMessages(); listenPrices(); listenRules(); listenSpese(); listenBlocchi(); listenValutazioni();
   setTimeout(initNotifiche, 2000);
 }
 
@@ -700,7 +745,10 @@ window._rc = function(){
     div.className='cal-day';
     div.textContent=d;
     var plat=bookedDays[d];
-    if(plat==='Airbnb') div.classList.add('booked-a');
+    var dateStr=calYear+'-'+(calMonth+1<10?'0':'')+(calMonth+1)+'-'+(d<10?'0':'')+d;
+    var isBlocked=blocchi.some(function(b){return dateStr>=b.dataInizio&&dateStr<=(b.dataFine||b.dataInizio);});
+    if(isBlocked) div.classList.add('blocco');
+    else if(plat==='Airbnb') div.classList.add('booked-a');
     else if(plat==='Booking.com') div.classList.add('booked-b');
     else if(plat) div.classList.add('booked-d');
     else div.classList.add('free');
@@ -1122,6 +1170,14 @@ var modalDefs={
     title:'Nuova spesa',
     html:function(d){d=d||{};return '<div class="form-row"><label>Descrizione</label><input id="f-nome" placeholder="es. Pulizie maggio" value="'+(d.nome||'')+'"></div><div class="form-row-2"><div class="form-row"><label>Categoria</label><select id="f-categoria"><option '+(d.categoria==='Pulizie'?'selected':'')+'>Pulizie</option><option '+(d.categoria==='Biancheria'?'selected':'')+'>Biancheria</option><option '+(d.categoria==='Manutenzione'?'selected':'')+'>Manutenzione</option><option '+(d.categoria==='Consumabili'?'selected':'')+'>Consumabili</option><option '+(d.categoria==='Commissioni'?'selected':'')+'>Commissioni</option><option '+(d.categoria==='Altro'?'selected':'')+'>Altro</option></select></div><div class="form-row"><label>Importo (EUR)</label><input id="f-importo" type="number" min="0" step="0.01" placeholder="0.00" value="'+(d.importo||'')+'"></div></div><div class="form-row"><label>Data</label><input id="f-data" type="date" value="'+(d.data||new Date().toISOString().split('T')[0])+'"></div><div class="form-row"><label>Note (opzionale)</label><input id="f-note" placeholder="es. Maria - 3 ore" value="'+(d.note||'')+'"></div><button class="save-btn" onclick="window._sspesa ? window._sspesa() : saveSpesa()">Salva spesa</button>';}
   },
+  blocco:{
+    title:'Blocca date',
+    html:function(){return '<div class="form-row"><label>Motivo</label><select id="f-motivo"><option>Uso personale</option><option>Manutenzione</option><option>Pulizie programmate</option><option>Altro</option></select></div><div class="form-row-2"><div class="form-row"><label>Data inizio</label><input id="f-data-inizio" type="date"></div><div class="form-row"><label>Data fine (lascia uguale per 1 giorno)</label><input id="f-data-fine" type="date"></div></div><button class="save-btn" onclick="window._sblocco ? window._sblocco() : saveBlocco()">Blocca date</button>';}
+  },
+  valutazione:{
+    title:'Valuta ospite',
+    html:function(){return '<div class="form-row"><label>Nome ospite</label><input id="f-nome-ospite" placeholder="es. Mario Rossi"></div><div class="form-row-2"><div class="form-row"><label>Piattaforma</label><select id="f-piattaforma-val"><option>Airbnb</option><option>Booking.com</option><option>Diretto</option></select></div><div class="form-row"><label>Data checkout</label><input id="f-data-val" type="date" value="'+new Date().toISOString().split('T')[0]+'"></div></div><div class="form-row"><label>Voto</label><div style="display:flex;gap:4px;margin-top:4px"><span id="star-1" onclick="window._setStelle(1)" style="font-size:28px;cursor:pointer;color:#e0e0da">&#11088;</span><span id="star-2" onclick="window._setStelle(2)" style="font-size:28px;cursor:pointer;color:#e0e0da">&#11088;</span><span id="star-3" onclick="window._setStelle(3)" style="font-size:28px;cursor:pointer;color:#e0e0da">&#11088;</span><span id="star-4" onclick="window._setStelle(4)" style="font-size:28px;cursor:pointer;color:#e0e0da">&#11088;</span><span id="star-5" onclick="window._setStelle(5)" style="font-size:28px;cursor:pointer;color:#e0e0da">&#11088;</span></div></div><div class="form-row"><label>Note private</label><textarea id="f-note-val" rows="3" placeholder="es. Ottimo ospite, molto pulito. Ha lasciato la casa in ordine."></textarea></div><button class="save-btn" onclick="window._sval ? window._sval() : saveVal()">Salva valutazione</button>';}
+  },
   rule:{
     title:'Nuova regola dinamica',
     html:function(){return '<div class="form-row"><label>Nome regola</label><input id="f-nome" placeholder="es. Sconto last minute"></div><div class="form-row"><label>Condizione</label><select id="f-condizione" onchange="updateRuleForm()"><option value="last_minute">Last minute (X giorni prima)</option><option value="weekend">Weekend (ven/sab/dom)</option><option value="anticipo">Prenotazione anticipata</option></select></div><div class="form-row" id="f-giorni-row"><label>Numero giorni</label><input id="f-giorni" type="number" min="1" value="7"></div><div class="form-row-2"><div class="form-row"><label>Azione</label><select id="f-azione"><option value="sconto">Sconto (%)</option><option value="aumento">Aumento (%)</option><option value="fisso">Prezzo fisso (EUR)</option></select></div><div class="form-row"><label>Valore</label><input id="f-valore" type="number" min="0" value="10"></div></div><button class="save-btn" onclick="saveRule()">Salva regola</button>';}
@@ -1185,7 +1241,111 @@ var T={
 };
 window._adt = async function(key){ var t=T[key]; if(!t)return; await addDoc(collection(db,'messages'),Object.assign({},t,{createdAt:serverTimestamp(),updatedAt:serverTimestamp()})); toast('Template aggiunto!'); };
 
+// BLOCCHI DATE
+var blocchi = [];
+
+function listenBlocchi(){
+  onSnapshot(collection(db,'blocchi'), function(snap){
+    blocchi = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    renderCalendar();
+    renderBlocchiList();
+  });
+}
+
+function renderBlocchiList(){
+  var el = document.getElementById('blocchi-list');
+  if(!el) return;
+  var future = blocchi.filter(function(b){ return (b.dataFine||b.dataInizio) >= new Date().toISOString().split('T')[0]; });
+  if(!future.length){ el.innerHTML=''; return; }
+  el.innerHTML = '<div style="font-size:12px;font-weight:600;color:#888;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.03em">Date bloccate</div>';
+  future.forEach(function(b){
+    var div = document.createElement('div');
+    div.style.cssText='background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:8px 12px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;font-size:12px';
+    div.innerHTML='<div><strong>'+(b.motivo||'Bloccato')+'</strong> &nbsp;|&nbsp; '+formatDate(b.dataInizio)+(b.dataFine&&b.dataFine!==b.dataInizio?' - '+formatDate(b.dataFine):'')+'</div>';
+    var del = document.createElement('button');
+    del.className='btn-danger'; del.style='padding:3px 8px;font-size:11px'; del.textContent='Rimuovi';
+    del.addEventListener('click',function(){window._di('blocchi',b.id);});
+    div.appendChild(del);
+    el.appendChild(div);
+  });
+}
+
+window._sblocco = async function(){
+  var dataInizio = v('f-data-inizio');
+  var dataFine = v('f-data-fine') || dataInizio;
+  var motivo = v('f-motivo') || 'Bloccato';
+  if(!dataInizio){toast('Inserisci la data');return;}
+  await addDoc(collection(db,'blocchi'),{dataInizio:dataInizio,dataFine:dataFine,motivo:motivo,createdAt:serverTimestamp()});
+  window._cm(); toast('Date bloccate!');
+};
+
+// VALUTAZIONI OSPITI
+var valutazioni = [];
+
+function listenValutazioni(){
+  onSnapshot(collection(db,'valutazioni'), function(snap){
+    valutazioni = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    valutazioni.sort(function(a,b){return (b.data||'').localeCompare(a.data||'');});
+    renderValutazioni();
+  });
+}
+
+window.renderValutazioni = function(){
+  var el = document.getElementById('valutazioni-list');
+  if(!el) return;
+  var starF = document.getElementById('filter-val-stars') ? document.getElementById('filter-val-stars').value : '';
+  var filtered = valutazioni.filter(function(v){ return !starF || String(v.stelle) === starF; });
+  el.innerHTML='';
+  if(!filtered.length){ el.innerHTML='<div class="empty"><div class="empty-icon">&#11088;</div><div class="empty-text">Nessuna valutazione</div></div>'; return; }
+  filtered.forEach(function(val){
+    var stars = Number(val.stelle||0);
+    var starsHtml = '';
+    for(var i=1;i<=5;i++) starsHtml += '<span style="color:'+(i<=stars?'#f59e0b':'#e0e0da')+'">&#11088;</span>';
+    var badgeClass = stars>=4?'val-badge-green':stars>=3?'val-badge-amber':'val-badge-red';
+    var badgeText = stars>=4?'Ottimo ospite':stars>=3?'Nella media':'Attenzione';
+    var div = document.createElement('div'); div.className='val-card';
+    div.innerHTML='<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">'+
+      '<div><div class="val-guest">'+(val.nomeOspite||'-')+'</div>'+
+      '<div class="val-date">'+(val.data||'-')+' &nbsp;|&nbsp; '+(val.piattaforma||'-')+'</div>'+
+      '<div style="display:flex;gap:2px;margin:6px 0">'+starsHtml+'</div>'+
+      '<span class="'+badgeClass+'">'+badgeText+'</span>'+
+      (val.note?'<div class="val-note">"'+(val.note)+'"</div>':'')+
+      '</div>'+
+      '<div style="display:flex;gap:4px;flex-shrink:0">'+
+      '</div></div>';
+    var delBtn = document.createElement('button'); delBtn.className='btn-danger'; delBtn.style='padding:4px 8px;font-size:11px'; delBtn.textContent='Elimina';
+    delBtn.addEventListener('click',function(){window._di('valutazioni',val.id);});
+    div.querySelector('[style*="flex-shrink:0"]').appendChild(delBtn);
+    el.appendChild(div);
+  });
+};
+
+window._sval = async function(){
+  var stelle = window._valStelle || 0;
+  if(!stelle){toast('Seleziona un voto');return;}
+  var nomeOspite = v('f-nome-ospite');
+  if(!nomeOspite){toast('Inserisci il nome');return;}
+  await addDoc(collection(db,'valutazioni'),{
+    nomeOspite:nomeOspite, stelle:stelle,
+    piattaforma:v('f-piattaforma-val'),
+    data:v('f-data-val')||new Date().toISOString().split('T')[0],
+    note:v('f-note-val'),
+    createdAt:serverTimestamp()
+  });
+  window._valStelle=0;
+  window._cm(); toast('Valutazione salvata!');
+};
+
+window._setStelle = function(n){
+  window._valStelle = n;
+  for(var i=1;i<=5;i++){
+    var s=document.getElementById('star-'+i);
+    if(s) s.style.color = i<=n?'#f59e0b':'#e0e0da';
+  }
+};
+
 // SPESE
+
 var spese = [];
 
 function listenSpese(){
