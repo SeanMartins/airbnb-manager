@@ -22,6 +22,22 @@
 .msg-title{font-size:14px;font-weight:600}
 .msg-preview{font-size:12px;color:#888;line-height:1.5}
 .msg-actions{display:flex;gap:4px;flex-shrink:0}
+.adempimento-row{background:#fff;border:1px solid #e8e8e4;border-radius:10px;padding:14px 16px;margin-bottom:10px}
+.adem-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.adem-name{font-size:14px;font-weight:600;flex:1}
+.adem-dates{font-size:11px;color:#888}
+.adem-checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.adem-check{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;border:1px solid #e8e8e4;cursor:pointer;transition:all 0.15s;font-size:12px}
+.adem-check:hover{border-color:#1a6b4a}
+.adem-check.done{background:#f0fdf4;border-color:#bbf7d0}
+.adem-check.urgent{background:#fff8ec;border-color:#fde68a}
+.adem-check.overdue{background:#fee2e2;border-color:#fecaca}
+.adem-icon{font-size:16px;flex-shrink:0}
+.adem-label{flex:1;line-height:1.4}
+.adem-label strong{display:block;font-weight:600}
+.adem-label span{color:#888;font-size:11px}
+.adem-toggle{width:20px;height:20px;border-radius:50%;border:2px solid #d0d0cc;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px}
+.adem-check.done .adem-toggle{background:#1a6b4a;border-color:#1a6b4a;color:#fff}
 </style>
 </head>
 <body>
@@ -45,6 +61,7 @@
   <button class="nav-btn" onclick="showSection('tasks',this)"><span class="nav-icon">🧹</span>Pulizie</button>
   <button class="nav-btn" onclick="showSection('pricing',this)"><span class="nav-icon">💰</span>Prezzi</button>
   <button class="nav-btn" onclick="showSection('stats',this)"><span class="nav-icon">📈</span>Statistiche</button>
+  <button class="nav-btn" onclick="showSection('adempimenti',this)"><span class="nav-icon">📋</span>Adempimenti</button>
   <a href="impostazioni.html" class="nav-btn"><span class="nav-icon">⚙️</span>Impostazioni</a>
 </div>
 
@@ -179,6 +196,57 @@
   </div>
 </div>
 
+<!-- ── ADEMPIMENTI ── -->
+<div class="section" id="section-adempimenti">
+  <div class="sec-header">
+    <div class="sec-title">📋 Adempimenti burocratici</div>
+  </div>
+
+  <!-- LINK RAPIDI -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+    <a href="https://alloggiatiweb.poliziadistato.it" target="_blank" style="text-decoration:none">
+      <div class="card" style="cursor:pointer;transition:border-color 0.15s;border-color:#e8e8e4" onmouseover="this.style.borderColor='#1a6b4a'" onmouseout="this.style.borderColor='#e8e8e4'">
+        <div style="font-size:22px;margin-bottom:8px">🚔</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px">Alloggiati Web</div>
+        <div style="font-size:11px;color:#888;line-height:1.5">Polizia di Stato — registrazione ospiti entro 24h dall'arrivo</div>
+        <div style="font-size:11px;color:#1a6b4a;margin-top:8px;font-weight:600">Apri portale →</div>
+      </div>
+    </a>
+    <a href="https://turismo5.regione.toscana.it" target="_blank" style="text-decoration:none">
+      <div class="card" style="cursor:pointer;transition:border-color 0.15s;border-color:#e8e8e4" onmouseover="this.style.borderColor='#1a6b4a'" onmouseout="this.style.borderColor='#e8e8e4'">
+        <div style="font-size:22px;margin-bottom:8px">🏛️</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px">Turismo5 Toscana</div>
+        <div style="font-size:11px;color:#888;line-height:1.5">Regione Toscana — tassa di soggiorno e comunicazioni statistiche</div>
+        <div style="font-size:11px;color:#1a6b4a;margin-top:8px;font-weight:600">Apri portale →</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- INFO SCADENZE -->
+  <div style="padding:12px 16px;background:#fff8ec;border:1px solid #fde68a;border-radius:10px;margin-bottom:20px;font-size:12px;color:#92400e;line-height:1.8">
+    <strong>⏰ Scadenze da ricordare:</strong><br>
+    • <strong>Alloggiati Web</strong> → entro <strong>24 ore</strong> dall'arrivo dell'ospite (obbligo di legge)<br>
+    • <strong>Turismo5</strong> → entro il <strong>16 del mese successivo</strong> per la tassa di soggiorno<br>
+    • <strong>Tassa di soggiorno Firenze</strong> → €5,50/persona/notte (max 7 notti) — da riscuotere all'arrivo
+  </div>
+
+  <!-- CHECKLIST PER PRENOTAZIONE -->
+  <div class="sec-header">
+    <div class="sec-title" style="font-size:14px">Stato adempimenti per prenotazione</div>
+    <button class="btn-secondary" style="font-size:12px;padding:5px 12px" onclick="refreshAdempimenti()">🔄 Aggiorna</button>
+  </div>
+  <div id="adempimenti-list">
+    <div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Nessuna prenotazione attiva</div></div>
+  </div>
+
+  <!-- NOTA TASSA SOGGIORNO -->
+  <div style="margin-top:20px;padding:14px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;font-size:12px;color:#166534;line-height:1.7">
+    <strong>💶 Calcolo tassa di soggiorno Firenze 2025:</strong><br>
+    €5,50 × numero ospiti × numero notti (max 7 notti per ospite)<br>
+    Es: 2 ospiti × 4 notti = <strong>€44,00</strong> da riscuotere e versare al Comune
+  </div>
+</div>
+
 <!-- ── STATISTICHE ── -->
 <div class="section" id="section-stats">
   <div class="sec-header"><div class="sec-title">Statistiche</div></div>
@@ -250,6 +318,7 @@ function listenBookings(){
     renderCalendar();
     renderStats();
     renderReminders();
+    renderAdempimenti();
   });
 }
 function listenTasks(){
@@ -1139,6 +1208,109 @@ window.deleteItem=async function(coll,id){
   toast('Eliminato ✓');
 };
 
+// ── ADEMPIMENTI ──
+function renderAdempimenti(){
+  const el = document.getElementById('adempimenti-list');
+  if(!el) return;
+  const now = new Date();
+  const active = bookings.filter(b => {
+    if(b.stato === 'Cancellata') return false;
+    const co = new Date(b.checkout);
+    co.setDate(co.getDate() + 7); // mostra fino a 7 giorni dopo checkout
+    return co >= now;
+  }).sort((a,b) => new Date(a.checkin) - new Date(b.checkin));
+
+  if(!active.length){
+    el.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Nessuna prenotazione attiva o imminente</div></div>';
+    return;
+  }
+
+  el.innerHTML = active.map(b => {
+    const checkinDate = new Date(b.checkin);
+    const checkoutDate = new Date(b.checkout);
+    const nights = Math.max(0, Math.round((checkoutDate - checkinDate)/86400000));
+    const hoursFromCheckin = (now - checkinDate) / 3600000;
+    const daysFromCheckin = hoursFromCheckin / 24;
+
+    // Stato alloggiati (entro 24h da checkin)
+    const allegKey = 'adem_alloggiati_' + b.id;
+    const allegDone = localStorage.getItem(allegKey);
+    const allegOverdue = !allegDone && hoursFromCheckin > 24 && hoursFromCheckin > 0;
+    const allegUrgent = !allegDone && hoursFromCheckin >= 0 && hoursFromCheckin <= 24;
+
+    // Stato turismo5 (entro 16 del mese successivo)
+    const tur5Key = 'adem_turismo5_' + b.id;
+    const tur5Done = localStorage.getItem(tur5Key);
+    const tur5Month = checkoutDate.getMonth();
+    const tur5Deadline = new Date(checkoutDate.getFullYear(), tur5Month + 1, 16);
+    const daysToTur5 = Math.ceil((tur5Deadline - now) / 86400000);
+    const tur5Urgent = !tur5Done && daysToTur5 <= 5;
+    const tur5Overdue = !tur5Done && daysToTur5 < 0;
+
+    // Stato tassa riscossa
+    const tassaKey = 'adem_tassa_' + b.id;
+    const tassaDone = localStorage.getItem(tassaKey);
+
+    const allegClass = allegDone ? 'done' : allegOverdue ? 'overdue' : allegUrgent ? 'urgent' : '';
+    const tur5Class = tur5Done ? 'done' : tur5Overdue ? 'overdue' : tur5Urgent ? 'urgent' : '';
+    const tassaClass = tassaDone ? 'done' : '';
+
+    return `<div class="adempimento-row">
+      <div class="adem-header">
+        <div class="adem-name">${b.nome||'Ospite'}</div>
+        <div class="adem-dates">${formatDate(b.checkin)} – ${formatDate(b.checkout)} · ${nights} notti · ${b.piattaforma||'—'}</div>
+      </div>
+      <div class="adem-checks">
+
+        <div class="adem-check ${allegClass}" onclick="toggleAdem('${allegKey}','${b.id}')">
+          <div class="adem-icon">🚔</div>
+          <div class="adem-label">
+            <strong>Alloggiati Web</strong>
+            <span>${allegDone ? '✅ Registrato' : allegOverdue ? '⚠️ SCADUTO — fai subito!' : allegUrgent ? '⏰ Entro 24h!' : 'Da fare dopo check-in'}</span>
+          </div>
+          <div class="adem-toggle">${allegDone ? '✓' : ''}</div>
+        </div>
+
+        <div class="adem-check ${tassaClass}" onclick="toggleAdem('${tassaKey}','${b.id}')">
+          <div class="adem-icon">💶</div>
+          <div class="adem-label">
+            <strong>Tassa soggiorno</strong>
+            <span>${tassaDone ? '✅ Riscossa' : 'Da riscuotere all'arrivo'}</span>
+          </div>
+          <div class="adem-toggle">${tassaDone ? '✓' : ''}</div>
+        </div>
+
+        <div class="adem-check ${tur5Class}" onclick="toggleAdem('${tur5Key}','${b.id}')">
+          <div class="adem-icon">🏛️</div>
+          <div class="adem-label">
+            <strong>Turismo5</strong>
+            <span>${tur5Done ? '✅ Comunicato' : tur5Overdue ? '⚠️ SCADUTO!' : 'Entro il 16/' + (tur5Month+2 > 12 ? 1 : tur5Month+2)}</span>
+          </div>
+          <div class="adem-toggle">${tur5Done ? '✓' : ''}</div>
+        </div>
+
+        <div class="adem-check" style="background:#f8f8f6;cursor:default">
+          <div class="adem-icon">💰</div>
+          <div class="adem-label">
+            <strong>Tassa stimata</strong>
+            <span>€5,50 × 1 ospite × ${Math.min(nights,7)} notti = <strong>€${(5.50 * Math.min(nights,7)).toFixed(2)}</strong></span>
+          </div>
+        </div>
+
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.toggleAdem = function(key, bookingId) {
+  if(localStorage.getItem(key)) localStorage.removeItem(key);
+  else localStorage.setItem(key, '1');
+  renderAdempimenti();
+  toast('Stato aggiornato ✓');
+};
+
+window.refreshAdempimenti = function(){ renderAdempimenti(); toast('Aggiornato ✓'); };
+
 // ── HELPERS ──
 function v(id){ return document.getElementById(id)?.value||''; }
 function formatDate(str){ if(!str) return '—'; return new Date(str).toLocaleDateString('it-IT',{day:'2-digit',month:'short'}); }
@@ -1149,6 +1321,7 @@ window.showSection=function(id, btn){
   document.getElementById('section-'+id).classList.add('active');
   btn.classList.add('active');
   if(id==='calendar') renderCalendar();
+  if(id==='adempimenti') renderAdempimenti();
 };
 
 function toast(msg){
