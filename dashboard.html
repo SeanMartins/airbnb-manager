@@ -329,7 +329,7 @@
         <div style="font-size:11px;color:#1a6b4a;margin-top:8px;font-weight:600">Apri portale &rarr;</div>
       </div>
     </a>
-    <a href="https://toscanaturismo.ross1000.it/turismo5-web/" target="_blank" style="text-decoration:none">
+    <a href="https://toscanaturismo.ross1000.it/turismo5-web/dashboard.xhtml" target="_blank" style="text-decoration:none">
       <div class="card" style="cursor:pointer">
         <div style="font-size:22px;margin-bottom:8px">&#127963;</div>
         <div style="font-size:13px;font-weight:700;margin-bottom:4px">Turismo5 Toscana</div>
@@ -339,12 +339,12 @@
     </a>
   </div>
   <div style="padding:12px 16px;background:#fff8ec;border:1px solid #fde68a;border-radius:10px;margin-bottom:20px;font-size:12px;color:#92400e;line-height:1.8">
-    <strong>Scadenze:</strong> Alloggiati Web &rarr; entro 24h dall'arrivo | Turismo5 &rarr; entro il 16 del mese successivo | Tassa soggiorno Firenze &rarr; 5,50 EUR/persona/notte (max 7 notti)
+    <strong>Scadenze:</strong> Alloggiati Web &rarr; entro 24h dall'arrivo | Turismo5 &rarr; entro il 16 del mese successivo | Tassa soggiorno Firenze &rarr; 6,00 EUR/persona/notte (max 7 notti, solo soggiorni fino a 30 notti)
   </div>
   <div class="sec-header"><div class="sec-title" style="font-size:14px">Stato adempimenti</div></div>
   <div id="adempimenti-list"></div>
   <div style="margin-top:16px;padding:14px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;font-size:12px;color:#166534">
-    <strong>Calcolo tassa:</strong> 5,50 EUR x ospiti x notti (max 7 notti per ospite)
+    <strong>Calcolo tassa:</strong> 6,00 EUR x ospiti x notti (max 7 notti per ospite, esente oltre 30 notti)
   </div>
 </div>
 
@@ -413,10 +413,24 @@
   </div>
 
   <div class="profitto-box" id="profitto-box">
-    <div class="profitto-row"><span class="profitto-label">Entrate totali</span><span class="profitto-val-green" id="prf-entrate">-</span></div>
+    <div class="profitto-row"><span class="profitto-label">Entrate totali (lordo)</span><span class="profitto-val-green" id="prf-entrate">-</span></div>
+    <div class="profitto-row"><span class="profitto-label">Commissione Airbnb (stima 15,5%+IVA)</span><span class="profitto-val-red" id="prf-commissione">-</span></div>
+    <div class="profitto-row" id="prf-ritenuta-row">
+      <span class="profitto-label">
+        <label style="cursor:pointer;display:flex;align-items:center;gap:6px">
+          <input type="checkbox" id="chk-ritenuta21" onchange="window._toggleRitenuta()" style="width:auto;margin:0">
+          Ritenuta d'acconto 21%
+        </label>
+      </span>
+      <span class="profitto-val-red" id="prf-ritenuta">-</span>
+    </div>
     <div class="profitto-row"><span class="profitto-label">Spese totali</span><span class="profitto-val-red" id="prf-spese">-</span></div>
-    <div class="profitto-row"><span class="profitto-label">Tasse soggiorno raccolte (stima)</span><span style="color:#92400e;font-weight:600" id="prf-tasse">-</span></div>
+    <div class="profitto-row" style="opacity:.75"><span class="profitto-label">Tassa soggiorno riscossa dall'host (stima, pass-through)</span><span style="color:#92400e;font-weight:600" id="prf-tasse">-</span></div>
     <div class="profitto-row"><span class="profitto-label">&#128200; Profitto netto</span><span class="profitto-val-green" id="prf-netto">-</span></div>
+    <div style="font-size:11px;color:#aaa;margin-top:6px;line-height:1.5">
+      La tassa di soggiorno non è sottratta dal profitto: la incassi dall'ospite e la versi al Comune, saldo zero per te &mdash; è mostrata solo per promemoria dell'importo da versare su Turismo5.<br>
+      Commissione Airbnb e ritenuta sono stime calcolate sul prezzo lordo prenotazione; verifica gli importi esatti nella sezione Guadagni di ogni prenotazione su Airbnb.
+    </div>
   </div>
 
   <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
@@ -608,7 +622,8 @@ function listenRules(){
 
 // TASSA SOGGIORNO
 function calcolaTassa(notti, ospiti){
-  return (5.50 * Math.min(notti,7) * (ospiti||1)).toFixed(2);
+  if (notti > 30) return '0.00';
+  return (6.00 * Math.min(notti,7) * (ospiti||1)).toFixed(2);
 }
 window._act = function(){
   var ci=v('f-checkin'), co=v('f-checkout'), ospiti=Number(v('f-ospiti'))||1;
@@ -1021,7 +1036,7 @@ window._ra = function(){
       '<div class="adem-check '+(allegDone?'done':allegOverdue?'overdue':'')+'" data-key="'+allegKey+'"><div class="adem-icon">&#128658;</div><div class="adem-label"><strong>Alloggiati Web</strong><span>'+(allegDone?'Registrato':allegOverdue?'SCADUTO':'Da fare dopo check-in')+'</span></div><div class="adem-toggle">'+(allegDone?'v':'')+'</div></div>'+
       '<div class="adem-check '+(tassaDone?'done':'')+'" data-key="'+tassaKey+'"><div class="adem-icon">&#128182;</div><div class="adem-label"><strong>Tassa soggiorno</strong><span>'+(tassaDone?'Riscossa':'Da riscuotere')+'</span></div><div class="adem-toggle">'+(tassaDone?'v':'')+'</div></div>'+
       '<div class="adem-check '+(tur5Done?'done':'')+'" data-key="'+tur5Key+'"><div class="adem-icon">&#127963;</div><div class="adem-label"><strong>Turismo5</strong><span>'+(tur5Done?'Comunicato':'Da comunicare')+'</span></div><div class="adem-toggle">'+(tur5Done?'v':'')+'</div></div>'+
-      '<div class="adem-check" style="cursor:default;background:#f8f8f6"><div class="adem-icon">&#128176;</div><div class="adem-label"><strong>Tassa stimata</strong><span>EUR '+(5.50*Math.min(nights,7)).toFixed(2)+'</span></div></div>'+
+      '<div class="adem-check" style="cursor:default;background:#f8f8f6"><div class="adem-icon">&#128176;</div><div class="adem-label"><strong>Tassa stimata</strong><span>EUR '+(nights>30?'0.00 (esente oltre 30 notti)':(6.00*Math.min(nights,7)).toFixed(2))+'</span></div></div>'+
       '</div>';
     div.querySelectorAll('.adem-check[data-key]').forEach(function(ch){
       ch.addEventListener('click',function(){
@@ -1152,7 +1167,7 @@ window._cl = function(){ document.getElementById('foto-lightbox').classList.remo
 var modalDefs={
   booking:{
     title:'Aggiungi prenotazione',
-    html:function(d){d=d||{};return '<div class="form-row-2"><div class="form-row"><label>Nome ospite</label><input id="f-nome" placeholder="Mario Rossi" value="'+(d.nome||'')+'"></div><div class="form-row"><label>Piattaforma</label><select id="f-piattaforma"><option '+(d.piattaforma==='Airbnb'?'selected':'')+'>Airbnb</option><option '+(d.piattaforma==='Booking.com'?'selected':'')+'>Booking.com</option><option '+(d.piattaforma==='Diretto'?'selected':'')+'>Diretto</option></select></div></div><div class="form-row-2"><div class="form-row"><label>Check-in</label><input id="f-checkin" type="date" value="'+(d.checkin||'')+'" onchange="aggiornaCalcoloTassa()"></div><div class="form-row"><label>Check-out</label><input id="f-checkout" type="date" value="'+(d.checkout||'')+'" onchange="aggiornaCalcoloTassa()"></div></div><div class="form-row-2"><div class="form-row"><label>Prezzo (EUR)</label><input id="f-prezzo" type="number" min="0" value="'+(d.prezzo||'')+'"></div><div class="form-row"><label>Ospiti</label><input id="f-ospiti" type="number" min="1" max="20" value="'+(d.ospiti||1)+'" onchange="aggiornaCalcoloTassa()"></div></div><div class="form-row"><label>Stato</label><select id="f-stato"><option '+(d.stato==='Confermata'?'selected':'')+'>Confermata</option><option '+(d.stato==='In attesa'?'selected':'')+'>In attesa</option><option '+(d.stato==='Cancellata'?'selected':'')+'>Cancellata</option></select></div><div class="tassa-box"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:#555;font-weight:500">Tassa di soggiorno da riscuotere</span><span class="tassa-val" id="tassa-calcolo">-</span></div><div style="font-size:11px;color:#888">EUR 5,50 x ospiti x notti (max 7 notti)</div></div><div class="form-row" style="margin-top:10px"><label>Note interne</label><textarea id="f-note" rows="2" placeholder="Arriva tardi, ha un cane...">'+(d.note||'')+'</textarea></div><button class="save-btn" onclick="saveBooking()">Salva prenotazione</button>';}
+    html:function(d){d=d||{};return '<div class="form-row-2"><div class="form-row"><label>Nome ospite</label><input id="f-nome" placeholder="Mario Rossi" value="'+(d.nome||'')+'"></div><div class="form-row"><label>Piattaforma</label><select id="f-piattaforma"><option '+(d.piattaforma==='Airbnb'?'selected':'')+'>Airbnb</option><option '+(d.piattaforma==='Booking.com'?'selected':'')+'>Booking.com</option><option '+(d.piattaforma==='Diretto'?'selected':'')+'>Diretto</option></select></div></div><div class="form-row-2"><div class="form-row"><label>Check-in</label><input id="f-checkin" type="date" value="'+(d.checkin||'')+'" onchange="aggiornaCalcoloTassa()"></div><div class="form-row"><label>Check-out</label><input id="f-checkout" type="date" value="'+(d.checkout||'')+'" onchange="aggiornaCalcoloTassa()"></div></div><div class="form-row-2"><div class="form-row"><label>Prezzo (EUR)</label><input id="f-prezzo" type="number" min="0" value="'+(d.prezzo||'')+'"></div><div class="form-row"><label>Ospiti</label><input id="f-ospiti" type="number" min="1" max="20" value="'+(d.ospiti||1)+'" onchange="aggiornaCalcoloTassa()"></div></div><div class="form-row"><label>Stato</label><select id="f-stato"><option '+(d.stato==='Confermata'?'selected':'')+'>Confermata</option><option '+(d.stato==='In attesa'?'selected':'')+'>In attesa</option><option '+(d.stato==='Cancellata'?'selected':'')+'>Cancellata</option></select></div><div class="tassa-box"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:#555;font-weight:500">Tassa di soggiorno da riscuotere</span><span class="tassa-val" id="tassa-calcolo">-</span></div><div style="font-size:11px;color:#888">EUR 6,00 x ospiti x notti (max 7 notti, esente oltre 30 notti)</div></div><div class="form-row" style="margin-top:10px"><label>Note interne</label><textarea id="f-note" rows="2" placeholder="Arriva tardi, ha un cane...">'+(d.note||'')+'</textarea></div><button class="save-btn" onclick="saveBooking()">Salva prenotazione</button>';}
   },
   message:{
     title:'Template messaggio',
@@ -1393,16 +1408,32 @@ window.renderSpese = function(){
   });
 };
 
+var AIRBNB_COMMISSIONE_PCT = 0.155;   // 15,5% costo servizio host, confermato da Airbnb (dettaglio "Guadagni")
+var AIRBNB_IVA_PCT = 0.22;            // IVA italiana sulla commissione
+var RITENUTA_PCT = 0.21;              // ritenuta d'acconto 21% (da confermare con Airbnb se applicata)
+
+window._toggleRitenuta = function(){
+  localStorage.setItem('cfg_ritenuta21', document.getElementById('chk-ritenuta21').checked ? '1' : '0');
+  renderProfitto();
+};
+
 function renderProfitto(){
-  var totEntrate = bookings.filter(function(b){return b.stato!=='Cancellata';}).reduce(function(s,b){return s+Number(b.prezzo||0);},0);
+  var attive = bookings.filter(function(b){return b.stato!=='Cancellata';});
+  var totEntrate = attive.reduce(function(s,b){return s+Number(b.prezzo||0);},0);
+  var totCommissione = attive.reduce(function(s,b){return s+Number(b.prezzo||0)*AIRBNB_COMMISSIONE_PCT*(1+AIRBNB_IVA_PCT);},0);
   var totSpese = spese.reduce(function(s,sp){return s+Number(sp.importo||0);},0);
-  var totTasse = bookings.filter(function(b){return b.stato!=='Cancellata';}).reduce(function(s,b){
+  var totTasse = attive.reduce(function(s,b){
     var nights = Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));
-    return s + (5.50 * Math.min(nights,7) * (b.ospiti||1));
+    return s + (nights>30?0:(6.00 * Math.min(nights,7) * (b.ospiti||1)));
   },0);
-  var netto = totEntrate - totSpese;
+  var ritenutaOn = localStorage.getItem('cfg_ritenuta21')==='1';
+  var totRitenuta = ritenutaOn ? totEntrate*RITENUTA_PCT : 0;
+  var netto = totEntrate - totCommissione - totRitenuta - totSpese;
   function sid(id){return document.getElementById(id);}
+  var chk = sid('chk-ritenuta21'); if(chk) chk.checked = ritenutaOn;
   if(sid('prf-entrate')) sid('prf-entrate').textContent = 'EUR '+totEntrate.toLocaleString('it-IT');
+  if(sid('prf-commissione')) sid('prf-commissione').textContent = '- EUR '+totCommissione.toFixed(2);
+  if(sid('prf-ritenuta')) sid('prf-ritenuta').textContent = ritenutaOn ? ('- EUR '+totRitenuta.toFixed(2)) : 'non applicata';
   if(sid('prf-spese')) sid('prf-spese').textContent = '- EUR '+totSpese.toFixed(2);
   if(sid('prf-tasse')) sid('prf-tasse').textContent = 'EUR '+totTasse.toFixed(2);
   if(sid('prf-netto')){ sid('prf-netto').textContent = 'EUR '+netto.toLocaleString('it-IT'); sid('prf-netto').style.color = netto>=0?'#1a6b4a':'#991b1b'; }
@@ -1467,7 +1498,7 @@ function generaPDF(ym, data){
   var netto = entrate - speseM;
   var tasse = data.prenotazioni.reduce(function(s,b){
     var nights=Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));
-    return s+(5.50*Math.min(nights,7)*(b.ospiti||1));
+    return s+(nights>30?0:(6.00*Math.min(nights,7)*(b.ospiti||1)));
   },0);
 
   var html = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8">'+
@@ -1496,7 +1527,7 @@ function generaPDF(ym, data){
 
   data.prenotazioni.forEach(function(b){
     var nights = Math.max(0,Math.round((new Date(b.checkout)-new Date(b.checkin))/86400000));
-    var tassa = (5.50*Math.min(nights,7)*(b.ospiti||1)).toFixed(2);
+    var tassa = (nights>30?0:(6.00*Math.min(nights,7)*(b.ospiti||1))).toFixed(2);
     html += '<tr><td>'+(b.nome||'-')+'</td><td>'+(b.piattaforma||'-')+'</td>'+
       '<td>'+formatDate(b.checkin)+'</td><td>'+formatDate(b.checkout)+'</td>'+
       '<td>'+nights+'</td><td>'+(b.ospiti||1)+'</td>'+
